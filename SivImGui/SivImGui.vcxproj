@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{6bf5699b-41d3-4571-b929-16030fe3f447}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SivImGui</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Intermediate\$(ProjectName)\Debug\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Debug\Intermediate\</IntDir>
+    <TargetName>$(ProjectName)(debug)</TargetName>
+    <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
+    <IncludePath>$(SIV3D_0_6_4)\include;$(SIV3D_0_6_4)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SIV3D_0_6_4)\lib\Windows;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Intermediate\$(ProjectName)\Release\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Release\Intermediate\</IntDir>
+    <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
+    <IncludePath>$(SIV3D_0_6_4)\include;$(SIV3D_0_6_4)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SIV3D_0_6_4)\lib\Windows;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_ENABLE_EXTENDED_ALIGNED_STORAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>advapi32.dll;crypt32.dll;dwmapi.dll;gdi32.dll;imm32.dll;ole32.dll;oleaut32.dll;opengl32.dll;shell32.dll;shlwapi.dll;user32.dll;winmm.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /I /D /Y "$(OutDir)$(TargetFileName)" "$(ProjectDir)App"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_ENABLE_EXTENDED_ALIGNED_STORAGE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <DisableSpecificWarnings>26451;26812;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>advapi32.dll;crypt32.dll;dwmapi.dll;gdi32.dll;imm32.dll;ole32.dll;oleaut32.dll;opengl32.dll;shell32.dll;shlwapi.dll;user32.dll;winmm.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /I /D /Y "$(OutDir)$(TargetFileName)" "$(ProjectDir)App"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Builder.cpp" />
+    <ClCompile Include="BuilderContext.cpp" />
+    <ClCompile Include="EventProvider.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="WidgetController.cpp" />
+    <ClCompile Include="WidgetCore.cpp" />
+    <ClCompile Include="Widgets\Button.cpp" />
+    <ClCompile Include="Widgets\Image.cpp" />
+    <ClCompile Include="Widgets\Label.cpp" />
+    <ClCompile Include="Widgets\SimpleButton.cpp" />
+    <ClCompile Include="Widgets\SimpleSlider.cpp" />
+    <ClCompile Include="Widgets\TestWidget.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="App\engine\texture\box-shadow\128.png" />
+    <Image Include="App\engine\texture\box-shadow\16.png" />
+    <Image Include="App\engine\texture\box-shadow\256.png" />
+    <Image Include="App\engine\texture\box-shadow\32.png" />
+    <Image Include="App\engine\texture\box-shadow\64.png" />
+    <Image Include="App\engine\texture\box-shadow\8.png" />
+    <Image Include="App\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="App\Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="App\dll\soundtouch\COPYING.TXT" />
+    <Text Include="App\engine\font\fontawesome\LICENSE.txt" />
+    <Text Include="App\engine\soundfont\GMGSx.sf2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".editorconfig" />
+    <None Include="App\dll\soundtouch\SoundTouch_x64.dll" />
+    <None Include="App\engine\font\fontawesome\fontawesome-brands.otf.zstdcmp" />
+    <None Include="App\engine\font\fontawesome\fontawesome-solid.otf.zstdcmp" />
+    <None Include="App\engine\font\materialdesignicons\license.md" />
+    <None Include="App\engine\font\materialdesignicons\materialdesignicons-webfont.ttf.zstdcmp" />
+    <None Include="App\engine\font\min\LICENSE" />
+    <None Include="App\engine\font\min\siv3d-min.woff" />
+    <None Include="App\engine\font\mplus\LICENSE_E" />
+    <None Include="App\engine\font\mplus\mplus-1p-black.ttf.zstdcmp" />
+    <None Include="App\engine\font\mplus\mplus-1p-bold.ttf.zstdcmp" />
+    <None Include="App\engine\font\mplus\mplus-1p-heavy.ttf.zstdcmp" />
+    <None Include="App\engine\font\mplus\mplus-1p-light.ttf.zstdcmp" />
+    <None Include="App\engine\font\mplus\mplus-1p-medium.ttf.zstdcmp" />
+    <None Include="App\engine\font\mplus\mplus-1p-regular.ttf.zstdcmp" />
+    <None Include="App\engine\font\mplus\mplus-1p-thin.ttf.zstdcmp" />
+    <None Include="App\engine\font\noto-cjk\LICENSE" />
+    <None Include="App\engine\font\noto-cjk\NotoSansCJK-Regular.ttc.zstdcmp" />
+    <None Include="App\engine\font\noto-cjk\NotoSansJP-Regular.otf.zstdcmp" />
+    <None Include="App\engine\font\noto-emoji\LICENSE" />
+    <None Include="App\engine\font\noto-emoji\NotoColorEmoji.ttf.zstdcmp" />
+    <None Include="App\engine\font\noto-emoji\NotoEmoji-Regular.ttf.zstdcmp" />
+    <None Include="App\engine\shader\d3d11\apply_srgb_curve.ps" />
+    <None Include="App\engine\shader\d3d11\bitmapfont.ps" />
+    <None Include="App\engine\shader\d3d11\copy.ps" />
+    <None Include="App\engine\shader\d3d11\forward3d.ps" />
+    <None Include="App\engine\shader\d3d11\forward3d.vs" />
+    <None Include="App\engine\shader\d3d11\fullscreen_triangle.ps" />
+    <None Include="App\engine\shader\d3d11\fullscreen_triangle.vs" />
+    <None Include="App\engine\shader\d3d11\gaussian_blur_9.ps" />
+    <None Include="App\engine\shader\d3d11\line3d.ps" />
+    <None Include="App\engine\shader\d3d11\line3d.vs" />
+    <None Include="App\engine\shader\d3d11\msdffont.ps" />
+    <None Include="App\engine\shader\d3d11\msdffont_outline.ps" />
+    <None Include="App\engine\shader\d3d11\msdffont_outlineshadow.ps" />
+    <None Include="App\engine\shader\d3d11\msdffont_shadow.ps" />
+    <None Include="App\engine\shader\d3d11\msdfprint.ps" />
+    <None Include="App\engine\shader\d3d11\round_dot.ps" />
+    <None Include="App\engine\shader\d3d11\sdffont.ps" />
+    <None Include="App\engine\shader\d3d11\sdffont_outline.ps" />
+    <None Include="App\engine\shader\d3d11\sdffont_outlineshadow.ps" />
+    <None Include="App\engine\shader\d3d11\sdffont_shadow.ps" />
+    <None Include="App\engine\shader\d3d11\shape.ps" />
+    <None Include="App\engine\shader\d3d11\sky.ps" />
+    <None Include="App\engine\shader\d3d11\sprite.vs" />
+    <None Include="App\engine\shader\d3d11\square_dot.ps" />
+    <None Include="App\engine\shader\d3d11\texture.ps" />
+    <None Include="App\engine\shader\glsl\apply_srgb_curve.frag" />
+    <None Include="App\engine\shader\glsl\bitmapfont.frag" />
+    <None Include="App\engine\shader\glsl\copy.frag" />
+    <None Include="App\engine\shader\glsl\forward3d.frag" />
+    <None Include="App\engine\shader\glsl\forward3d.vert" />
+    <None Include="App\engine\shader\glsl\fullscreen_triangle.frag" />
+    <None Include="App\engine\shader\glsl\fullscreen_triangle.vert" />
+    <None Include="App\engine\shader\glsl\gaussian_blur_9.frag" />
+    <None Include="App\engine\shader\glsl\line3d.frag" />
+    <None Include="App\engine\shader\glsl\line3d.vert" />
+    <None Include="App\engine\shader\glsl\msdffont.frag" />
+    <None Include="App\engine\shader\glsl\msdffont_outline.frag" />
+    <None Include="App\engine\shader\glsl\msdffont_outlineshadow.frag" />
+    <None Include="App\engine\shader\glsl\msdffont_shadow.frag" />
+    <None Include="App\engine\shader\glsl\msdfprint.frag" />
+    <None Include="App\engine\shader\glsl\round_dot.frag" />
+    <None Include="App\engine\shader\glsl\sdffont.frag" />
+    <None Include="App\engine\shader\glsl\sdffont_outline.frag" />
+    <None Include="App\engine\shader\glsl\sdffont_outlineshadow.frag" />
+    <None Include="App\engine\shader\glsl\sdffont_shadow.frag" />
+    <None Include="App\engine\shader\glsl\shape.frag" />
+    <None Include="App\engine\shader\glsl\sky.frag" />
+    <None Include="App\engine\shader\glsl\sprite.vert" />
+    <None Include="App\engine\shader\glsl\square_dot.frag" />
+    <None Include="App\engine\shader\glsl\texture.frag" />
+    <None Include="App\engine\soundfont\GMGSx.sf2.zstdcmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Builder.hpp" />
+    <ClInclude Include="BuilderContext.hpp" />
+    <ClInclude Include="Common.hpp" />
+    <ClInclude Include="Event.hpp" />
+    <ClInclude Include="EventProvider.hpp" />
+    <ClInclude Include="FocusManager.hpp" />
+    <ClInclude Include="Layout.hpp" />
+    <ClInclude Include="Manager.hpp" />
+    <ClInclude Include="Space.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="WidgetController.hpp" />
+    <ClInclude Include="WidgetCore.hpp" />
+    <ClInclude Include="Widgets\Button.hpp" />
+    <ClInclude Include="Widgets\Image.hpp" />
+    <ClInclude Include="Widgets\Label.hpp" />
+    <ClInclude Include="Widgets\SimpleButton.hpp" />
+    <ClInclude Include="Widgets\SimpleSlider.hpp" />
+    <ClInclude Include="Widgets\TestWidget.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

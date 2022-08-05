@@ -183,4 +183,35 @@ namespace SivImGui
 		arrangeVH<0>(result, children, rect, space, axisYAlignment, axisXAlignment);
 		return result;
 	}
+
+	MeasureResult StackLayout::measure(const std::vector<WidgetBase*>& children) const
+	{
+		MeasureResult result;
+		for (auto child : children)
+		{
+			const auto& childResult = child->measuredSize();
+			result.expand.x |= childResult.expand.x;
+			result.expand.y |= childResult.expand.y;
+			result.minSize.x = Max(result.minSize.x, childResult.minSize.x);
+			result.minSize.y = Max(result.minSize.y, childResult.minSize.y);;
+		}
+		result.minSize += padding;
+		return result;
+	}
+
+	Array<RectF> StackLayout::arrange(RectF rect, const std::vector<WidgetBase*>& children) const
+	{
+		rect -= padding;
+		Array<RectF> result(Arg::reserve = children.size());
+		for (auto child : children)
+		{
+			const auto& childResult = child->measuredSize();
+			result.emplace_back(RectF{
+				rect.pos,
+				childResult.expand.x ? Max(childResult.minSize.x, rect.w) : childResult.minSize.x,
+				childResult.expand.y ? Max(childResult.minSize.y, rect.h) : childResult.minSize.y,
+			});
+		}
+		return result;
+	}
 }

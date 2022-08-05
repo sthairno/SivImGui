@@ -217,8 +217,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Builder.hpp" />
+    <ClInclude Include="Widgets\Label.hpp" />
     <ClInclude Include="Layout.hpp" />
     <ClInclude Include="MeasureResult.hpp" />
+    <ClInclude Include="Widgets\Box.hpp" />
     <ClInclude Include="Root.hpp" />
     <ClInclude Include="Space.hpp" />
     <ClInclude Include="stdafx.h" />

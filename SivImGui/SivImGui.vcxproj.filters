@@ -380,5 +380,11 @@
     <ClInclude Include="WidgetBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Widgets\Box.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets\Label.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

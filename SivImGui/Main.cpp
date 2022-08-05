@@ -5,23 +5,40 @@
 #include "Widgets/Container.hpp"
 #include "Widgets/SimpleButton.hpp"
 #include "Widgets/Button.hpp"
+#include "Widgets/Box.hpp"
+#include "Widgets/Label.hpp"
+
+const Size gridSize{ 5, 6 };
 
 std::unique_ptr<Font> font;
+std::unique_ptr<Font> heavyFont;
 
-bool DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w)
+Array<String> tileChars;
+
+void Reset()
+{
+	tileChars.clear();
+	tileChars.emplace_back(U"");
+}
+
+void DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w, bool* mouseOver = nullptr)
 {
 	const RectF rect = w.rect().movedBy(pos);
 	rect.drawFrame(1, 0, Palette::Red);
 
-	bool mouseOver = false;
+	bool tmp = false;
+	if (not mouseOver)
+	{
+		mouseOver = &tmp;
+	}
 	for (auto& child : w.children())
 	{
-		mouseOver |= DrawInfo(rect.pos, *child);
+		DrawInfo(rect.pos, *child, mouseOver);
 	}
 
-	if (not mouseOver && rect.mouseOver())
+	if (not *mouseOver && rect.mouseOver())
 	{
-		mouseOver = true;
+		*mouseOver = true;
 
 		rect.draw(ColorF(Palette::Red, 0.2));
 		std::u32string text;
@@ -32,6 +49,7 @@ bool DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w)
 			{
 			case 0: layoutName = U"HorizontalLayout"; break;
 			case 1: layoutName = U"VerticalLayout"; break;
+			case 2: layoutName = U"StackLayout"; break;
 			}
 			fmt::format_to(std::back_inserter(text), U"Type: {}(Container)\nRect: {}\nExpand: ({}, {})\nLayout: {}", w.typeName, w.rect(), w.xExpand.value(), w.yExpand.value(), layoutName);
 		}
@@ -54,8 +72,86 @@ bool DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w)
 		diagRect.draw(ColorF(1, 0.5)).drawFrame(0, 2, ColorF(1, 0.9));
 		drawableText.draw(diagRect - SivImGui::Padding{ 4 }, Palette::Black);
 	}
+}
 
-	return mouseOver;
+void BuildHeader(SivImGui::Builder& ctx)
+{
+	SivImGui::Box::New(ctx, ColorF(0.9))([&](SivImGui::Box& b) {
+		b.xExpand = true;
+		b.minSize = { 10, 50 };
+		b.layout = { SivImGui::StackLayout{} };
+		b.frameThickness = 0;
+
+		if (SivImGui::SimpleButton::New(ctx, U"Reset").clicked())
+		{
+			Reset();
+		}
+		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+			c.layout = { SivImGui::VerticalLayout{
+				.padding = { 0.0 },
+				.space = 0.0,
+				.axisXAlignment = SivImGui::Alignment::Center,
+				.axisYAlignment = SivImGui::Alignment::Center,
+			} };
+			c.xExpand = true;
+
+			SivImGui::Label::New(ctx, U"Layout Demo")([&](SivImGui::Label& l) {
+				l.textColor = ColorF(0.1);
+			});
+		});
+	});
+}
+
+void BuildTile(SivImGui::Builder& ctx, char32_t chr, bool editing)
+{
+	SivImGui::Box::New(ctx, editing ? ColorF(1) : ColorF(0.5))([&](SivImGui::Box& b) {
+		b.layout = { SivImGui::VerticalLayout{
+			.padding = { 0.0 },
+			.axisXAlignment = SivImGui::Alignment::Center,
+			.axisYAlignment = SivImGui::Alignment::Center,
+		} };
+		b.minSize = { 60, 60 };
+		b.frameThickness = 2;
+		b.frameColor = chr ? ColorF(0.5) : ColorF(0.7);
+
+		if (chr)
+		{
+			auto& l = SivImGui::Label::New(ctx, String(1, chr).uppercase());
+			l.font = *heavyFont;
+			l.textColor = editing ? Palette::Black : Palette::White;
+		}
+	});
+}
+
+void BuildTiles(SivImGui::Builder& ctx)
+{
+	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+		c.layout = { SivImGui::VerticalLayout{
+			.padding = { 0.0 },
+			.space = 5.0,
+		} };
+		for (int y : Iota(gridSize.y))
+		{
+			bool editing = y >= tileChars.size() - 1;
+			const String line = y < tileChars.size() ? tileChars[y] : U"";
+
+			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+				c.layout = { SivImGui::HorizontalLayout{
+					.padding = { 0.0 },
+					.space = 5.0,
+				} };
+
+				for (int x : Iota(gridSize.x))
+				{
+					BuildTile(
+						ctx,
+						x < line.size() ? line[x] : U'\0',
+						editing
+					);
+				}
+			});
+		}
+	});
 }
 
 void BuildKey(SivImGui::Builder& ctx, String& str, const char32_t chr, const char32_t* label = nullptr)
@@ -131,34 +227,100 @@ String BuildKeyboard(SivImGui::Builder& ctx)
 
 void Main()
 {
+	Scene::SetBackground(Palette::White);
+	Window::SetStyle(WindowStyle::Sizable);
+
 	font = std::make_unique<Font>(14);
+	heavyFont = std::make_unique<Font>(28, Typeface::Heavy);
 
 	SivImGui::Root root(std::make_unique<SivImGui::Container>());
-	root.getWidget().layout = { SivImGui::VerticalLayout{
-		.axisXAlignment = SivImGui::Alignment::Center,
-		.axisYAlignment = SivImGui::Alignment::Center
-	} };
-	root.getWidget().xExpand = true;
-	root.getWidget().yExpand = true;
+	{
+		auto& widget = root.getWidget();
+		widget.layout = { SivImGui::VerticalLayout{
+			.padding = { 0 },
+			.space = 0
+		} };
+		widget.xExpand = true;
+		widget.yExpand = true;
+	}
 
 	SivImGui::Builder ctx(root.getWidget());
-
 	bool showInfo = false;
+	String input;
+
+	Reset();
 
 	while (System::Update())
 	{
 		root.update();
-
 		ctx.reset();
+
+		/////////
+
+		input.clear();
+		BuildHeader(ctx);
+		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+			c.layout = { SivImGui::VerticalLayout{
+				.padding = { 0, 10, 10 },
+				.space = 0,
+				.axisXAlignment = SivImGui::Alignment::Center,
+			} };
+			c.xExpand = true;
+			c.yExpand = true;
+
+			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+				c.layout = { SivImGui::VerticalLayout{
+					.padding = { 0 },
+					.axisYAlignment = SivImGui::Alignment::Center,
+				} };
+				c.yExpand = true;
+				BuildTiles(ctx);
+			});
+			input += BuildKeyboard(ctx);
+			input += TextInput::GetRawInput();
+		});
+
+		for (const auto c : input)
 		{
+			auto& line = tileChars.back();
 
-			BuildKeyboard(ctx);
+			if (c == U'\b')
+			{
+				if (line)
+				{
+					line.pop_back();
+				}
+				continue;
+			}
 
+			if (c == U'\n' || c == U'\r')
+			{
+				if (line.size() == gridSize.x &&
+					tileChars.size() <= gridSize.y)
+				{
+					tileChars.emplace_back(U"");
+				}
+				continue;
+			}
+
+			if (U'a' <= c && c <= U'z')
+			{
+				if (line.size() < gridSize.x)
+				{
+					line.push_back(c);
+				}
+			}
 		}
-		ctx.finalize();
 
+		/////////
+
+		ctx.finalize();
 		root.layout(Scene::Size());
 		root.draw();
+
+		/////////
+
+		// デバッグ情報の表示切替
 
 		if (KeySpace.down())
 		{

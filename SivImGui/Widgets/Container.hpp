@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "WidgetBase.hpp"
-#include "Builder.hpp"
+#include "../WidgetBase.hpp"
+#include "../Builder.hpp"
 
 namespace SivImGui
 {

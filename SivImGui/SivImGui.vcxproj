@@ -114,22 +114,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Builder.cpp" />
-    <ClCompile Include="BuilderContext.cpp" />
-    <ClCompile Include="EventProvider.cpp" />
+    <ClCompile Include="Layout.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Root.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="WidgetController.cpp" />
-    <ClCompile Include="WidgetCore.cpp" />
-    <ClCompile Include="Widgets\Button.cpp" />
-    <ClCompile Include="Widgets\Image.cpp" />
-    <ClCompile Include="Widgets\Label.cpp" />
-    <ClCompile Include="Widgets\SimpleButton.cpp" />
-    <ClCompile Include="Widgets\SimpleSlider.cpp" />
-    <ClCompile Include="Widgets\TestWidget.cpp" />
+    <ClCompile Include="WidgetBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -225,24 +217,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Builder.hpp" />
-    <ClInclude Include="BuilderContext.hpp" />
-    <ClInclude Include="Common.hpp" />
-    <ClInclude Include="Event.hpp" />
-    <ClInclude Include="EventProvider.hpp" />
-    <ClInclude Include="FocusManager.hpp" />
     <ClInclude Include="Layout.hpp" />
-    <ClInclude Include="Manager.hpp" />
+    <ClInclude Include="MeasureResult.hpp" />
+    <ClInclude Include="Root.hpp" />
     <ClInclude Include="Space.hpp" />
-    <ClInclude Include="State.hpp" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="WidgetController.hpp" />
-    <ClInclude Include="WidgetCore.hpp" />
+    <ClInclude Include="WidgetBase.hpp" />
     <ClInclude Include="Widgets\Button.hpp" />
-    <ClInclude Include="Widgets\Image.hpp" />
-    <ClInclude Include="Widgets\Label.hpp" />
+    <ClInclude Include="Widgets\Container.hpp" />
     <ClInclude Include="Widgets\SimpleButton.hpp" />
-    <ClInclude Include="Widgets\SimpleSlider.hpp" />
-    <ClInclude Include="Widgets\TestWidget.hpp" />
+    <ClInclude Include="Widgets\Widget.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

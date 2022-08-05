@@ -1,22 +1,67 @@
 ﻿#include "Builder.hpp"
-#include "BuilderContext.hpp"
-#include "WidgetController.hpp"
 
-namespace GUI::Builder
+namespace SivImGui
 {
-	void SetLayout(Context& ctx, Layout::Variant&& layout)
+	Builder::Builder(WidgetBase& root)
+		: m_root(root)
 	{
-		assert(ctx.getParentWidget());
-		ctx.getParentWidget()->getController().layout = layout;
+		reset();
 	}
 
-	void SameLine(Context& ctx, bool value)
+	WidgetBase& Builder::next(WidgetBase::TypeID type, WidgetBase::Generator generator)
 	{
-		const auto last = ctx.getLastWidget();
-		const auto parent = ctx.getParentWidget();
-		if (last && last != parent)
+		auto& state = m_stack.back();
+		auto& children = state.widget->children();
+
+		if (state.nextItr != children.end())
 		{
-			last->getController().sameLine = value;
+			if (state.nextItr->get()->typeId == type)
+			{
+				WidgetBase* child = state.nextItr->get();
+				state.nextItr++;
+				return *child;
+			}
+			else
+			{
+				state.widget->removeChildrenFrom(state.nextItr);
+			}
 		}
+
+		state.widget->addChild(std::unique_ptr<WidgetBase>(generator()));
+		state.nextItr = children.end();
+
+		WidgetBase& newChild = *children.back();
+		newChild.m_builder = this;
+		return newChild;
 	}
-};
+
+	void Builder::push(WidgetBase& widget)
+	{
+		m_stack.emplace_back(State{
+			.widget = &widget,
+			.nextItr = widget.children().begin()
+		});
+	}
+
+	void Builder::pop()
+	{
+		auto& state = m_stack.back();
+		state.widget->removeChildrenFrom(state.nextItr);
+		m_stack.pop_back();
+	}
+
+	void Builder::reset()
+	{
+		m_stack.clear();
+		push(m_root);
+	}
+
+	void Builder::finalize()
+	{
+		while (not m_stack.empty())
+		{
+			pop();
+		}
+		push(m_root);
+	}
+}

@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "Common.hpp"
+#include <Siv3D.hpp>
 
-namespace GUI
+namespace SivImGui
 {
 	struct Space
 	{
@@ -127,7 +127,7 @@ namespace GUI
 
 	constexpr inline Vec2 operator-(const Vec2& v, const Space& s)
 	{
-		Vec2 vec{ - s.left + v.x - s.right, - s.top + v.y - s.bottom };
+		Vec2 vec{ -s.left + v.x - s.right, -s.top + v.y - s.bottom };
 
 		if (vec.x < 0.0)
 		{

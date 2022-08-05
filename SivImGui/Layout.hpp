@@ -1,78 +1,83 @@
 ﻿#pragma once
-#include "Common.hpp"
+#include <Siv3D.hpp>
 #include "Space.hpp"
+#include "MeasureResult.hpp"
 
-namespace GUI::Layout
+namespace SivImGui
 {
+	class WidgetBase;
+
 	enum class Alignment
 	{
-		Start,
-		Center,
-		End,
+		Start, Center, End
 	};
 
-	struct Default
+	struct HorizontalLayout
 	{
-		double space = 4;
+		Padding padding{ 10.0 };
 
-		Padding padding{ 5.0 };
+		double space = 5.0;
 
 		Alignment axisXAlignment = Alignment::Start;
 
 		Alignment axisYAlignment = Alignment::Start;
 
-		Alignment lineAlignment = Alignment::Start;
+		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
+
+		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const;
 	};
 
-	struct Horizontal
+	struct VerticalLayout
 	{
-		double space = 4;
+		Padding padding{ 10.0 };
 
-		Padding padding{ 5.0 };
+		double space = 5.0;
 
 		Alignment axisXAlignment = Alignment::Start;
 
 		Alignment axisYAlignment = Alignment::Start;
+
+		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
+
+		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const;
 	};
 
-	struct Vertical
+	struct Layout
 	{
-		double space = 4;
+		using Variant = std::variant<HorizontalLayout, VerticalLayout>;
 
-		Padding padding{ 5.0 };
+		Layout(Variant data)
+			: data(data)
+		{}
 
-		Alignment axisXAlignment = Alignment::Start;
+		Variant data;
 
-		Alignment axisYAlignment = Alignment::Start;
+		MeasureResult measure(const std::vector<WidgetBase*>& children) const
+		{
+			return std::visit([&](auto& l) { return l.measure(children); }, data);
+		}
+
+		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const
+		{
+			return std::visit([&](auto& l) { return l.arrange(rect, children); }, data);
+		}
 	};
 
-	inline bool operator==(const Default& l, const Default& r)
+	inline bool operator==(const HorizontalLayout& l, const HorizontalLayout& r)
 	{
-		return l.space == r.space &&
-			l.axisXAlignment == r.axisXAlignment &&
-			l.axisYAlignment == r.axisYAlignment &&
-			l.lineAlignment == r.lineAlignment;
+		return l.padding == r.padding && l.space == r.space;
 	}
 
-	inline bool operator!=(const Default& l, const Default& r) { return !(l == r); }
+	inline bool operator!=(const HorizontalLayout& l, const HorizontalLayout& r) { return !(l == r); }
 
-	inline bool operator==(const Horizontal& l, const Horizontal& r)
+	inline bool operator==(const VerticalLayout& l, const VerticalLayout& r)
 	{
-		return l.space == r.space &&
-			l.axisXAlignment == r.axisXAlignment &&
-			l.axisYAlignment == r.axisYAlignment;
+		return l.padding == r.padding && l.space == r.space;
 	}
 
-	inline bool operator!=(const Horizontal& l, const Horizontal& r) { return !(l == r); }
+	inline bool operator!=(const VerticalLayout& l, const VerticalLayout& r) { return !(l == r); }
 
-	inline bool operator==(const Vertical& l, const Vertical& r)
-	{
-		return l.space == r.space &&
-			l.axisXAlignment == r.axisXAlignment &&
-			l.axisYAlignment == r.axisYAlignment;
-	}
+	inline bool operator==(const Layout& l, const Layout& r) { return l.data == r.data; }
 
-	inline bool operator!=(const Vertical& l, const Vertical& r) { return !(l == r); }
-
-	using Variant = std::variant<Default, Horizontal, Vertical>;
+	inline bool operator!=(const Layout& l, const Layout& r) { return l.data != r.data; }
 }

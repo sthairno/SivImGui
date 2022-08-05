@@ -78,38 +78,14 @@
     <ClCompile Include="Builder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BuilderContext.cpp">
+    <ClCompile Include="Layout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventProvider.cpp">
+    <ClCompile Include="Root.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Manager.cpp">
+    <ClCompile Include="WidgetBase.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WidgetController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WidgetCore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\Button.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\Image.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\Label.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\SimpleButton.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\SimpleSlider.cpp">
-      <Filter>Source Files\Widgets</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\TestWidget.cpp">
-      <Filter>Source Files\Widgets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,59 +350,35 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Widgets\SimpleButton.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets\Button.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets\Container.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Widgets\Widget.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
     <ClInclude Include="Builder.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BuilderContext.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Event.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventProvider.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FocusManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Manager.hpp">
+    <ClInclude Include="MeasureResult.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Root.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Space.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="State.hpp">
+    <ClInclude Include="WidgetBase.hpp">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WidgetController.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WidgetCore.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\Button.hpp">
-      <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\Image.hpp">
-      <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\Label.hpp">
-      <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\SimpleButton.hpp">
-      <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\SimpleSlider.hpp">
-      <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Widgets\TestWidget.hpp">
-      <Filter>Header Files\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

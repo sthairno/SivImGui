@@ -156,7 +156,9 @@ void BuildTiles(SivImGui::Builder& ctx)
 
 void BuildKey(SivImGui::Builder& ctx, String& str, const char32_t chr, const char32_t* label = nullptr)
 {
-	if (SivImGui::SimpleButton::New(ctx, label ? label : String(1, chr).uppercase()).clicked())
+	if (SivImGui::SimpleButton::New(ctx, label ? label : String(1, chr).uppercase())
+		([&](SivImGui::SimpleButton& b) { b.minSize = { 50, 20 }; })
+		.clicked())
 	{
 		str.append(chr);
 	}
@@ -270,7 +272,7 @@ void Main()
 
 			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
 				c.layout = { SivImGui::VerticalLayout{
-					.padding = { 0 },
+					.padding = { 10 },
 					.axisYAlignment = SivImGui::Alignment::Center,
 				} };
 				c.yExpand = true;

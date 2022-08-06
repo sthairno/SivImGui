@@ -386,5 +386,8 @@
     <ClInclude Include="Widgets\Label.hpp">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="Widgets\Image.hpp">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

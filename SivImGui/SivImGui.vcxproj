@@ -217,6 +217,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Builder.hpp" />
+    <ClInclude Include="Widgets\Image.hpp" />
     <ClInclude Include="Widgets\Label.hpp" />
     <ClInclude Include="Layout.hpp" />
     <ClInclude Include="MeasureResult.hpp" />

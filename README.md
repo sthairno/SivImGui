@@ -2,11 +2,11 @@
 
 `(Dear ImGui + egui + HTML) / 3`くらいのGUIライブラリ
 
-### 実装例
+## 実装例
 
 ![sample](assets/sample.png)
 
-#### 事前定義
+### 事前定義
 
 ```cpp
 #include <Siv3D.hpp>
@@ -64,7 +64,7 @@ void Main()
 }
 ```
 
-#### ループ内定義(ImGui風)
+### ループ内定義(ImGui風)
 
 ```cpp
 #include <Siv3D.hpp>

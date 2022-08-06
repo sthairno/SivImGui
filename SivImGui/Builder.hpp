@@ -4,10 +4,13 @@
 
 namespace SivImGui
 {
+	/// @brief UI作成補助クラス
 	class Builder
 	{
 	public:
 
+		/// @brief コンストラクタ
+		/// @param root 操作対象ウィジェット
 		Builder(WidgetBase& root);
 
 	public:
@@ -39,8 +42,8 @@ namespace SivImGui
 	};
 }
 
-
-// GUI::Builder 補助メンバ関数
+/// @brief GUI::Builder補助メンバ関数
+/// @param WIDGET_TYPE ウィジェットの型名
 #define SIVIMGUI_BUILDER_HELPER(WIDGET_TYPE)\
 public:\
 template<std::invocable<> Callback> WIDGET_TYPE& operator()(Callback&& f) { builderPush(); f(); builderPop(); return *this; }\

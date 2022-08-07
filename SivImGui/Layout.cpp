@@ -19,11 +19,13 @@ namespace SivImGui
 	{
 		switch (alignment)
 		{
-		case Alignment::Start: return pos;
-		case Alignment::Center: return pos + (size - itemSize) / 2;
-		case Alignment::End: return pos + size - itemSize;
+		case Alignment::Center:
+			return pos + (size - itemSize) / 2;
+		case Alignment::End:
+			return pos + size - itemSize;
+		default:
+			return pos;
 		}
-		return pos;
 	}
 
 	template<uint8 primary>
@@ -52,7 +54,7 @@ namespace SivImGui
 			auto& childSize = result[idx].size;
 
 			Ref<primary>(childSize) = Ref<primary>(childRequest.minSize);
-			Ref<secondary>(childSize) = Ref<secondary>(childRequest.expand)
+			Ref<secondary>(childSize) = (Ref<secondary>(childRequest.expand) || secondaryAlignment == Alignment::Stretch)
 				? Max(Ref<secondary>(rect.size), Ref<secondary>(childRequest.minSize))
 				: Ref<secondary>(childRequest.minSize);
 		}
@@ -156,7 +158,7 @@ namespace SivImGui
 	{
 		rect -= padding;
 		Array<RectF> result(children.size(), RectF{ 0, 0, 0, 0 });
-		arrangeVH<1>(result, children, rect, space, axisXAlignment, axisYAlignment);
+		arrangeVH<1>(result, children, rect, space, horizontalAlignment, verticalAlignment);
 		return result;
 	}
 
@@ -180,7 +182,7 @@ namespace SivImGui
 	{
 		rect -= padding;
 		Array<RectF> result(children.size(), RectF{ 0, 0, 0, 0 });
-		arrangeVH<0>(result, children, rect, space, axisYAlignment, axisXAlignment);
+		arrangeVH<0>(result, children, rect, space, verticalAlignment, horizontalAlignment);
 		return result;
 	}
 
@@ -206,10 +208,19 @@ namespace SivImGui
 		for (auto child : children)
 		{
 			const auto& childResult = child->measuredSize();
+
+			SizeF childSize{
+				(childResult.expand.x || horizontalAlignment == Alignment::Stretch)
+					? Max(childResult.minSize.x, rect.w)
+					: childResult.minSize.x,
+				(childResult.expand.y || verticalAlignment == Alignment::Stretch)
+					? Max(childResult.minSize.y, rect.h)
+					: childResult.minSize.y,
+			};
 			result.emplace_back(RectF{
-				rect.pos,
-				childResult.expand.x ? Max(childResult.minSize.x, rect.w) : childResult.minSize.x,
-				childResult.expand.y ? Max(childResult.minSize.y, rect.h) : childResult.minSize.y,
+				calcLeadPosition(horizontalAlignment, rect.x, rect.w, childSize.x),
+				calcLeadPosition(verticalAlignment, rect.y, rect.h, childSize.y),
+				childSize
 			});
 		}
 		return result;

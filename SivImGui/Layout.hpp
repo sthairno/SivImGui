@@ -9,7 +9,7 @@ namespace SivImGui
 
 	enum class Alignment
 	{
-		Start, Center, End
+		Start, Center, End, Stretch
 	};
 
 	struct HorizontalLayout
@@ -18,9 +18,9 @@ namespace SivImGui
 
 		double space = 5.0;
 
-		Alignment axisXAlignment = Alignment::Start;
+		Alignment horizontalAlignment = Alignment::Start;
 
-		Alignment axisYAlignment = Alignment::Start;
+		Alignment verticalAlignment = Alignment::Stretch;
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
@@ -33,9 +33,9 @@ namespace SivImGui
 
 		double space = 5.0;
 
-		Alignment axisXAlignment = Alignment::Start;
+		Alignment horizontalAlignment = Alignment::Stretch;
 
-		Alignment axisYAlignment = Alignment::Start;
+		Alignment verticalAlignment = Alignment::Start;
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
@@ -45,6 +45,10 @@ namespace SivImGui
 	struct StackLayout
 	{
 		Padding padding{ 10.0 };
+
+		Alignment horizontalAlignment = Alignment::Stretch;
+
+		Alignment verticalAlignment = Alignment::Stretch;
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
@@ -77,8 +81,8 @@ namespace SivImGui
 		return
 			l.padding == r.padding &&
 			l.space == r.space &&
-			l.axisXAlignment == r.axisXAlignment &&
-			l.axisYAlignment == r.axisYAlignment;
+			l.horizontalAlignment == r.horizontalAlignment &&
+			l.verticalAlignment == r.verticalAlignment;
 	}
 
 	inline bool operator!=(const HorizontalLayout& l, const HorizontalLayout& r) { return !(l == r); }
@@ -88,8 +92,8 @@ namespace SivImGui
 		return
 			l.padding == r.padding &&
 			l.space == r.space &&
-			l.axisXAlignment == r.axisXAlignment &&
-			l.axisYAlignment == r.axisYAlignment;
+			l.horizontalAlignment == r.horizontalAlignment &&
+			l.verticalAlignment == r.verticalAlignment;
 	}
 
 	inline bool operator!=(const VerticalLayout& l, const VerticalLayout& r) { return !(l == r); }
@@ -97,7 +101,9 @@ namespace SivImGui
 	inline bool operator==(const StackLayout& l, const StackLayout& r)
 	{
 		return
-			l.padding == r.padding;
+			l.padding == r.padding &&
+			l.horizontalAlignment == r.horizontalAlignment &&
+			l.verticalAlignment == r.verticalAlignment;
 	}
 
 	inline bool operator!=(const StackLayout& l, const StackLayout& r) { return !(l == r); }

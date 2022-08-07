@@ -79,7 +79,9 @@ void BuildHeader(SivImGui::Builder& ctx)
 	SivImGui::Box::New(ctx, ColorF(0.9))([&](SivImGui::Box& b) {
 		b.xExpand = true;
 		b.minSize = { 10, 50 };
-		b.layout = { SivImGui::StackLayout{} };
+		b.layout = { SivImGui::StackLayout{
+			.horizontalAlignment = SivImGui::Alignment::Start
+		} };
 		b.frameThickness = 0;
 
 		if (SivImGui::SimpleButton::New(ctx, U"Reset").clicked())
@@ -90,8 +92,8 @@ void BuildHeader(SivImGui::Builder& ctx)
 			c.layout = { SivImGui::VerticalLayout{
 				.padding = { 0.0 },
 				.space = 0.0,
-				.axisXAlignment = SivImGui::Alignment::Center,
-				.axisYAlignment = SivImGui::Alignment::Center,
+				.horizontalAlignment = SivImGui::Alignment::Center,
+				.verticalAlignment = SivImGui::Alignment::Center,
 			} };
 			c.xExpand = true;
 
@@ -107,8 +109,8 @@ void BuildTile(SivImGui::Builder& ctx, char32_t chr, bool editing)
 	SivImGui::Box::New(ctx, editing ? ColorF(1) : ColorF(0.5))([&](SivImGui::Box& b) {
 		b.layout = { SivImGui::VerticalLayout{
 			.padding = { 0.0 },
-			.axisXAlignment = SivImGui::Alignment::Center,
-			.axisYAlignment = SivImGui::Alignment::Center,
+			.horizontalAlignment = SivImGui::Alignment::Center,
+			.verticalAlignment = SivImGui::Alignment::Center,
 		} };
 		b.minSize = { 60, 60 };
 		b.frameThickness = 2;
@@ -171,7 +173,7 @@ String BuildKeyboard(SivImGui::Builder& ctx)
 	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
 		c.layout = { SivImGui::VerticalLayout{
 			.padding = { 0 },
-			.axisXAlignment = SivImGui::Alignment::Center
+			.horizontalAlignment = SivImGui::Alignment::Center
 		} };
 
 		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
@@ -265,7 +267,7 @@ void Main()
 			c.layout = { SivImGui::VerticalLayout{
 				.padding = { 0, 10, 10 },
 				.space = 0,
-				.axisXAlignment = SivImGui::Alignment::Center,
+				.horizontalAlignment = SivImGui::Alignment::Center,
 			} };
 			c.xExpand = true;
 			c.yExpand = true;
@@ -273,7 +275,7 @@ void Main()
 			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
 				c.layout = { SivImGui::VerticalLayout{
 					.padding = { 10 },
-					.axisYAlignment = SivImGui::Alignment::Center,
+					.verticalAlignment = SivImGui::Alignment::Center,
 				} };
 				c.yExpand = true;
 				BuildTiles(ctx);

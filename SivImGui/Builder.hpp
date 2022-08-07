@@ -38,7 +38,7 @@ namespace SivImGui
 			WidgetBase::WidgetContainer::const_iterator nextItr;
 		};
 
-		std::vector<State> m_stack;
+		std::deque<State> m_stack;
 	};
 }
 

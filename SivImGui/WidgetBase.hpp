@@ -34,9 +34,9 @@ namespace SivImGui
 
 	public:
 
-		T value() const { return m_value; }
+		const T& value() const { return m_value; }
 
-		T& operator =(T value)
+		const T& operator =(T value)
 		{
 			if (value != m_value)
 			{
@@ -45,10 +45,6 @@ namespace SivImGui
 			}
 			return m_value;
 		}
-
-		T& operator*() { return m_value; }
-
-		T* operator->() { return &m_value; }
 
 		const T& operator*() const { return m_value; }
 
@@ -106,7 +102,15 @@ namespace SivImGui
 
 		Property<SizeF> minSize{ *this, { 0, 0 }, PropertyFlag::Layout };
 
-		Property<Layout> layout{ *this, { HorizontalLayout{} }, PropertyFlag::Layout };
+		Property<Layout> layout{ *this, { VerticalLayout{} }, PropertyFlag::Layout };
+
+		Property<int> row{ *this, 0, PropertyFlag::Layout };
+
+		Property<int> column{ *this, 0, PropertyFlag::Layout };
+
+		Property<int> rowSpan{ *this, 1, PropertyFlag::Layout };
+
+		Property<int> columnSpan{ *this, 1, PropertyFlag::Layout };
 
 	public:
 

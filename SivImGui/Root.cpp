@@ -7,12 +7,13 @@ namespace SivImGui
 		m_widget->layoutCore(availableSize);
 	}
 
-	bool Root::update(Vec2 pos)
+	void Root::update(Vec2 pos, bool mouseOver)
 	{
+		auto& windowState = Window::GetState();
 		Transformer2D t(Mat3x2::Translate(pos), TransformCursor::Yes);
-		bool handled = false;
-		m_widget->updateCore(handled);
-		return handled;
+		mouseOver &= not windowState.sizeMove;
+		mouseOver &= windowState.focused;
+		m_widget->updateCore(mouseOver, m_enabled);
 	}
 
 	void Root::draw(Vec2 pos) const

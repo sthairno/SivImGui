@@ -15,7 +15,7 @@ namespace SivImGui
 
 		if (state.nextItr != children.end())
 		{
-			if (state.nextItr->get()->typeId == type)
+			if (state.nextItr->get()->typeInfo.id == type)
 			{
 				WidgetBase* child = state.nextItr->get();
 				state.nextItr++;

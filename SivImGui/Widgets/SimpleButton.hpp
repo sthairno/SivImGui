@@ -45,24 +45,17 @@ namespace SivImGui
 			return SimpleGUI::ButtonRegion(label, { 0, 0 }).size;
 		}
 
-		virtual bool update(RectF rect, bool handled) override
+		virtual void update(RectF rect) override
 		{
 			const RectF btnRect(rect.pos, rect.w, measuredSize().minSize.y);
 
-			m_clicked = false;
-			if (not handled && btnRect.leftClicked())
-			{
-				m_clicked = true;
-				return true;
-			}
-
-			return false;
+			m_clicked = mouseOver() && btnRect.leftClicked();
 		}
 
 		virtual void draw(RectF rect) const override
 		{
 			[[maybe_unused]]
-			bool _ = SimpleGUI::Button(label, rect.pos, rect.w);
+			bool _ = SimpleGUI::Button(label, rect.pos, rect.w, isEnabled());
 		}
 	};
 }

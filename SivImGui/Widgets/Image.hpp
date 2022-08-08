@@ -19,7 +19,8 @@ namespace SivImGui
 			return {
 				.id = typeid(Image).hash_code(),
 				.name = U"Image",
-				.generator = [] { return std::make_unique<Image>(); }
+				.generator = [] { return std::make_unique<Image>(); },
+				.enableMouseOver = false
 			};
 		}
 

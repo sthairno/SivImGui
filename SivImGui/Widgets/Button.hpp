@@ -48,15 +48,11 @@ namespace SivImGui
 
 	public:
 
-		bool mouseOver() const { return m_mouseOver; }
-
 		bool pressed() const { return m_pressed; }
 
 		bool clicked() const { return m_clicked; }
 
 	protected:
-
-		bool m_mouseOver = false;
 
 		bool m_pressed = false;
 
@@ -77,30 +73,24 @@ namespace SivImGui
 			);
 		}
 
-		virtual bool update(RectF rect, bool handled) override
+		virtual void update(RectF rect) override
 		{
 			m_clicked = false;
-			m_mouseOver = not handled && rect.mouseOver();
 
-			if (m_mouseOver)
+			if (mouseOver() && MouseL.down())
 			{
-				handled = true;
-				if (MouseL.down())
-				{
-					m_pressed = true;
-				}
+				m_pressed = true;
+				return;
 			}
 
 			if (m_pressed && not MouseL.pressed())
 			{
-				if (m_mouseOver)
+				if (mouseOver())
 				{
 					m_clicked = true;
 				}
 				m_pressed = false;
 			}
-
-			return handled;
 		}
 
 		virtual void draw(RectF rect) const override
@@ -110,14 +100,14 @@ namespace SivImGui
 			ColorF backCol;
 			ColorF frameCol;
 
-			if (true /*enabled*/)
+			if (isEnabled())
 			{
 				if (m_pressed)
 				{
 					backCol = mouseOverBackgroundColor;
 					frameCol = mouseOverFlameColor;
 				}
-				else if (m_mouseOver)
+				else if (mouseOver())
 				{
 					backCol = mouseOverBackgroundColor;
 					frameCol = mouseOverFlameColor;
@@ -137,7 +127,7 @@ namespace SivImGui
 			rrect.draw(backCol);
 			rrect.drawFrame(frameThickness, 0, frameCol);
 
-			if (m_mouseOver)
+			if (mouseOver())
 			{
 				Cursor::RequestStyle(CursorStyle::Hand);
 			}

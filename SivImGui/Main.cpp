@@ -51,11 +51,11 @@ void DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w, bool* mouseOver = nullptr
 			case 1: layoutName = U"VerticalLayout"; break;
 			case 2: layoutName = U"StackLayout"; break;
 			}
-			fmt::format_to(std::back_inserter(text), U"Type: {}(Container)\nRect: {}\nExpand: ({}, {})\nLayout: {}", w.typeName, w.rect(), w.xExpand.value(), w.yExpand.value(), layoutName);
+			fmt::format_to(std::back_inserter(text), U"Type: {}(Container)\nRect: {}\nExpand: ({}, {})\nLayout: {}", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value(), layoutName);
 		}
 		else
 		{
-			fmt::format_to(std::back_inserter(text), U"Type: {}(Widget)\nRect: {}\nExpand: ({}, {})", w.typeName, w.rect(), w.xExpand.value(), w.yExpand.value());
+			fmt::format_to(std::back_inserter(text), U"Type: {}(Widget)\nRect: {}\nExpand: ({}, {})", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value());
 		}
 		const auto drawableText = (*font)(text);
 		const auto cursorPos = Cursor::PosF();
@@ -84,7 +84,9 @@ void BuildHeader(SivImGui::Builder& ctx)
 		} };
 		b.frameThickness = 0;
 
-		if (SivImGui::SimpleButton::New(ctx, U"Reset").clicked())
+		auto& resetBtn = SivImGui::SimpleButton::New(ctx, U"Reset");
+		resetBtn.enabled = tileChars[0].size() > 0;
+		if (resetBtn.clicked())
 		{
 			Reset();
 		}

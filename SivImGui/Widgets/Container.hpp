@@ -18,7 +18,8 @@ namespace SivImGui
 			return {
 				.id = 1,
 				.name = U"Container",
-				.generator = [] { return std::make_unique<Container>(); }
+				.generator = [] { return std::make_unique<Container>(); },
+				.enableMouseOver = false
 			};
 		}
 

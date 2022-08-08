@@ -68,6 +68,8 @@ namespace SivImGui
 		StringView name;
 
 		std::function<std::unique_ptr<WidgetBase>()> generator;
+
+		bool enableMouseOver = true;
 	};
 
 	class WidgetBase
@@ -81,8 +83,7 @@ namespace SivImGui
 		using WidgetContainer = std::vector<std::unique_ptr<WidgetBase>>;
 
 		WidgetBase(WidgetTypeInfo typeInfo, bool isContainer)
-			: typeId(typeInfo.id)
-			, typeName(typeInfo.name)
+			: typeInfo(typeInfo)
 			, isContainer(isContainer)
 		{ }
 
@@ -96,6 +97,10 @@ namespace SivImGui
 
 		Property<bool> yExpand{ *this, false, PropertyFlag::Layout };
 
+		Property<bool> enabled{ *this, true, PropertyFlag::Layout };
+
+		Property<Optional<bool>> enableMouseOver{ *this, { }, PropertyFlag::Layout };
+
 		Property<SizeF> minSize{ *this, { 0, 0 }, PropertyFlag::Layout };
 
 		Property<Layout> layout{ *this, { VerticalLayout{} }, PropertyFlag::Layout };
@@ -106,9 +111,7 @@ namespace SivImGui
 
 	public:
 
-		const TypeID typeId;
-
-		const StringView typeName;
+		const WidgetTypeInfo typeInfo;
 
 		const bool isContainer;
 
@@ -126,6 +129,10 @@ namespace SivImGui
 
 		MeasureResult measuredSize() const { return m_measuredSize; };
 
+		bool mouseOver() const { return m_mouseOver; }
+
+		bool isEnabled() const { return m_enabled; }
+
 		void requestLayout() { m_layoutRequired = true; }
 
 		void removeChildren();
@@ -140,7 +147,7 @@ namespace SivImGui
 
 		virtual Array<RectF> arrange(RectF rect) const = 0;
 
-		virtual bool update(RectF, bool) { return false; };
+		virtual void update(RectF) { };
 
 		virtual void draw(RectF) const { }
 
@@ -160,7 +167,7 @@ namespace SivImGui
 
 		void layoutCore(SizeF availableSize);
 
-		void updateCore(bool& handled);
+		bool updateCore(bool mouseOver, bool enabled);
 
 		void drawCore() const;
 
@@ -179,6 +186,10 @@ namespace SivImGui
 		bool m_visible = true;
 
 		bool m_layoutRequired = true;
+
+		bool m_mouseOver = false;
+
+		bool m_enabled = true;
 
 		void arrangeCore(RectF rect);
 

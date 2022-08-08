@@ -16,14 +16,18 @@ namespace SivImGui
 
 		WidgetBase& getWidget() { return *m_widget; }
 
+		void setEnabled(bool enable) { m_enabled = enable; }
+
 		void layout(SizeF availableSize);
 
-		bool update(Vec2 pos = { 0, 0 });
+		void update(Vec2 pos = { 0, 0 }, bool mouseOver = true);
 
 		void draw(Vec2 pos = { 0, 0 }) const;
 
 	private:
 
 		std::unique_ptr<WidgetBase> m_widget;
+
+		bool m_enabled = true;
 	};
 }

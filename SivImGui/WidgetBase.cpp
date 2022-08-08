@@ -57,15 +57,37 @@ namespace SivImGui
 		arrangeCore(rect);
 	}
 
-	void WidgetBase::updateCore(bool& handled)
+	bool WidgetBase::updateCore(bool mouseOver, bool enabled)
 	{
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
+		const RectF rect{ 0, 0, m_rect.size };
+		const bool rectMouseOver = rect.mouseOver();
 
+		mouseOver &= rectMouseOver;
+		enabled &= this->enabled;
+
+		bool covered = false;
 		std::for_each(
 			m_visibleChildren.rbegin(), m_visibleChildren.rend(),
-			[&](WidgetBase* child) { child->updateCore(handled); }
+			[=, &covered](WidgetBase* child) {
+				covered |= child->updateCore(mouseOver && not covered, enabled);
+			}
 		);
-		handled |= update({ 0, 0, m_rect.size }, handled);
+
+		m_enabled = enabled;
+		if (enableMouseOver->value_or(typeInfo.enableMouseOver))
+		{
+			m_mouseOver = mouseOver && not covered;
+			covered |= rectMouseOver;
+		}
+		else
+		{
+			m_mouseOver = false;
+		}
+
+		update(rect);
+
+		return covered;
 	}
 
 	void WidgetBase::drawCore() const

@@ -19,7 +19,8 @@ namespace SivImGui
 			return {
 				.id = typeid(Label).hash_code(),
 				.name = U"Label",
-				.generator = [] { return std::make_unique<Label>(); }
+				.generator = [] { return std::make_unique<Label>(); },
+				.enableMouseOver = false
 			};
 		}
 

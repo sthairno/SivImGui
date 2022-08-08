@@ -9,14 +9,24 @@ namespace SivImGui
 
 		static Box& New(Builder& ctx, ColorF backColor)
 		{
-			auto& w = reinterpret_cast<Box&>(ctx.next(typeid(Box).hash_code(), [&] { return new Box(); }));
+			auto& w = ctx.next<Box>(TypeInfo());
 			w.backColor = backColor;
 			return w;
 		}
 
+		static WidgetTypeInfo TypeInfo()
+		{
+			return {
+				.id = typeid(Box).hash_code(),
+				.name = U"Box",
+				.generator = [] { return std::make_unique<Box>(); }
+			};
+		}
+
 	public:
 
-		Box() : Container(typeid(Box).hash_code(), U"Box") { }
+		Box()
+			: Container(TypeInfo()) { }
 
 	public:
 
@@ -27,6 +37,21 @@ namespace SivImGui
 		Property<double> frameThickness{ *this, 1, PropertyFlag::Layout };
 
 	protected:
+
+		virtual MeasureResult measure() const override
+		{
+			auto result = layout->measure(visibleChildren());
+			result.minSize += Padding{ frameThickness };
+			return result;
+		}
+
+		virtual Array<RectF> arrange(RectF rect) const override
+		{
+			return layout->arrange(
+				rect - Padding{ frameThickness },
+				visibleChildren()
+			);
+		}
 
 		virtual void draw(RectF rect) const override
 		{

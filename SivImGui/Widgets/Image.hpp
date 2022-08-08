@@ -9,14 +9,24 @@ namespace SivImGui
 
 		static Image& New(Builder& ctx, const Texture& texture)
 		{
-			auto& w = reinterpret_cast<Image&>(ctx.next(typeid(Image).hash_code(), [&] { return new Image(); }));
+			auto& w = ctx.next<Image>(TypeInfo());
 			w.texture = texture;
 			return w;
 		}
 
+		static WidgetTypeInfo TypeInfo()
+		{
+			return {
+				.id = typeid(Image).hash_code(),
+				.name = U"Image",
+				.generator = [] { return std::make_unique<Image>(); }
+			};
+		}
+
 	public:
 
-		Image() : Widget(typeid(Image).hash_code(), U"Image") { }
+		Image()
+			: Widget(TypeInfo()) { }
 
 	public:
 
@@ -26,13 +36,7 @@ namespace SivImGui
 
 		Property<ColorF> diffuse{ *this, Palette::White };
 
-	public:
-
-		bool clicked() const { return m_clicked; }
-
 	protected:
-
-		bool m_clicked = false;
 
 		virtual SizeF region() const override
 		{

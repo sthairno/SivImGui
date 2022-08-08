@@ -9,12 +9,22 @@ namespace SivImGui
 
 		static Button& New(Builder& ctx)
 		{
-			return reinterpret_cast<Button&>(ctx.next(typeid(Button).hash_code(), [] { return new Button(); }));
+			return ctx.next<Button>(TypeInfo());
+		}
+
+		static WidgetTypeInfo TypeInfo()
+		{
+			return {
+				.id = typeid(Button).hash_code(),
+				.name = U"Button",
+				.generator = [] { return std::make_unique<Button>(); }
+			};
 		}
 
 	public:
 
-		Button() : Container(typeid(Button).hash_code(), U"Button") { }
+		Button()
+			: Container(TypeInfo()) { }
 
 	public:
 

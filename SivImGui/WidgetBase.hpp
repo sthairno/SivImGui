@@ -21,15 +21,12 @@ namespace SivImGui
 	template<class T>
 	class Property
 	{
-		using Validator = std::function<bool(T)>;
-
 	public:
 
-		Property(WidgetBase& widget, const T defaultValue, PropertyFlag flag = PropertyFlag::None, Validator validator = nullptr)
+		Property(WidgetBase& widget, const T defaultValue, PropertyFlag flag = PropertyFlag::None)
 			: m_value(defaultValue)
 			, m_widget(widget)
 			, m_flag(flag)
-			, m_validator(validator)
 		{ }
 
 	public:
@@ -40,7 +37,10 @@ namespace SivImGui
 		{
 			if (value != m_value)
 			{
-				valueChanged();
+				if (m_flag & PropertyFlag::Layout)
+				{
+					m_widget.requestLayout();
+				}
 				return m_value = value;
 			}
 			return m_value;
@@ -56,24 +56,18 @@ namespace SivImGui
 
 		const PropertyFlag m_flag;
 
-		Validator m_validator;
-
 		WidgetBase& m_widget;
 
 		T m_value;
+	};
 
-		void valueChanged()
-		{
-			if (m_validator)
-			{
-				assert(m_validator(m_value) && "Validation failed");
-			}
+	struct WidgetTypeInfo
+	{
+		size_t id;
 
-			if (m_flag & PropertyFlag::Layout)
-			{
-				m_widget.requestLayout();
-			}
-		}
+		StringView name;
+
+		std::function<std::unique_ptr<WidgetBase>()> generator;
 	};
 
 	class WidgetBase
@@ -86,11 +80,13 @@ namespace SivImGui
 
 		using WidgetContainer = std::vector<std::unique_ptr<WidgetBase>>;
 
-		WidgetBase(TypeID typeId, StringView typeName, bool isContainer)
-			: typeId(typeId)
-			, typeName(typeName)
+		WidgetBase(WidgetTypeInfo typeInfo, bool isContainer)
+			: typeId(typeInfo.id)
+			, typeName(typeInfo.name)
 			, isContainer(isContainer)
 		{ }
+
+		WidgetBase(WidgetBase&) = delete;
 
 	public:
 
@@ -104,13 +100,9 @@ namespace SivImGui
 
 		Property<Layout> layout{ *this, { VerticalLayout{} }, PropertyFlag::Layout };
 
-		Property<int> row{ *this, 0, PropertyFlag::Layout };
+		Property<Point> gridPos{ *this, { 0, 0 }, PropertyFlag::Layout };
 
-		Property<int> column{ *this, 0, PropertyFlag::Layout };
-
-		Property<int> rowSpan{ *this, 1, PropertyFlag::Layout };
-
-		Property<int> columnSpan{ *this, 1, PropertyFlag::Layout };
+		Property<Size> gridSpan{ *this, { 1, 1 }, PropertyFlag::Layout };
 
 	public:
 

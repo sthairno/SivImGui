@@ -10,19 +10,27 @@ namespace SivImGui
 
 		static Container& New(Builder& ctx)
 		{
-			return reinterpret_cast<Container&>(ctx.next(1, [] { return new Container(); }));
+			return ctx.next<Container>(TypeInfo());
+		}
+
+		static WidgetTypeInfo TypeInfo()
+		{
+			return {
+				.id = 1,
+				.name = U"Container",
+				.generator = [] { return std::make_unique<Container>(); }
+			};
 		}
 
 	public:
 
-		Container() : WidgetBase(1, U"Container", true)
-		{ }
+		Container()
+			: WidgetBase(TypeInfo(), true) { }
 
 	protected:
 
-		Container(WidgetBase::TypeID typeId, StringView typeName)
-			: WidgetBase(typeId, typeName, true)
-		{ }
+		Container(WidgetTypeInfo typeInfo)
+			: WidgetBase(typeInfo, true) { }
 
 	protected:
 

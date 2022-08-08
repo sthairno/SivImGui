@@ -17,7 +17,13 @@ namespace SivImGui
 
 		WidgetBase& current() const { return *m_stack.back().widget; }
 
-		WidgetBase& next(WidgetBase::TypeID type, WidgetBase::Generator generator);
+		WidgetBase& next(WidgetBase::TypeID type, std::function<std::unique_ptr<WidgetBase>()> generator);
+
+		template<class WidgetT>
+		WidgetT& next(WidgetTypeInfo info)
+		{
+			return reinterpret_cast<WidgetT&>(next(info.id, info.generator));
+		}
 
 		void push(WidgetBase& widget);
 

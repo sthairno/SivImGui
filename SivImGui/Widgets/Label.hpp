@@ -9,14 +9,24 @@ namespace SivImGui
 
 		static Label& New(Builder& ctx, const String& text)
 		{
-			auto& w = reinterpret_cast<Label&>(ctx.next(typeid(Label).hash_code(), [&] { return new Label(); }));
+			auto& w = ctx.next<Label>(TypeInfo());
 			w.text = text;
 			return w;
 		}
 
+		static WidgetTypeInfo TypeInfo()
+		{
+			return {
+				.id = typeid(Label).hash_code(),
+				.name = U"Label",
+				.generator = [] { return std::make_unique<Label>(); }
+			};
+		}
+
 	public:
 
-		Label() : Widget(typeid(Label).hash_code(), U"Label") { }
+		Label()
+			: Widget(TypeInfo()) { }
 
 	public:
 

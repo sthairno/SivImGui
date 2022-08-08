@@ -340,7 +340,7 @@ void Main()
 			Window::SetMinimumFrameBufferSize(windowMinSize);
 			if (windowNewSize != windowCurrentSize)
 			{
-				Window::Resize(windowNewSize);
+				Window::ResizeVirtual(windowNewSize, Centering::No);
 			}
 		}
 		root.draw();

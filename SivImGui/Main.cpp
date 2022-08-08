@@ -158,9 +158,17 @@ void BuildTiles(SivImGui::Builder& ctx)
 
 void BuildKey(SivImGui::Builder& ctx, String& str, const char32_t chr, const char32_t* label = nullptr)
 {
-	if (SivImGui::SimpleButton::New(ctx, label ? label : String(1, chr).uppercase())
-		([&](SivImGui::SimpleButton& b) { b.minSize = { 50, 20 }; })
-		.clicked())
+	auto& key = SivImGui::Button::New(ctx);
+	key([&](SivImGui::Button& b) {
+		b.minSize = { 60, 46 };
+		b.layout = { SivImGui::VerticalLayout{
+			.padding = { 4, 20 },
+			.horizontalAlignment = SivImGui::Alignment::Center,
+			.verticalAlignment = SivImGui::Alignment::Center
+		} };
+		SivImGui::Label::New(ctx, label ? label : String(1, chr).uppercase()).textColor = Palette::Black;
+	});
+	if (key.clicked())
 	{
 		str.append(chr);
 	}
@@ -320,6 +328,21 @@ void Main()
 
 		ctx.finalize();
 		root.layout(Scene::Size());
+		{
+			const SizeF minSize = root.getWidget().measuredSize().minSize;
+			const Size windowCurrentSize = Scene::Size();
+			const Size windowMinSize = SizeF{ Math::Ceil(minSize.x), Math::Ceil(minSize.y) }.asPoint();
+			const Size windowNewSize {
+				Max(windowCurrentSize.x, windowMinSize.x),
+				Max(windowCurrentSize.y, windowMinSize.y)
+			};
+
+			Window::SetMinimumFrameBufferSize(windowMinSize);
+			if (windowNewSize != windowCurrentSize)
+			{
+				Window::Resize(windowNewSize);
+			}
+		}
 		root.draw();
 
 		/////////

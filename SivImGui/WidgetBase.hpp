@@ -103,7 +103,7 @@ namespace SivImGui
 
 		Property<SizeF> minSize{ *this, { 0, 0 }, PropertyFlag::Layout };
 
-		Property<Layout> layout{ *this, { VerticalLayout{} }, PropertyFlag::Layout };
+		Property<Layout> layout{ *this, VerticalLayout{}, PropertyFlag::Layout };
 
 		Property<Point> gridPos{ *this, { 0, 0 }, PropertyFlag::Layout };
 

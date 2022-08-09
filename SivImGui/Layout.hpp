@@ -55,26 +55,7 @@ namespace SivImGui
 		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const;
 	};
 
-	struct Layout
-	{
-		using Variant = std::variant<HorizontalLayout, VerticalLayout, StackLayout>;
-
-		Layout(Variant data)
-			: data(data)
-		{}
-
-		Variant data;
-
-		MeasureResult measure(const std::vector<WidgetBase*>& children) const
-		{
-			return std::visit([&](auto& l) { return l.measure(children); }, data);
-		}
-
-		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const
-		{
-			return std::visit([&](auto& l) { return l.arrange(rect, children); }, data);
-		}
-	};
+	using Layout = std::variant<HorizontalLayout, VerticalLayout, StackLayout>;
 
 	inline bool operator==(const HorizontalLayout& l, const HorizontalLayout& r)
 	{
@@ -107,8 +88,4 @@ namespace SivImGui
 	}
 
 	inline bool operator!=(const StackLayout& l, const StackLayout& r) { return !(l == r); }
-
-	inline bool operator==(const Layout& l, const Layout& r) { return l.data == r.data; }
-
-	inline bool operator!=(const Layout& l, const Layout& r) { return l.data != r.data; }
 }

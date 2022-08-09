@@ -37,12 +37,16 @@ namespace SivImGui
 
 		virtual MeasureResult measure() const override
 		{
-			return layout->measure(visibleChildren());
+			return std::visit([this](auto& l) {
+				return l.measure(visibleChildren());
+			}, layout.value());
 		}
 
 		virtual Array<RectF> arrange(RectF rect) const override
 		{
-			return layout->arrange(rect, visibleChildren());
+			return std::visit([this, rect](auto& l) {
+				return l.arrange(rect, visibleChildren());
+			}, layout.value());;
 		}
 	};
 }

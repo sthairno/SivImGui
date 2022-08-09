@@ -340,7 +340,8 @@ void Main()
 			};
 
 			Window::SetMinimumFrameBufferSize(windowMinSize);
-			if (windowNewSize != windowCurrentSize)
+			if (not Window::GetState().sizeMove &&
+				windowNewSize != windowCurrentSize)
 			{
 				Window::ResizeVirtual(windowNewSize, Centering::No);
 			}

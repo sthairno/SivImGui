@@ -41,17 +41,14 @@ namespace SivImGui
 
 		virtual MeasureResult measure() const override
 		{
-			auto result = layout->measure(visibleChildren());
+			auto result = Container::measure();
 			result.minSize += Padding{ frameThickness };
 			return result;
 		}
 
 		virtual Array<RectF> arrange(RectF rect) const override
 		{
-			return layout->arrange(
-				rect - Padding{ frameThickness },
-				visibleChildren()
-			);
+			return Container::arrange(rect - Padding{ frameThickness });
 		}
 
 		virtual void draw(RectF rect) const override

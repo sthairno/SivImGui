@@ -37,22 +37,27 @@ namespace SivImGui
 
 		Property<Font> font{ *this, SimpleGUI::GetFont(), PropertyFlag::Layout};
 
-	public:
+		Property<bool> fitHeight{ *this, false, PropertyFlag::Layout };
 
-		bool clicked() const { return m_clicked; }
+		Property<TextStyle> textStyle{ *this, TextStyle::Default(), PropertyFlag::Layout};
 
 	protected:
 
-		bool m_clicked = false;
-
 		virtual SizeF region() const override
 		{
-			return (*font)(text).region().size;
+			return fitHeight ? SizeF{ 0, 0 } : (*font)(text).region().size;
 		}
 
 		virtual void draw(RectF rect) const override
 		{
-			(*font)(text).draw(rect.pos, textColor);
+			if (fitHeight)
+			{
+				(*font)(text).draw(textStyle, rect.h, rect.pos, textColor);
+			}
+			else
+			{
+				(*font)(text).draw(textStyle, rect.pos, textColor);
+			}
 		}
 	};
 }

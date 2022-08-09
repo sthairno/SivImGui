@@ -60,20 +60,17 @@ namespace SivImGui
 
 		virtual MeasureResult measure() const override
 		{
-			auto result = layout->measure(visibleChildren());
+			auto result = Container::measure();
 			result.minSize += Padding{ frameThickness, Max<double>(frameThickness, roundSize) };
 			return result;
 		}
 
 		virtual Array<RectF> arrange(RectF rect) const override
 		{
-			return layout->arrange(
-				rect - Padding{ frameThickness, Max<double>(frameThickness, roundSize) },
-				visibleChildren()
-			);
+			return Container::arrange(rect - Padding{ frameThickness, Max<double>(frameThickness, roundSize) });
 		}
 
-		virtual void update(RectF rect) override
+		virtual void update(RectF) override
 		{
 			m_clicked = false;
 

@@ -10,17 +10,18 @@ namespace SivImGui
 
 		static Container& New(Builder& ctx)
 		{
-			return ctx.next<Container>(TypeInfo());
+			return ctx.next<Container>();
 		}
 
-		static WidgetTypeInfo TypeInfo()
+		static const WidgetTypeInfo& TypeInfo()
 		{
-			return {
+			const static WidgetTypeInfo info{
 				.id = 1,
 				.name = U"Container",
 				.generator = [] { return std::make_unique<Container>(); },
 				.enableMouseOver = false
 			};
+			return info;
 		}
 
 	public:
@@ -30,7 +31,7 @@ namespace SivImGui
 
 	protected:
 
-		Container(WidgetTypeInfo typeInfo)
+		Container(const WidgetTypeInfo& typeInfo)
 			: WidgetBase(typeInfo, true) { }
 
 	protected:

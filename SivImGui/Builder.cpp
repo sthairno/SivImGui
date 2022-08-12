@@ -8,14 +8,14 @@ namespace SivImGui
 		reset();
 	}
 
-	WidgetBase& Builder::next(WidgetBase::TypeID type, std::function<std::unique_ptr<WidgetBase>()> generator)
+	WidgetBase& Builder::nextImpl(const WidgetTypeInfo& info)
 	{
 		auto& state = m_stack.back();
 		auto& children = state.widget->children();
 
 		if (state.nextItr != children.end())
 		{
-			if (state.nextItr->get()->typeInfo.id == type)
+			if (state.nextItr->get()->typeInfo.id == info.id)
 			{
 				WidgetBase* child = state.nextItr->get();
 				state.nextItr++;
@@ -27,7 +27,7 @@ namespace SivImGui
 			}
 		}
 
-		state.widget->addChild(generator());
+		state.widget->addChild(info.generator());
 		state.nextItr = children.end();
 
 		WidgetBase& newChild = *children.back();

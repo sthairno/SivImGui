@@ -9,19 +9,20 @@ namespace SivImGui
 
 		static Image& New(Builder& ctx, const Texture& texture)
 		{
-			auto& w = ctx.next<Image>(TypeInfo());
+			auto& w = ctx.next<Image>();
 			w.texture = texture;
 			return w;
 		}
 
-		static WidgetTypeInfo TypeInfo()
+		static const WidgetTypeInfo& TypeInfo()
 		{
-			return {
+			const static WidgetTypeInfo info{
 				.id = typeid(Image).hash_code(),
 				.name = U"Image",
 				.generator = [] { return std::make_unique<Image>(); },
 				.enableMouseOver = false
 			};
+			return info;
 		}
 
 	public:

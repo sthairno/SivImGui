@@ -9,19 +9,20 @@ namespace SivImGui
 
 		static Box& New(Builder& ctx, ColorF backColor)
 		{
-			auto& w = ctx.next<Box>(TypeInfo());
+			auto& w = ctx.next<Box>();
 			w.backColor = backColor;
 			return w;
 		}
 
-		static WidgetTypeInfo TypeInfo()
+		static const WidgetTypeInfo& TypeInfo()
 		{
-			return {
+			const static WidgetTypeInfo info{
 				.id = typeid(Box).hash_code(),
 				.name = U"Box",
 				.generator = [] { return std::make_unique<Box>(); },
 				.enableMouseOver = false
 			};
+			return info;
 		}
 
 	public:

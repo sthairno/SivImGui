@@ -249,7 +249,7 @@ void Main()
 
 	SivImGui::Root root(std::make_unique<SivImGui::Container>());
 	{
-		auto& widget = root.getWidget();
+		auto& widget = root.getRootWidget();
 		widget.layout = SivImGui::VerticalLayout{
 			.padding = { 0 },
 			.space = 0
@@ -258,7 +258,7 @@ void Main()
 		widget.yExpand = true;
 	}
 
-	SivImGui::Builder ctx(root.getWidget());
+	SivImGui::Builder ctx(root.getRootWidget());
 	bool showInfo = false;
 	String input;
 
@@ -331,7 +331,7 @@ void Main()
 		ctx.finalize();
 		root.layout(Scene::Size());
 		{
-			const SizeF minSize = root.getWidget().measuredSize().minSize;
+			const SizeF minSize = root.getRootWidget().measuredSize().minSize;
 			const Size windowCurrentSize = Scene::Size();
 			const Size windowMinSize = SizeF{ Math::Ceil(minSize.x), Math::Ceil(minSize.y) }.asPoint();
 			const Size windowNewSize {
@@ -358,7 +358,7 @@ void Main()
 		}
 		if (showInfo)
 		{
-			DrawInfo({ 0, 0 }, root.getWidget());
+			DrawInfo({ 0, 0 }, root.getRootWidget());
 		}
 	}
 }

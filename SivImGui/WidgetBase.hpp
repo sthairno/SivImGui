@@ -76,13 +76,9 @@ namespace SivImGui
 	{
 	public:
 
-		using TypeID = size_t;
-
-		using Generator = std::function<WidgetBase* ()>;
-
 		using WidgetContainer = std::vector<std::unique_ptr<WidgetBase>>;
 
-		WidgetBase(WidgetTypeInfo typeInfo, bool isContainer)
+		WidgetBase(const WidgetTypeInfo& typeInfo, bool isContainer)
 			: typeInfo(typeInfo)
 			, isContainer(isContainer)
 		{ }
@@ -90,6 +86,8 @@ namespace SivImGui
 		WidgetBase(WidgetBase&) = delete;
 
 	public:
+
+		Property<String> id{ *this, U"" };
 
 		Property<bool> visible{ *this, true, PropertyFlag::Layout };
 
@@ -111,7 +109,7 @@ namespace SivImGui
 
 	public:
 
-		const WidgetTypeInfo typeInfo;
+		const WidgetTypeInfo& typeInfo;
 
 		const bool isContainer;
 

@@ -14,7 +14,7 @@ namespace SivImGui
 			assert(m_widget);
 		}
 
-		WidgetBase& getWidget() { return *m_widget; }
+		WidgetBase& getRootWidget() { return *m_widget; }
 
 		void setEnabled(bool enable) { m_enabled = enable; }
 
@@ -23,6 +23,11 @@ namespace SivImGui
 		void update(Vec2 pos = { 0, 0 }, bool mouseOver = true);
 
 		void draw(Vec2 pos = { 0, 0 }) const;
+
+		WidgetBase& getWidgetById(const StringView id);
+
+		template<class WidgetT>
+		WidgetT& getWidgetById(const StringView id);
 
 	private:
 

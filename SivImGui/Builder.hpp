@@ -20,7 +20,7 @@ namespace SivImGui
 		template<class WidgetT>
 		WidgetT& next()
 		{
-			return reinterpret_cast<WidgetT&>(nextImpl(WidgetT::TypeInfo()));
+			return reinterpret_cast<WidgetT&>(nextImpl(WidgetT::TypeInfo(), [] { return std::make_unique<WidgetT>(); }));
 		}
 
 		void push(WidgetBase& widget);
@@ -44,7 +44,7 @@ namespace SivImGui
 
 		std::deque<State> m_stack;
 
-		WidgetBase& nextImpl(const WidgetTypeInfo& info);
+		WidgetBase& nextImpl(const WidgetTypeInfo& info, std::function<std::unique_ptr<WidgetBase>()> generator);
 	};
 }
 

@@ -19,7 +19,6 @@ namespace SivImGui
 			const static WidgetTypeInfo info{
 				.id = typeid(Box).hash_code(),
 				.name = U"Box",
-				.generator = [] { return std::make_unique<Box>(); },
 				.enableMouseOver = false
 			};
 			return info;

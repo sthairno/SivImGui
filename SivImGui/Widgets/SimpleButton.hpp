@@ -19,7 +19,6 @@ namespace SivImGui
 			const static WidgetTypeInfo info{
 				.id = typeid(SimpleButton).hash_code(),
 				.name = U"SimpleButton",
-				.generator = [] { return std::make_unique<SimpleButton>(); }
 			};
 			return info;
 		}

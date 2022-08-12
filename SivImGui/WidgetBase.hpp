@@ -67,8 +67,6 @@ namespace SivImGui
 
 		StringView name;
 
-		std::function<std::unique_ptr<WidgetBase>()> generator;
-
 		bool enableMouseOver = true;
 	};
 

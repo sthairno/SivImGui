@@ -18,7 +18,6 @@ namespace SivImGui
 			const static WidgetTypeInfo info{
 				.id = 1,
 				.name = U"Container",
-				.generator = [] { return std::make_unique<Container>(); },
 				.enableMouseOver = false
 			};
 			return info;

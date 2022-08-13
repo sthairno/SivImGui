@@ -33,9 +33,23 @@ namespace SivImGui
 
 		const T& value() const { return m_value; }
 
+		template<class U = T> requires std::equality_comparable_with<T, U>
+		const T& operator =(U value)
+		{
+			if (m_value != value)
+			{
+				if (m_flag & PropertyFlag::Layout)
+				{
+					m_widget.requestLayout();
+				}
+				return m_value = value;
+			}
+			return m_value;
+		}
+
 		const T& operator =(T value)
 		{
-			if (value != m_value)
+			if (m_value != value)
 			{
 				if (m_flag & PropertyFlag::Layout)
 				{

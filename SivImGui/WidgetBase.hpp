@@ -23,9 +23,10 @@ namespace SivImGui
 	{
 	public:
 
-		Property(WidgetBase& widget, const T defaultValue, PropertyFlag flag = PropertyFlag::None)
+		template<class WidgetT>
+		Property(WidgetT* _this, const T defaultValue, PropertyFlag flag = PropertyFlag::None, const StringView name = U"")
 			: m_value(defaultValue)
-			, m_widget(widget)
+			, m_widget(*_this)
 			, m_flag(flag)
 		{ }
 
@@ -99,25 +100,25 @@ namespace SivImGui
 
 	public:
 
-		Property<String> id{ *this, U"" };
+		Property<String> id{ this, U"" };
 
-		Property<bool> visible{ *this, true, PropertyFlag::Layout };
+		Property<bool> visible{ this, true, PropertyFlag::Layout };
 
-		Property<bool> xExpand{ *this, false, PropertyFlag::Layout };
+		Property<bool> xExpand{ this, false, PropertyFlag::Layout };
 
-		Property<bool> yExpand{ *this, false, PropertyFlag::Layout };
+		Property<bool> yExpand{ this, false, PropertyFlag::Layout };
 
-		Property<bool> enabled{ *this, true, PropertyFlag::Layout };
+		Property<bool> enabled{ this, true, PropertyFlag::Layout };
 
-		Property<Optional<bool>> enableMouseOver{ *this, { }, PropertyFlag::Layout };
+		Property<Optional<bool>> enableMouseOver{ this, { }, PropertyFlag::Layout };
 
-		Property<SizeF> minSize{ *this, { 0, 0 }, PropertyFlag::Layout };
+		Property<SizeF> minSize{ this, { 0, 0 }, PropertyFlag::Layout };
 
-		Property<Layout> layout{ *this, VerticalLayout{}, PropertyFlag::Layout };
+		Property<Layout> layout{ this, VerticalLayout{}, PropertyFlag::Layout };
 
-		Property<Point> gridPos{ *this, { 0, 0 }, PropertyFlag::Layout };
+		Property<Point> gridPos{ this, { 0, 0 }, PropertyFlag::Layout };
 
-		Property<Size> gridSpan{ *this, { 1, 1 }, PropertyFlag::Layout };
+		Property<Size> gridSpan{ this, { 1, 1 }, PropertyFlag::Layout };
 
 	public:
 
@@ -212,3 +213,9 @@ namespace SivImGui
 		virtual ~WidgetBase() = default;
 	};
 }
+
+#define SIVIMGUI_PROPERTY(TYPE, NAME, VALUE)\
+Property<TYPE> NAME{ this, VALUE, PropertyFlag::None, U"" #NAME}
+
+#define SIVIMGUI_LAYOUT_PROPERTY(TYPE, NAME, VALUE)\
+Property<TYPE> NAME{ this, VALUE, PropertyFlag::Layout, U"" #NAME}

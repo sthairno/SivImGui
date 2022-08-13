@@ -31,11 +31,11 @@ namespace SivImGui
 
 	public:
 
-		Property<Texture> texture{ *this, { }, PropertyFlag::Layout};
+		Property<Texture> texture{ this, { }, PropertyFlag::Layout};
 
-		Property<bool> fitScale{ *this, false, PropertyFlag::Layout };
+		Property<bool> fitScale{ this, false, PropertyFlag::Layout };
 
-		Property<ColorF> diffuse{ *this, Palette::White };
+		Property<ColorF> diffuse{ this, Palette::White };
 
 	protected:
 

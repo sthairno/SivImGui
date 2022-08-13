@@ -31,15 +31,15 @@ namespace SivImGui
 
 	public:
 
-		Property<String> text{ *this, U"", PropertyFlag::Layout };
+		Property<String> text{ this, U"", PropertyFlag::Layout };
 
-		Property<ColorF> textColor{ *this, Palette::White, PropertyFlag::Layout };
+		Property<ColorF> textColor{ this, Palette::White, PropertyFlag::Layout };
 
-		Property<Font> font{ *this, SimpleGUI::GetFont(), PropertyFlag::Layout};
+		Property<Font> font{ this, SimpleGUI::GetFont(), PropertyFlag::Layout};
 
-		Property<bool> fitHeight{ *this, false, PropertyFlag::Layout };
+		Property<bool> fitHeight{ this, false, PropertyFlag::Layout };
 
-		Property<TextStyle> textStyle{ *this, TextStyle::Default(), PropertyFlag::Layout};
+		Property<TextStyle> textStyle{ this, TextStyle::Default(), PropertyFlag::Layout};
 
 	protected:
 

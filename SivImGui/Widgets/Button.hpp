@@ -28,23 +28,23 @@ namespace SivImGui
 
 	public:
 
-		Property<ColorF> backgroundColor{ *this, ColorF{ 1.0 } };
+		Property<ColorF> backgroundColor{ this, ColorF{ 1.0 } };
 
-		Property<ColorF> flameColor{ *this, ColorF{ 0.67 } };
+		Property<ColorF> flameColor{ this, ColorF{ 0.67 } };
 
-		Property<ColorF> disabledBackgroundColor{ *this, ColorF{ 0.92 } };
+		Property<ColorF> disabledBackgroundColor{ this, ColorF{ 0.92 } };
 
-		Property<ColorF> disabledFlameColor{ *this, ColorF{ 0.67 } };
+		Property<ColorF> disabledFlameColor{ this, ColorF{ 0.67 } };
 
-		Property<ColorF> disabledTextColor{ *this, ColorF{ 0.67 } };
+		Property<ColorF> disabledTextColor{ this, ColorF{ 0.67 } };
 
-		Property<ColorF> mouseOverBackgroundColor{ *this, ColorF{ 0.9, 0.95, 1.0 } };
+		Property<ColorF> mouseOverBackgroundColor{ this, ColorF{ 0.9, 0.95, 1.0 } };
 
-		Property<ColorF> mouseOverFlameColor{ *this, ColorF{ 0.67 } };
+		Property<ColorF> mouseOverFlameColor{ this, ColorF{ 0.67 } };
 
-		Property<double> frameThickness{ *this, 1, PropertyFlag::Layout };
+		Property<double> frameThickness{ this, 1, PropertyFlag::Layout };
 
-		Property<double> roundSize{ *this, 4.8, PropertyFlag::Layout };
+		Property<double> roundSize{ this, 4.8, PropertyFlag::Layout };
 
 	public:
 

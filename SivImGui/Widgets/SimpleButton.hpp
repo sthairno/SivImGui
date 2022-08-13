@@ -7,10 +7,10 @@ namespace SivImGui
 	{
 		SIVIMGUI_BUILDER_HELPER(SimpleButton);
 
-		static SimpleButton& New(Builder& ctx, const String& label)
+		static SimpleButton& New(Builder& ctx, const StringView text)
 		{
 			auto& w = ctx.next<SimpleButton>();
-			w.label = label;
+			w.text = text;
 			return w;
 		}
 
@@ -30,7 +30,7 @@ namespace SivImGui
 
 	public:
 
-		Property<String> label{ *this, U"", PropertyFlag::Layout };
+		Property<String> text{ *this, U"", PropertyFlag::Layout };
 
 	public:
 
@@ -42,7 +42,7 @@ namespace SivImGui
 
 		virtual SizeF region() const override
 		{
-			return SimpleGUI::ButtonRegion(label, { 0, 0 }).size;
+			return SimpleGUI::ButtonRegion(*text, { 0, 0 }).size;
 		}
 
 		virtual void update(RectF rect) override
@@ -55,7 +55,7 @@ namespace SivImGui
 		virtual void draw(RectF rect) const override
 		{
 			[[maybe_unused]]
-			bool _ = SimpleGUI::Button(label, rect.pos, rect.w, isEnabled());
+			bool _ = SimpleGUI::Button(*text, rect.pos, rect.w, isEnabled());
 		}
 	};
 }

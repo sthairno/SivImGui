@@ -7,7 +7,7 @@ namespace SivImGui
 	{
 		SIVIMGUI_BUILDER_HELPER(Label);
 
-		static Label& New(Builder& ctx, const String& text)
+		static Label& New(Builder& ctx, const StringView text)
 		{
 			auto& w = ctx.next<Label>();
 			w.text = text;

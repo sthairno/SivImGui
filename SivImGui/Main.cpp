@@ -87,13 +87,37 @@ void BuildHeader(SivImGui::Builder& ctx)
 			.horizontalAlignment = SivImGui::Alignment::Start
 		};
 		b.frameThickness = 0;
+		b.enableMouseOver = true;
 
-		auto& resetBtn = SivImGui::SimpleButton::New(ctx, U"Reset");
-		resetBtn.enabled = tileChars[0].size() > 0;
-		if (resetBtn.clicked())
-		{
-			Reset();
-		}
+		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+			c.layout = SivImGui::HorizontalLayout{
+				.padding = { 0.0 }
+			};
+
+			auto& resetBtn = SivImGui::SimpleButton::New(ctx, U"Reset");
+			resetBtn.enabled = tileChars[0].size() > 0;
+			if (resetBtn.clicked())
+			{
+				Reset();
+			}
+
+			SivImGui::Container::New(ctx).xExpand = true;
+
+			auto windowStyle = Window::GetStyle();
+			if (SivImGui::SimpleButton::New(ctx,
+				windowStyle == WindowStyle::Frameless ? U"Frameless" : U"Normal").clicked())
+			{
+				if (windowStyle == WindowStyle::Frameless)
+				{
+					Window::SetStyle(WindowStyle::Sizable);
+				}
+				else
+				{
+					Window::SetStyle(WindowStyle::Frameless);
+				}
+			}
+		});
+
 		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
 			c.layout = SivImGui::VerticalLayout{
 				.padding = { 0.0 },
@@ -107,6 +131,24 @@ void BuildHeader(SivImGui::Builder& ctx)
 				l.textColor = ColorF(0.1);
 			});
 		});
+
+		static bool moving = false;
+
+		if (Window::GetStyle() == WindowStyle::Frameless &&
+			b.mouseOver() && MouseL.down())
+		{
+			moving = true;
+		}
+
+		if (moving && not MouseL.pressed())
+		{
+			moving = false;
+		}
+
+		if (moving)
+		{
+			Window::SetPos(Window::GetPos() + Cursor::ScreenDelta());
+		}
 	});
 }
 

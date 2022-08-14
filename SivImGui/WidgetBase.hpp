@@ -77,7 +77,9 @@ namespace SivImGui
 
 		bool isEnabled() const { return m_enabled; }
 
-		void requestLayout() { m_layoutRequired = true; }
+		int32 layoutUpdatedAt() const { return m_layoutUpdatedAt; }
+
+		void requestLayout();
 
 		void removeChildren();
 
@@ -134,6 +136,8 @@ namespace SivImGui
 		bool m_mouseOver = false;
 
 		bool m_enabled = true;
+
+		int32 m_layoutUpdatedAt = 0;
 
 		void arrangeCore(RectF rect);
 

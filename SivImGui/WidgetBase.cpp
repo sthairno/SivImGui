@@ -3,10 +3,22 @@
 
 namespace SivImGui
 {
+	void WidgetBase::requestLayout()
+	{
+		m_layoutRequired = true;
+
+		if (m_parent)
+		{
+			m_parent->requestLayout();
+		}
+	}
+
 	void WidgetBase::removeChildren()
 	{
 		m_visibleChildren.clear();
 		m_children.clear();
+		
+		requestLayout();
 	}
 
 	void WidgetBase::removeChildrenFrom(WidgetContainer::const_iterator first)
@@ -21,6 +33,8 @@ namespace SivImGui
 			m_visibleChildren.cend()
 		);
 		m_children.erase(first, m_children.cend());
+
+		requestLayout();
 	}
 
 	void WidgetBase::addChild(std::unique_ptr<WidgetBase>&& child)
@@ -28,6 +42,8 @@ namespace SivImGui
 		assert(isContainer);
 		child->m_parent = this;
 		m_children.emplace_back(std::move(child));
+
+		requestLayout();
 	}
 
 	void WidgetBase::builderPush()
@@ -103,6 +119,11 @@ namespace SivImGui
 
 	void WidgetBase::measureCore()
 	{
+		if (not m_layoutRequired)
+		{
+			return;
+		}
+
 		for (auto child : m_visibleChildren)
 		{
 			child->measureCore();
@@ -134,6 +155,12 @@ namespace SivImGui
 
 	void WidgetBase::arrangeCore(RectF rect)
 	{
+		if (not m_layoutRequired &&
+			m_rect == rect)
+		{
+			return;
+		}
+
 		m_rect = rect;
 
 		auto result = arrange({ 0, 0, rect.size });
@@ -143,5 +170,8 @@ namespace SivImGui
 		{
 			child->arrangeCore(result[idx]);
 		}
+
+		m_layoutUpdatedAt = Scene::FrameCount();
+		m_layoutRequired = false;
 	}
 }

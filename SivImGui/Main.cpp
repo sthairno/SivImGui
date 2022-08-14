@@ -24,7 +24,11 @@ void Reset()
 void DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w, bool* mouseOver = nullptr)
 {
 	const RectF rect = w.rect().movedBy(pos);
-	rect.drawFrame(1, 0, Palette::Red);
+	const ColorF baseColor = w.layoutUpdatedAt() == Scene::FrameCount()
+		? Palette::Red
+		: Palette::Blue;
+
+	rect.drawFrame(1, 0, baseColor);
 
 	bool tmp = false;
 	if (not mouseOver)
@@ -40,7 +44,7 @@ void DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w, bool* mouseOver = nullptr
 	{
 		*mouseOver = true;
 
-		rect.draw(ColorF(Palette::Red, 0.2));
+		rect.draw(ColorF(baseColor, 0.2));
 		std::u32string text;
 		if (w.isContainer)
 		{

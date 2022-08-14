@@ -155,13 +155,14 @@ namespace SivImGui
 
 	void WidgetBase::arrangeCore(RectF rect)
 	{
+		m_rect.pos = rect.pos;
+
 		if (not m_layoutRequired &&
-			m_rect == rect)
+			m_rect.size == rect.size)
 		{
 			return;
 		}
-
-		m_rect = rect;
+		m_rect.size = rect.size;
 
 		auto result = arrange({ 0, 0, rect.size });
 

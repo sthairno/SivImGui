@@ -62,7 +62,7 @@ namespace SivImGui
 			return MeasureResult{ .minSize = region(), .expand = { false, false } };
 		}
 
-		Array<RectF> arrange(RectF) const override
+		Array<RectF> arrange(RectF) override
 		{
 			return { };
 		};

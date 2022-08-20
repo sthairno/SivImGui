@@ -96,7 +96,7 @@ namespace SivImGui
 
 		virtual MeasureResult measure() const = 0;
 
-		virtual Array<RectF> arrange(RectF rect) const = 0;
+		virtual Array<RectF> arrange(RectF rect) = 0;
 
 		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) = 0;
 

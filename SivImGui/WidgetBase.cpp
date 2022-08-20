@@ -76,15 +76,15 @@ namespace SivImGui
 	void WidgetBase::updateCore(bool enabled)
 	{
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
-		const RectF rect{ 0, 0, m_rect.size };
-		enabled &= this->enabled;
 
+		enabled &= this->enabled;
 		std::for_each(
 			m_visibleChildren.rbegin(), m_visibleChildren.rend(),
 			[=](WidgetBase* child) { child->updateCore(enabled); }
 		);
 
-		update(rect);
+		m_enabled = enabled;
+		update(RectF{ 0, 0, m_rect.size });
 	}
 
 	void WidgetBase::drawCore() const

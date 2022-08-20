@@ -98,15 +98,19 @@ namespace SivImGui
 
 		virtual Array<RectF> arrange(RectF rect) const = 0;
 
-		virtual void update(RectF) { };
+		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) = 0;
 
-		virtual void draw(RectF) const { }
+		virtual void update(RectF rect) = 0;
 
-		virtual WidgetBase* hitTest(RectF, Vec2 pos) = 0;
+		virtual void draw(RectF rect) const = 0;
 
 		void builderPush();
 
 		void builderPop();
+
+		void updateChildren(const std::vector<WidgetBase*>& children);
+
+		void drawChildren(const std::vector<WidgetBase*>& children) const;
 
 	private:
 

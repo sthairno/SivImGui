@@ -70,8 +70,10 @@ namespace SivImGui
 			return Container::arrange(rect - Padding{ frameThickness, Max<double>(frameThickness, roundSize) });
 		}
 
-		virtual void update(RectF) override
+		virtual void update(RectF rect) override
 		{
+			Container::update(rect);
+
 			m_clicked = false;
 
 			if (mouseOver() && MouseL.down())
@@ -128,6 +130,8 @@ namespace SivImGui
 			{
 				Cursor::RequestStyle(CursorStyle::Hand);
 			}
+
+			Container::draw(rect);
 		}
 	};
 }

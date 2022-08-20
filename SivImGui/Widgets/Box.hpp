@@ -54,6 +54,7 @@ namespace SivImGui
 		virtual void draw(RectF rect) const override
 		{
 			rect.draw(backColor).drawFrame(frameThickness, 0, frameColor);
+			Container::draw(rect);
 		}
 	};
 }

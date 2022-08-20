@@ -58,6 +58,22 @@ namespace SivImGui
 		m_builder->pop();
 	}
 
+	void WidgetBase::updateChildren(const std::vector<WidgetBase*>& children)
+	{
+		std::for_each(
+			children.rbegin(), children.rend(),
+			[=](WidgetBase* child) { child->updateCore(m_enabled); }
+		);
+	}
+
+	void WidgetBase::drawChildren(const std::vector<WidgetBase*>& children) const
+	{
+		std::for_each(
+			children.begin(), children.end(),
+			[](WidgetBase* child) { child->drawCore(); }
+		);
+	}
+
 	void WidgetBase::layoutCore(SizeF availableSize)
 	{
 		checkChildrenVisibility();
@@ -75,27 +91,17 @@ namespace SivImGui
 
 	void WidgetBase::updateCore(bool enabled)
 	{
+		m_enabled = this->enabled && enabled;
+
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
-
-		enabled &= this->enabled;
-		std::for_each(
-			m_visibleChildren.rbegin(), m_visibleChildren.rend(),
-			[=](WidgetBase* child) { child->updateCore(enabled); }
-		);
-
-		m_enabled = enabled;
 		update(RectF{ 0, 0, m_rect.size });
 	}
 
 	void WidgetBase::drawCore() const
 	{
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
-
 		draw({ 0, 0, m_rect.size });
-		std::for_each(
-			m_visibleChildren.begin(), m_visibleChildren.end(),
-			[](WidgetBase* child) { child->drawCore(); }
-		);
+		
 	}
 
 	void WidgetBase::measureCore()

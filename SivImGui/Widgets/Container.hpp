@@ -59,6 +59,16 @@ namespace SivImGui
 			return hitTestSelf(rect, pos);
 		}
 
+		virtual void update(RectF) override
+		{
+			updateChildren(visibleChildren());
+		}
+
+		virtual void draw(RectF) const override
+		{
+			drawChildren(visibleChildren());
+		}
+
 		template<class ShapeT>
 		WidgetBase* hitTestSelf(ShapeT shape, Vec2 pos)
 		{

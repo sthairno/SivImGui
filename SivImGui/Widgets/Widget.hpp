@@ -37,6 +37,20 @@ namespace SivImGui
 
 		virtual SizeF region() const { return { 0, 0 }; };
 
+		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) override
+		{
+			return hitTestSelf(rect, pos);
+		}
+
+		template<class ShapeT>
+		WidgetBase* hitTestSelf(ShapeT shape, Vec2 pos)
+		{
+			return
+				enableMouseOver->value_or(typeInfo.enableMouseOver) &&
+				shape.contains(pos)
+				? this : nullptr;
+		}
+
 	private:
 
 		MeasureResult measure() const override

@@ -7,13 +7,27 @@ namespace SivImGui
 		m_widget->layoutCore(availableSize);
 	}
 
-	void GUI::update(Vec2 pos, bool mouseOver)
+	void GUI::update(Vec2 pos, bool allowMouseOver)
 	{
 		auto& windowState = Window::GetState();
+
+		if (m_hoveredWidget)
+		{
+			m_hoveredWidget->m_mouseOver = false;
+		}
+		allowMouseOver &= not windowState.sizeMove;
+		allowMouseOver &= windowState.focused;
+		if (allowMouseOver)
+		{
+			m_hoveredWidget = m_widget->hitTest(Cursor::PosF() - pos);
+			if (m_hoveredWidget)
+			{
+				m_hoveredWidget->m_mouseOver = true;
+			}
+		}
+
 		Transformer2D t(Mat3x2::Translate(pos), TransformCursor::Yes);
-		mouseOver &= not windowState.sizeMove;
-		mouseOver &= windowState.focused;
-		m_widget->updateCore(mouseOver, m_enabled);
+		m_widget->updateCore(m_enabled);
 	}
 
 	void GUI::draw(Vec2 pos) const

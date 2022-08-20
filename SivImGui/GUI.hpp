@@ -20,7 +20,7 @@ namespace SivImGui
 
 		void layout(SizeF availableSize);
 
-		void update(Vec2 pos = { 0, 0 }, bool mouseOver = true);
+		void update(Vec2 pos = { 0, 0 }, bool allowMouseOver = true);
 
 		void draw(Vec2 pos = { 0, 0 }) const;
 
@@ -34,5 +34,7 @@ namespace SivImGui
 		std::unique_ptr<WidgetBase> m_widget;
 
 		bool m_enabled = true;
+
+		WidgetBase* m_hoveredWidget = nullptr;
 	};
 }

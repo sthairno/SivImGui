@@ -79,6 +79,11 @@ namespace SivImGui
 
 		int32 layoutUpdatedAt() const { return m_layoutUpdatedAt; }
 
+		WidgetBase* hitTest(Vec2 pos)
+		{
+			return hitTest(RectF{ 0, 0, m_rect.size }, pos - m_rect.pos);
+		}
+
 		void requestLayout();
 
 		void removeChildren();
@@ -97,6 +102,8 @@ namespace SivImGui
 
 		virtual void draw(RectF) const { }
 
+		virtual WidgetBase* hitTest(RectF, Vec2 pos) = 0;
+
 		void builderPush();
 
 		void builderPop();
@@ -111,9 +118,11 @@ namespace SivImGui
 
 		friend GUI;
 
+		bool m_mouseOver = false;
+
 		void layoutCore(SizeF availableSize);
 
-		bool updateCore(bool mouseOver, bool enabled);
+		void updateCore(bool enabled);
 
 		void drawCore() const;
 
@@ -132,8 +141,6 @@ namespace SivImGui
 		bool m_visible = true;
 
 		bool m_layoutRequired = true;
-
-		bool m_mouseOver = false;
 
 		bool m_enabled = true;
 

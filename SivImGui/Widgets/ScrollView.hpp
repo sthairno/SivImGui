@@ -269,7 +269,7 @@ namespace SivImGui
 
 			if (hBarRect)
 			{
-				RoundRect{ *hBarRect, hBarRect->w / 2 }.draw(ColorF(Palette::Black, 0.5));
+				RoundRect{ *hBarRect, hBarRect->h / 2 }.draw(ColorF(Palette::Black, 0.5));
 			}
 			if (vBarRect)
 			{
@@ -293,7 +293,7 @@ namespace SivImGui
 
 			const double barPos = (width - barSize) * m_contentRect.x / (width - m_contentRect.w);
 
-			return RectF{ Arg::bottomLeft = rect.bl() + Vec2{ 0, barPos }, scrollbarSize, barSize};
+			return RectF{ Arg::bottomLeft = rect.bl() + Vec2{ barPos, 0 }, barSize, scrollbarSize};
 		}
 
 		Optional<RectF> getVBarRect(RectF rect, double height) const

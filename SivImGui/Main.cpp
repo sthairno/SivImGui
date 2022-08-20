@@ -7,6 +7,7 @@
 #include "Widgets/Button.hpp"
 #include "Widgets/Box.hpp"
 #include "Widgets/Label.hpp"
+#include "Widgets/ScrollView.hpp"
 
 const Size gridSize{ 5, 6 };
 
@@ -44,37 +45,40 @@ void DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w, bool* mouseOver = nullptr
 	{
 		*mouseOver = true;
 
-		rect.draw(ColorF(baseColor, 0.2));
-		std::u32string text;
-		if (w.isContainer)
+		if (not Window::GetState().sizeMove)
 		{
-			std::u32string_view layoutName = U"";
-			switch (w.layout->index())
+			rect.draw(ColorF(baseColor, 0.2));
+			std::u32string text;
+			if (w.isContainer)
 			{
-			case 0: layoutName = U"HorizontalLayout"; break;
-			case 1: layoutName = U"VerticalLayout"; break;
-			case 2: layoutName = U"StackLayout"; break;
+				std::u32string_view layoutName = U"";
+				switch (w.layout->index())
+				{
+				case 0: layoutName = U"HorizontalLayout"; break;
+				case 1: layoutName = U"VerticalLayout"; break;
+				case 2: layoutName = U"StackLayout"; break;
+				}
+				fmt::format_to(std::back_inserter(text), U"Type: {}(Container)\nRect: {}\nExpand: ({}, {})\nLayout: {}", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value(), layoutName);
 			}
-			fmt::format_to(std::back_inserter(text), U"Type: {}(Container)\nRect: {}\nExpand: ({}, {})\nLayout: {}", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value(), layoutName);
-		}
-		else
-		{
-			fmt::format_to(std::back_inserter(text), U"Type: {}(Widget)\nRect: {}\nExpand: ({}, {})", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value());
-		}
-		const auto drawableText = (*font)(text);
-		const auto cursorPos = Cursor::PosF();
+			else
+			{
+				fmt::format_to(std::back_inserter(text), U"Type: {}(Widget)\nRect: {}\nExpand: ({}, {})", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value());
+			}
+			const auto drawableText = (*font)(text);
+			const auto cursorPos = Cursor::PosF();
 
-		RectF diagRect{ cursorPos + Vec2{ 20, 20 }, drawableText.region().size + SivImGui::Padding{4} };
-		if (diagRect.x + diagRect.w >= Scene::Width())
-		{
-			diagRect.x = cursorPos.x - diagRect.w - 4;
+			RectF diagRect{ cursorPos + Vec2{ 20, 20 }, drawableText.region().size + SivImGui::Padding{4} };
+			if (diagRect.x + diagRect.w >= Scene::Width())
+			{
+				diagRect.x = cursorPos.x - diagRect.w - 4;
+			}
+			if (diagRect.y + diagRect.h >= Scene::Height())
+			{
+				diagRect.y = cursorPos.y - diagRect.h - 4;
+			}
+			diagRect.draw(ColorF(1, 0.5)).drawFrame(0, 2, ColorF(1, 0.9));
+			drawableText.draw(diagRect - SivImGui::Padding{ 4 }, Palette::Black);
 		}
-		if (diagRect.y + diagRect.h >= Scene::Height())
-		{
-			diagRect.y = cursorPos.y - diagRect.h - 4;
-		}
-		diagRect.draw(ColorF(1, 0.5)).drawFrame(0, 2, ColorF(1, 0.9));
-		drawableText.draw(diagRect - SivImGui::Padding{ 4 }, Palette::Black);
 	}
 }
 
@@ -293,16 +297,17 @@ void Main()
 	font = std::make_unique<Font>(14);
 	heavyFont = std::make_unique<Font>(28, Typeface::Heavy);
 
-	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
+	auto root = std::make_unique<SivImGui::ScrollView>();
 	{
-		auto& widget = gui.getRootWidget();
-		widget.layout = SivImGui::VerticalLayout{
+		root->layout = SivImGui::VerticalLayout{
 			.padding = { 0 },
 			.space = 0
 		};
-		widget.xExpand = true;
-		widget.yExpand = true;
+		root->xExpand = true;
+		root->yExpand = true;
+		root->mode = SivImGui::ScrollView::Mode::Vertical;
 	}
+	SivImGui::GUI gui(std::move(root));
 
 	SivImGui::Builder ctx(gui.getRootWidget());
 	bool showInfo = false;

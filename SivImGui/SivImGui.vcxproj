@@ -229,6 +229,7 @@
     <ClInclude Include="WidgetBase.hpp" />
     <ClInclude Include="Widgets\Button.hpp" />
     <ClInclude Include="Widgets\Container.hpp" />
+    <ClInclude Include="Widgets\ScrollView.hpp" />
     <ClInclude Include="Widgets\SimpleButton.hpp" />
     <ClInclude Include="Widgets\Widget.hpp" />
   </ItemGroup>

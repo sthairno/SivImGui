@@ -4,11 +4,11 @@
 
 namespace SivImGui
 {
-	class Root
+	class GUI
 	{
 	public:
 
-		Root(std::unique_ptr<WidgetBase>&& widget)
+		GUI(std::unique_ptr<WidgetBase>&& widget)
 			: m_widget(std::move(widget))
 		{
 			assert(m_widget);

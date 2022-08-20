@@ -1,5 +1,5 @@
 ﻿#include <Siv3D.hpp> // OpenSiv3D v0.6.5
-#include "Root.hpp"
+#include "GUI.hpp"
 
 #include "Widgets/Widget.hpp"
 #include "Widgets/Container.hpp"
@@ -293,9 +293,9 @@ void Main()
 	font = std::make_unique<Font>(14);
 	heavyFont = std::make_unique<Font>(28, Typeface::Heavy);
 
-	SivImGui::Root root(std::make_unique<SivImGui::Container>());
+	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
 	{
-		auto& widget = root.getRootWidget();
+		auto& widget = gui.getRootWidget();
 		widget.layout = SivImGui::VerticalLayout{
 			.padding = { 0 },
 			.space = 0
@@ -304,7 +304,7 @@ void Main()
 		widget.yExpand = true;
 	}
 
-	SivImGui::Builder ctx(root.getRootWidget());
+	SivImGui::Builder ctx(gui.getRootWidget());
 	bool showInfo = false;
 	String input;
 
@@ -312,7 +312,7 @@ void Main()
 
 	while (System::Update())
 	{
-		root.update();
+		gui.update();
 		ctx.reset();
 
 		/////////
@@ -375,9 +375,9 @@ void Main()
 		/////////
 
 		ctx.finalize();
-		root.layout(Scene::Size());
+		gui.layout(Scene::Size());
 		{
-			const SizeF minSize = root.getRootWidget().measuredSize().minSize;
+			const SizeF minSize = gui.getRootWidget().measuredSize().minSize;
 			const Size windowCurrentSize = Scene::Size();
 			const Size windowMinSize = SizeF{ Math::Ceil(minSize.x), Math::Ceil(minSize.y) }.asPoint();
 			const Size windowNewSize {
@@ -392,7 +392,7 @@ void Main()
 				Window::ResizeVirtual(windowNewSize, Centering::No);
 			}
 		}
-		root.draw();
+		gui.draw();
 
 		/////////
 
@@ -404,7 +404,7 @@ void Main()
 		}
 		if (showInfo)
 		{
-			DrawInfo({ 0, 0 }, root.getRootWidget());
+			DrawInfo({ 0, 0 }, gui.getRootWidget());
 		}
 	}
 }

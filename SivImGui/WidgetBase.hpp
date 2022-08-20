@@ -7,7 +7,7 @@
 namespace SivImGui
 {
 	class Builder;
-	class Root;
+	class GUI;
 
 	struct WidgetTypeInfo
 	{
@@ -109,7 +109,7 @@ namespace SivImGui
 
 	private:
 
-		friend Root;
+		friend GUI;
 
 		void layoutCore(SizeF availableSize);
 

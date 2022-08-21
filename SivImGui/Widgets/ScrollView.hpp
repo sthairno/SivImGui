@@ -285,22 +285,10 @@ namespace SivImGui
 				Container::draw(rect);
 			}
 
-			Optional<RectF> hHandle, vHandle;
-			if (m_barVisible.x)
-			{
-				//m_barRect[0].drawFrame(1, Palette::Red);
-				hHandle = getHHandleRect(rect);
-			}
-			if (m_barVisible.y)
-			{
-				//m_barRect[1].drawFrame(1, Palette::Red);
-				vHandle = getVHandleRect(rect);
-			}
-
 			static constexpr Triangle triangle = Triangle(-Triangle(1.0).boundingRect().center(), 1.0);
 			const double btnSize = ButtonScale * scrollbarSize;
-			const double handleSize = HandleScale * scrollbarSize;
-			if (hHandle)
+			Optional<RectF> hHandle, vHandle;
+			if (m_barVisible.x)
 			{
 				triangle
 					.scaled(btnSize)
@@ -312,10 +300,10 @@ namespace SivImGui
 					.rotatedAt(0, 0, 90_deg)
 					.movedBy(m_barRect[0].rightCenter() + Vec2{ scrollbarSize / 2, 0 })
 					.draw(ColorF(Palette::Black, 0.5));
-				RoundRect{ hHandle->scaled(1, HandleScale), handleSize / 2 }
-				.draw(ColorF(Palette::Black, 0.5));
+				//m_barRect[0].drawFrame(1, Palette::Red);
+				hHandle = getHHandleRect(rect);
 			}
-			if (vHandle)
+			if (m_barVisible.y)
 			{
 				triangle
 					.scaled(btnSize)
@@ -327,8 +315,20 @@ namespace SivImGui
 					.rotatedAt(0, 0, 180_deg)
 					.movedBy(m_barRect[1].bottomCenter() + Vec2{ 0,  scrollbarSize / 2 })
 					.draw(ColorF(Palette::Black, 0.5));
+				//m_barRect[1].drawFrame(1, Palette::Red);
+				vHandle = getVHandleRect(rect);
+			}
+
+			const double handleSize = HandleScale * scrollbarSize;
+			if (hHandle)
+			{
+				RoundRect{ hHandle->scaled(1, HandleScale), handleSize / 2 }
+					.draw(ColorF(Palette::Black, 0.5));
+			}
+			if (vHandle)
+			{
 				RoundRect{ vHandle->scaled(HandleScale, 1), handleSize / 2 }
-				.draw(ColorF(Palette::Black, 0.5));
+					.draw(ColorF(Palette::Black, 0.5));
 			}
 		}
 

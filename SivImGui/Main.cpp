@@ -303,9 +303,7 @@ void Main()
 			.padding = { 0 },
 			.space = 0
 		};
-		root->xExpand = true;
-		root->yExpand = true;
-		root->mode = SivImGui::ScrollView::Mode::Vertical;
+		root->mode = SivImGui::ScrollView::Mode::Both;
 	}
 	SivImGui::GUI gui(std::move(root));
 

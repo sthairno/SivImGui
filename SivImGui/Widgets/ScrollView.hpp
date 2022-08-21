@@ -7,6 +7,10 @@ namespace SivImGui
 	{
 		SIVIMGUI_BUILDER_HELPER(ScrollView);
 
+		static constexpr double ButtonScale = 0.6;
+
+		static constexpr double HandleScale = 0.4;
+
 	public:
 
 		enum class Mode : int8
@@ -43,15 +47,19 @@ namespace SivImGui
 
 		Property<Mode> mode{ this, Mode::None, PropertyFlag::Layout };
 
-		Property<double> scrollbarSize{ this, 10, PropertyFlag::Layout };
+		Property<double> scrollbarSize{ this, 20, PropertyFlag::Layout };
+
+		Property<SizeF> step{ this, { 20, 20 }, PropertyFlag::Layout };
 
 	protected:
 
 		RectF m_contentRect{ 0, 0, 0, 0 };
 
-		MeasureResult m_containerMeasureResult;
-
 		Vector2D<bool> m_scrolling{ false, false };
+
+		Vector2D<bool> m_barVisible{ false, false };
+
+		std::array<RectF, 2> m_barRect;
 
 		virtual MeasureResult measure() const override
 		{
@@ -65,7 +73,6 @@ namespace SivImGui
 				// <--->
 				result.minSize.x = scrollbarSize * 2;
 				result.minSize.y += scrollbarSize;
-				result.expand.x = false;
 				break;
 			case Mode::Vertical:
 				//     A
@@ -74,7 +81,6 @@ namespace SivImGui
 				//     V
 				result.minSize.x += scrollbarSize;
 				result.minSize.y = scrollbarSize * 2;
-				result.expand.y = false;
 				break;
 			case Mode::Both:
 				//     A
@@ -83,8 +89,6 @@ namespace SivImGui
 				// <-->#
 				result.minSize.x = scrollbarSize * 3;
 				result.minSize.y = scrollbarSize * 3;
-				result.expand.x = false;
-				result.expand.y = false;
 				break;
 			}
 			return result;
@@ -93,63 +97,69 @@ namespace SivImGui
 		virtual Array<RectF> arrange(RectF rect) override
 		{
 			MeasureResult result = Container::measure();
-			switch (mode)
+
+			m_barVisible = {
+				result.minSize.x > rect.w,
+				result.minSize.y > rect.h,
+			};
+
+			if (m_barVisible.x && not m_barVisible.y)
 			{
-			case Mode::Horizontal:
-				if (result.minSize.x > rect.w)
-				{
-					//      
-					//      
-					//      
-					// <--->
-					m_contentRect.size = {
-						result.minSize.x,
-						rect.h - scrollbarSize,
-					};
-				}
-				else
-				{
-					//      
-					//      
-					//      
-					//      
-					m_contentRect.size = {
-						result.minSize.x,
-						rect.h,
-					};
-				}
-				break;
-			case Mode::Vertical:
-				if (result.minSize.y > rect.h)
-				{
-					//     A
-					//     |
-					//     |
-					//     V
-					m_contentRect.size = {
-						rect.w - scrollbarSize,
-						result.minSize.y,
-					};
-				}
-				else
-				{
-					//      
-					//      
-					//      
-					//      
-					m_contentRect.size = {
-						rect.w,
-						result.minSize.y,
-					};
-				}
-				break;
-			case Mode::Both:
-				m_contentRect.size = result.minSize;
-				break;
-			default:
-				m_contentRect.size = rect.size;
-				break;
+				//      
+				//      
+				//      
+				// <--->
+				m_barRect[0] = {
+					Arg::bottomLeft = rect.bl() + Vec2{ scrollbarSize, 0 },
+					rect.w - scrollbarSize * 2,
+					scrollbarSize,
+				};
 			}
+			else if (not m_barVisible.x && m_barVisible.y)
+			{
+				//     A
+				//     |
+				//     |
+				//     V
+				m_barRect[1] = {
+					Arg::topRight = rect.tr() + Vec2{ 0, scrollbarSize },
+					scrollbarSize,
+					rect.h - scrollbarSize * 2,
+				};
+			}
+			else if (m_barVisible.x && m_barVisible.y)
+			{
+				//     A
+				//     |
+				//     V
+				// <-->#
+				m_barRect = {
+					RectF {
+						Arg::bottomLeft = rect.bl() + Vec2{ scrollbarSize, 0 },
+						rect.w - scrollbarSize * 3,
+						scrollbarSize,
+					},
+					RectF {
+						Arg::topRight = rect.tr() + Vec2{ 0, scrollbarSize },
+						scrollbarSize,
+						rect.h - scrollbarSize * 3,
+					},
+				};
+			}
+
+			if (m_barVisible.x)
+			{
+				rect.h -= scrollbarSize;
+			}
+			if (m_barVisible.y)
+			{
+				rect.w -= scrollbarSize;
+			}
+			m_contentRect = {
+				Max(result.minSize.x, rect.w),
+				Max(result.minSize.y, rect.h),
+			};
+
 			return Container::arrange({ 0, 0, m_contentRect.size });
 		}
 
@@ -160,8 +170,7 @@ namespace SivImGui
 				return nullptr;
 			}
 
-			if (mode == Mode::Horizontal ||
-				mode == Mode::Both)
+			if (m_barVisible.x)
 			{
 				if (RectF{ Arg::bottomRight = rect.br(), scrollbarSize, rect.h }.contains(pos))
 				{
@@ -169,8 +178,7 @@ namespace SivImGui
 				}
 			}
 
-			if (mode == Mode::Vertical ||
-				mode == Mode::Both)
+			if (m_barVisible.y)
 			{
 				if (RectF{ Arg::bottomRight = rect.br(), rect.w, scrollbarSize }.contains(pos))
 				{
@@ -193,53 +201,78 @@ namespace SivImGui
 
 		virtual void update(RectF rect) override
 		{
-			if (*mode != Mode::None)
+			Optional<RectF> hHandle, vHandle;
+			if (m_barVisible.x)
 			{
-				SizeF barAreaSize;
-				Optional<RectF> hBarRect, vBarRect;
-				switch (*mode)
-				{
-				case Mode::Horizontal:
-					barAreaSize.x = rect.w;
-					hBarRect = getHBarRect(rect, barAreaSize.x);
-					break;
-				case Mode::Vertical:
-					barAreaSize.y = rect.h;
-					vBarRect = getVBarRect(rect, barAreaSize.y);
-					break;
-				case Mode::Both:
-					barAreaSize.x = rect.w - scrollbarSize;
-					barAreaSize.y = rect.h - scrollbarSize;
-					hBarRect = getHBarRect(rect, barAreaSize.x);
-					vBarRect = getVBarRect(rect, barAreaSize.y);
-					break;
-				}
-
-				if (mouseOver() && MouseL.down())
-				{
-					m_scrolling.x |= hBarRect && hBarRect->mouseOver();
-					m_scrolling.y |= vBarRect && vBarRect->mouseOver();
-				}
-
-				if (not MouseL.pressed())
-				{
-					m_scrolling = { false, false };
-				}
-
-				const Vec2 cursorDelta = Cursor::DeltaF();
-
-				if (hBarRect && m_scrolling.x)
-				{
-					m_contentRect.x -= cursorDelta.x * (m_contentRect.w - rect.w) / (barAreaSize.x - hBarRect->w);
-				}
-				m_contentRect.x = Min(Max(m_contentRect.x, rect.w - m_contentRect.w), 0.0);
-
-				if (vBarRect && m_scrolling.y)
-				{
-					m_contentRect.y -= cursorDelta.y * (m_contentRect.h - rect.h) / (barAreaSize.y - vBarRect->h);
-				}
-				m_contentRect.y = Min(Max(m_contentRect.y, rect.h - m_contentRect.h), 0.0);
+				hHandle = getHHandleRect(rect);
 			}
+			if (m_barVisible.y)
+			{
+				vHandle = getVHandleRect(rect);
+			}
+
+			if (mouseOver() && MouseL.down())
+			{
+				if (hHandle && hHandle->mouseOver())
+				{
+					m_scrolling.x = true;
+				}
+				if (vHandle && vHandle->mouseOver())
+				{
+					m_scrolling.y = true;
+				}
+
+				if (m_barVisible.x)
+				{
+					// <
+					if (RectF{ m_barRect[0].tl() - Vec2{ scrollbarSize, 0 }, scrollbarSize, scrollbarSize }
+						.mouseOver())
+					{
+						m_contentRect.x += step->x;
+					}
+					// >
+					if (RectF{ m_barRect[0].tr(), scrollbarSize, scrollbarSize }
+						.mouseOver())
+					{
+						m_contentRect.x -= step->x;
+					}
+				}
+
+				if (m_barVisible.y)
+				{
+					// A
+					if (RectF{ m_barRect[1].tl() - Vec2{ 0, scrollbarSize }, scrollbarSize, scrollbarSize }
+						.mouseOver())
+					{
+						m_contentRect.y += step->y;
+					}
+					// V
+					if (RectF{ m_barRect[1].bl(), scrollbarSize, scrollbarSize }
+						.mouseOver())
+					{
+						m_contentRect.y -= step->y;
+					}
+				}
+			}
+
+			m_scrolling = {
+				m_scrolling.x && MouseL.pressed() && hHandle,
+				m_scrolling.y && MouseL.pressed() && vHandle,
+			};
+
+			const Vec2 cursorDelta = Cursor::DeltaF();
+
+			if (m_scrolling.x)
+			{
+				m_contentRect.x -= cursorDelta.x * (m_contentRect.w - rect.w) / (m_barRect[0].w - hHandle->w);
+			}
+			if (m_scrolling.y)
+			{
+				m_contentRect.y -= cursorDelta.y * (m_contentRect.h - rect.h) / (m_barRect[1].h - vHandle->h);
+			}
+
+			m_contentRect.x = Min(Max(m_contentRect.x, rect.w - m_contentRect.w), 0.0);
+			m_contentRect.y = Min(Max(m_contentRect.y, rect.h - m_contentRect.h), 0.0);
 
 			Transformer2D t(Mat3x2::Translate(m_contentRect.pos), TransformCursor::Yes);
 			Container::update(rect);
@@ -252,67 +285,91 @@ namespace SivImGui
 				Container::draw(rect);
 			}
 
-			Optional<RectF> hBarRect, vBarRect;
-			switch (*mode)
+			Optional<RectF> hHandle, vHandle;
+			if (m_barVisible.x)
 			{
-			case Mode::Horizontal:
-				hBarRect = getHBarRect(rect, rect.w);
-				break;
-			case Mode::Vertical:
-				vBarRect = getVBarRect(rect, rect.h);
-				break;
-			case Mode::Both:
-				hBarRect = getHBarRect(rect, rect.w - scrollbarSize);
-				vBarRect = getVBarRect(rect, rect.h - scrollbarSize);
-				break;
+				//m_barRect[0].drawFrame(1, Palette::Red);
+				hHandle = getHHandleRect(rect);
+			}
+			if (m_barVisible.y)
+			{
+				//m_barRect[1].drawFrame(1, Palette::Red);
+				vHandle = getVHandleRect(rect);
 			}
 
-			if (hBarRect)
+			static constexpr Triangle triangle = Triangle(-Triangle(1.0).boundingRect().center(), 1.0);
+			const double btnSize = ButtonScale * scrollbarSize;
+			const double handleSize = HandleScale * scrollbarSize;
+			if (hHandle)
 			{
-				RoundRect{ *hBarRect, hBarRect->h / 2 }.draw(ColorF(Palette::Black, 0.5));
+				triangle
+					.scaled(btnSize)
+					.rotatedAt(0, 0, -90_deg)
+					.movedBy(m_barRect[0].leftCenter() - Vec2{ scrollbarSize / 2, 0 })
+					.draw(ColorF(Palette::Black, 0.5));
+				triangle
+					.scaled(btnSize)
+					.rotatedAt(0, 0, 90_deg)
+					.movedBy(m_barRect[0].rightCenter() + Vec2{ scrollbarSize / 2, 0 })
+					.draw(ColorF(Palette::Black, 0.5));
+				RoundRect{ hHandle->scaled(1, HandleScale), handleSize / 2 }
+				.draw(ColorF(Palette::Black, 0.5));
 			}
-			if (vBarRect)
+			if (vHandle)
 			{
-				RoundRect{ *vBarRect, vBarRect->w / 2 }.draw(ColorF(Palette::Black, 0.5));
+				triangle
+					.scaled(btnSize)
+					.rotatedAt(0, 0, 0_deg)
+					.movedBy(m_barRect[1].topCenter() - Vec2{ 0, scrollbarSize / 2 })
+					.draw(ColorF(Palette::Black, 0.5));
+				triangle
+					.scaled(btnSize)
+					.rotatedAt(0, 0, 180_deg)
+					.movedBy(m_barRect[1].bottomCenter() + Vec2{ 0,  scrollbarSize / 2 })
+					.draw(ColorF(Palette::Black, 0.5));
+				RoundRect{ vHandle->scaled(HandleScale, 1), handleSize / 2 }
+				.draw(ColorF(Palette::Black, 0.5));
 			}
 		}
 
-		Optional<RectF> getHBarRect(RectF rect, double width) const
+		Optional<RectF> getHHandleRect(RectF rect) const
 		{
 			if (m_contentRect.w <= rect.w)
 			{
 				return none;
 			}
 
-			const double barSize = Max(width * width / m_contentRect.w, scrollbarSize * 2);
+			const RectF barRect = m_barRect[0];
+			const double handleSize = Max(barRect.w * rect.w / m_contentRect.w, barRect.h * 2);
 
-			if (barSize >= width)
+			if (handleSize >= barRect.w)
 			{
 				return none;
 			}
 
-			const double barPos = (width - barSize) * m_contentRect.x / (width - m_contentRect.w);
+			const double handlePos = (barRect.w - handleSize) * m_contentRect.x / (rect.w - m_contentRect.w);
 
-			return RectF{ Arg::bottomLeft = rect.bl() + Vec2{ barPos, 0 }, barSize, scrollbarSize};
+			return RectF{ Arg::bottomLeft = barRect.bl() + Vec2{ handlePos, 0 }, handleSize, barRect.h };
 		}
 
-		Optional<RectF> getVBarRect(RectF rect, double height) const
+		Optional<RectF> getVHandleRect(RectF rect) const
 		{
 			if (m_contentRect.h <= rect.h)
 			{
 				return none;
 			}
 
-			const double barSize = Max(height * height / m_contentRect.h, scrollbarSize * 2);
+			const RectF barRect = m_barRect[1];
+			const double handleSize = Max(barRect.h * rect.h / m_contentRect.h, barRect.w * 2);
 
-			if (barSize >= height)
+			if (handleSize >= barRect.h)
 			{
 				return none;
 			}
 
-			const double barPos = (height - barSize) * m_contentRect.y / (height - m_contentRect.h);
+			const double handlePos = (barRect.h - handleSize) * m_contentRect.y / (rect.h - m_contentRect.h);
 
-			return RectF{ Arg::topRight = rect.tr() + Vec2{ 0, barPos }, scrollbarSize, barSize};
+			return RectF{ Arg::topRight = barRect.tr() + Vec2{ 0, handlePos }, barRect.w, handleSize };
 		}
 	};
 }

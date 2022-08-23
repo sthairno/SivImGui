@@ -47,19 +47,19 @@ namespace SivImGui
 
 		Property<Mode> mode{ this, Mode::None, PropertyFlag::Layout };
 
-		Property<double> scrollbarSize{ this, 20, PropertyFlag::Layout };
+		Property<int32> scrollbarSize{ this, 20, PropertyFlag::Layout };
 
-		Property<SizeF> step{ this, { 20, 20 }, PropertyFlag::Layout };
+		Property<Size> step{ this, { 20, 20 }, PropertyFlag::Layout };
 
 	protected:
 
-		RectF m_contentRect{ 0, 0, 0, 0 };
+		Rect m_contentRect{ 0, 0, 0, 0 };
 
 		Vector2D<bool> m_scrolling{ false, false };
 
 		Vector2D<bool> m_barVisible{ false, false };
 
-		std::array<RectF, 2> m_barRect;
+		std::array<Rect, 2> m_barRect;
 
 		virtual MeasureResult measure() const override
 		{
@@ -94,7 +94,7 @@ namespace SivImGui
 			return result;
 		}
 
-		virtual Array<RectF> arrange(RectF rect) override
+		virtual Array<Rect> arrange(Rect rect) override
 		{
 			MeasureResult result = Container::measure();
 
@@ -110,7 +110,7 @@ namespace SivImGui
 				//      
 				// <--->
 				m_barRect[0] = {
-					Arg::bottomLeft = rect.bl() + Vec2{ scrollbarSize, 0 },
+					Arg::bottomLeft = rect.bl() + Point{ *scrollbarSize, 0 },
 					rect.w - scrollbarSize * 2,
 					scrollbarSize,
 				};
@@ -122,7 +122,7 @@ namespace SivImGui
 				//     |
 				//     V
 				m_barRect[1] = {
-					Arg::topRight = rect.tr() + Vec2{ 0, scrollbarSize },
+					Arg::topRight = rect.tr() + Point{ 0, *scrollbarSize },
 					scrollbarSize,
 					rect.h - scrollbarSize * 2,
 				};
@@ -134,13 +134,13 @@ namespace SivImGui
 				//     V
 				// <-->#
 				m_barRect = {
-					RectF {
-						Arg::bottomLeft = rect.bl() + Vec2{ scrollbarSize, 0 },
+					Rect {
+						Arg::bottomLeft = rect.bl() + Point{ *scrollbarSize, 0 },
 						rect.w - scrollbarSize * 3,
 						scrollbarSize,
 					},
-					RectF {
-						Arg::topRight = rect.tr() + Vec2{ 0, scrollbarSize },
+					Rect {
+						Arg::topRight = rect.tr() + Point{ 0, *scrollbarSize },
 						scrollbarSize,
 						rect.h - scrollbarSize * 3,
 					},
@@ -155,7 +155,7 @@ namespace SivImGui
 			{
 				rect.w -= scrollbarSize;
 			}
-			m_contentRect = {
+			m_contentRect.size = {
 				Max(result.minSize.x, rect.w),
 				Max(result.minSize.y, rect.h),
 			};
@@ -163,7 +163,7 @@ namespace SivImGui
 			return Container::arrange({ 0, 0, m_contentRect.size });
 		}
 
-		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) override
+		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) override
 		{
 			if (not rect.contains(pos))
 			{
@@ -172,7 +172,7 @@ namespace SivImGui
 
 			if (m_barVisible.x)
 			{
-				if (RectF{ Arg::bottomRight = rect.br(), scrollbarSize, rect.h }.contains(pos))
+				if (Rect{ Arg::bottomRight = rect.br(), scrollbarSize, rect.h }.contains(pos))
 				{
 					return this;
 				}
@@ -180,7 +180,7 @@ namespace SivImGui
 
 			if (m_barVisible.y)
 			{
-				if (RectF{ Arg::bottomRight = rect.br(), rect.w, scrollbarSize }.contains(pos))
+				if (Rect{ Arg::bottomRight = rect.br(), rect.w, scrollbarSize }.contains(pos))
 				{
 					return this;
 				}
@@ -199,7 +199,7 @@ namespace SivImGui
 			return nullptr;
 		}
 
-		virtual void update(RectF rect) override
+		virtual void update(Rect rect) override
 		{
 			Optional<RectF> hHandle, vHandle;
 			if (m_barVisible.x)
@@ -225,13 +225,13 @@ namespace SivImGui
 				if (m_barVisible.x)
 				{
 					// <
-					if (RectF{ m_barRect[0].tl() - Vec2{ scrollbarSize, 0 }, scrollbarSize, scrollbarSize }
+					if (Rect{ m_barRect[0].tl() - Point{ *scrollbarSize, 0 }, *scrollbarSize, *scrollbarSize }
 						.mouseOver())
 					{
 						m_contentRect.x += step->x;
 					}
 					// >
-					if (RectF{ m_barRect[0].tr(), scrollbarSize, scrollbarSize }
+					if (Rect{ m_barRect[0].tr(), *scrollbarSize, *scrollbarSize }
 						.mouseOver())
 					{
 						m_contentRect.x -= step->x;
@@ -241,13 +241,13 @@ namespace SivImGui
 				if (m_barVisible.y)
 				{
 					// A
-					if (RectF{ m_barRect[1].tl() - Vec2{ 0, scrollbarSize }, scrollbarSize, scrollbarSize }
+					if (Rect{ m_barRect[1].tl() - Point{ 0, *scrollbarSize }, *scrollbarSize, *scrollbarSize }
 						.mouseOver())
 					{
 						m_contentRect.y += step->y;
 					}
 					// V
-					if (RectF{ m_barRect[1].bl(), scrollbarSize, scrollbarSize }
+					if (Rect{ m_barRect[1].bl(), *scrollbarSize, *scrollbarSize }
 						.mouseOver())
 					{
 						m_contentRect.y -= step->y;
@@ -271,14 +271,14 @@ namespace SivImGui
 				m_contentRect.y -= cursorDelta.y * (m_contentRect.h - rect.h) / (m_barRect[1].h - vHandle->h);
 			}
 
-			m_contentRect.x = Min(Max(m_contentRect.x, rect.w - m_contentRect.w), 0.0);
-			m_contentRect.y = Min(Max(m_contentRect.y, rect.h - m_contentRect.h), 0.0);
+			m_contentRect.x = Min(Max(m_contentRect.x, rect.w - m_contentRect.w), 0);
+			m_contentRect.y = Min(Max(m_contentRect.y, rect.h - m_contentRect.h), 0);
 
 			Transformer2D t(Mat3x2::Translate(m_contentRect.pos), TransformCursor::Yes);
 			Container::update(rect);
 		}
 
-		virtual void draw(RectF rect) const override
+		virtual void draw(Rect rect) const override
 		{
 			{
 				Transformer2D t(Mat3x2::Translate(m_contentRect.pos), TransformCursor::Yes);
@@ -308,12 +308,12 @@ namespace SivImGui
 				triangle
 					.scaled(btnSize)
 					.rotatedAt(0, 0, 0_deg)
-					.movedBy(m_barRect[1].topCenter() - Vec2{ 0, scrollbarSize / 2 })
+					.movedBy(m_barRect[1].topCenter() - Point{ 0, scrollbarSize / 2 })
 					.draw(ColorF(Palette::Black, 0.5));
 				triangle
 					.scaled(btnSize)
 					.rotatedAt(0, 0, 180_deg)
-					.movedBy(m_barRect[1].bottomCenter() + Vec2{ 0,  scrollbarSize / 2 })
+					.movedBy(m_barRect[1].bottomCenter() + Point{ 0,  scrollbarSize / 2 })
 					.draw(ColorF(Palette::Black, 0.5));
 				//m_barRect[1].drawFrame(1, Palette::Red);
 				vHandle = getVHandleRect(rect);
@@ -332,15 +332,15 @@ namespace SivImGui
 			}
 		}
 
-		Optional<RectF> getHHandleRect(RectF rect) const
+		Optional<RectF> getHHandleRect(Rect rect) const
 		{
 			if (m_contentRect.w <= rect.w)
 			{
 				return none;
 			}
 
-			const RectF barRect = m_barRect[0];
-			const double handleSize = Max(barRect.w * rect.w / m_contentRect.w, barRect.h * 2);
+			const Rect barRect = m_barRect[0];
+			const double handleSize = Max<double>((double)barRect.w * rect.w / m_contentRect.w, barRect.h * 2);
 
 			if (handleSize >= barRect.w)
 			{
@@ -349,18 +349,18 @@ namespace SivImGui
 
 			const double handlePos = (barRect.w - handleSize) * m_contentRect.x / (rect.w - m_contentRect.w);
 
-			return RectF{ Arg::bottomLeft = barRect.bl() + Vec2{ handlePos, 0 }, handleSize, barRect.h };
+			return RectF(Arg::bottomLeft = barRect.bl() + Vec2{ handlePos, 0 }, handleSize, barRect.h);
 		}
 
-		Optional<RectF> getVHandleRect(RectF rect) const
+		Optional<RectF> getVHandleRect(Rect rect) const
 		{
 			if (m_contentRect.h <= rect.h)
 			{
 				return none;
 			}
 
-			const RectF barRect = m_barRect[1];
-			const double handleSize = Max(barRect.h * rect.h / m_contentRect.h, barRect.w * 2);
+			const Rect barRect = m_barRect[1];
+			const double handleSize = Max<double>((double)barRect.h * rect.h / m_contentRect.h, barRect.w * 2);
 
 			if (handleSize >= barRect.h)
 			{
@@ -369,7 +369,7 @@ namespace SivImGui
 
 			const double handlePos = (barRect.h - handleSize) * m_contentRect.y / (rect.h - m_contentRect.h);
 
-			return RectF{ Arg::topRight = barRect.tr() + Vec2{ 0, handlePos }, barRect.w, handleSize };
+			return RectF(Arg::topRight = barRect.tr() + Vec2{ 0, handlePos }, barRect.w, handleSize);
 		}
 	};
 }

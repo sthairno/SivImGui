@@ -14,9 +14,9 @@ namespace SivImGui
 
 	struct HorizontalLayout
 	{
-		Padding padding{ 10.0 };
+		Padding padding{ 10 };
 
-		double space = 5.0;
+		int32 space = 5;
 
 		Alignment horizontalAlignment = Alignment::Start;
 
@@ -24,14 +24,14 @@ namespace SivImGui
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
-		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const;
+		Array<Rect> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
 	};
 
 	struct VerticalLayout
 	{
-		Padding padding{ 10.0 };
+		Padding padding{ 10 };
 
-		double space = 5.0;
+		int32 space = 5;
 
 		Alignment horizontalAlignment = Alignment::Stretch;
 
@@ -39,12 +39,12 @@ namespace SivImGui
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
-		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const;
+		Array<Rect> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
 	};
 
 	struct StackLayout
 	{
-		Padding padding{ 10.0 };
+		Padding padding{ 10 };
 
 		Alignment horizontalAlignment = Alignment::Stretch;
 
@@ -52,7 +52,7 @@ namespace SivImGui
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
-		Array<RectF> arrange(RectF rect, const std::vector<WidgetBase*>& children) const;
+		Array<Rect> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
 	};
 
 	using Layout = std::variant<HorizontalLayout, VerticalLayout, StackLayout>;

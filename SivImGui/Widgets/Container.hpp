@@ -42,14 +42,14 @@ namespace SivImGui
 			}, layout.value());
 		}
 
-		virtual Array<RectF> arrange(RectF rect) override
+		virtual Array<Rect> arrange(Rect rect) override
 		{
 			return std::visit([this, rect](auto& l) {
 				return l.arrange(rect, visibleChildren());
 			}, layout.value());;
 		}
 
-		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) override
+		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) override
 		{
 			if (auto result = hitTestChildren(pos))
 			{
@@ -59,12 +59,12 @@ namespace SivImGui
 			return hitTestSelf(rect, pos);
 		}
 
-		virtual void update(RectF) override
+		virtual void update(Rect) override
 		{
 			updateChildren(visibleChildren());
 		}
 
-		virtual void draw(RectF) const override
+		virtual void draw(Rect) const override
 		{
 			drawChildren(visibleChildren());
 		}

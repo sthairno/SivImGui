@@ -2,12 +2,12 @@
 
 namespace SivImGui
 {
-	void GUI::layout(SizeF availableSize)
+	void GUI::layout(Size availableSize)
 	{
 		m_widget->layoutCore(availableSize);
 	}
 
-	void GUI::update(Vec2 pos, bool allowMouseOver)
+	void GUI::update(Point pos, bool allowMouseOver)
 	{
 		auto& windowState = Window::GetState();
 
@@ -30,7 +30,7 @@ namespace SivImGui
 		m_widget->updateCore(m_enabled);
 	}
 
-	void GUI::draw(Vec2 pos) const
+	void GUI::draw(Point pos) const
 	{
 		Transformer2D t(Mat3x2::Translate(pos), TransformCursor::Yes);
 		m_widget->drawCore();

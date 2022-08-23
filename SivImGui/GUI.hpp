@@ -18,11 +18,11 @@ namespace SivImGui
 
 		void setEnabled(bool enable) { m_enabled = enable; }
 
-		void layout(SizeF availableSize);
+		void layout(Size availableSize);
 
-		void update(Vec2 pos = { 0, 0 }, bool allowMouseOver = true);
+		void update(Point pos = { 0, 0 }, bool allowMouseOver = true);
 
-		void draw(Vec2 pos = { 0, 0 }) const;
+		void draw(Point pos = { 0, 0 }) const;
 
 		WidgetBase& getWidgetById(const StringView id);
 

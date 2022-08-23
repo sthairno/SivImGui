@@ -43,12 +43,12 @@ namespace SivImGui
 
 	protected:
 
-		virtual SizeF region() const override
+		virtual Size region() const override
 		{
-			return fitHeight ? SizeF{ 0, 0 } : (*font)(text).region().size;
+			return fitHeight ? Size{ 0, 0 } : (*font)(text).region().size.asPoint();
 		}
 
-		virtual void draw(RectF rect) const override
+		virtual void draw(Rect rect) const override
 		{
 			if (fitHeight)
 			{

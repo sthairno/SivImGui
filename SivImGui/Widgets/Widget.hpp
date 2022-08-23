@@ -35,16 +35,16 @@ namespace SivImGui
 
 	protected:
 
-		virtual SizeF region() const { return { 0, 0 }; };
+		virtual Size region() const { return { 0, 0 }; };
 
-		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) override
+		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) override
 		{
 			return hitTestSelf(rect, pos);
 		}
 
-		virtual void update(RectF) override { }
+		virtual void update(Rect) override { }
 
-		virtual void draw(RectF) const override { }
+		virtual void draw(Rect) const override { }
 
 		template<class ShapeT>
 		WidgetBase* hitTestSelf(ShapeT shape, Vec2 pos)
@@ -62,7 +62,7 @@ namespace SivImGui
 			return MeasureResult{ .minSize = region(), .expand = { false, false } };
 		}
 
-		Array<RectF> arrange(RectF) override
+		Array<Rect> arrange(Rect) override
 		{
 			return { };
 		};

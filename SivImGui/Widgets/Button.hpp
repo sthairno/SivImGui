@@ -42,9 +42,9 @@ namespace SivImGui
 
 		Property<ColorF> mouseOverFlameColor{ this, ColorF{ 0.67 } };
 
-		Property<double> frameThickness{ this, 1, PropertyFlag::Layout };
+		Property<int32> frameThickness{ this, 1, PropertyFlag::Layout };
 
-		Property<double> roundSize{ this, 4.8, PropertyFlag::Layout };
+		Property<int32> roundSize{ this, 5, PropertyFlag::Layout };
 
 	public:
 
@@ -61,16 +61,16 @@ namespace SivImGui
 		virtual MeasureResult measure() const override
 		{
 			auto result = Container::measure();
-			result.minSize += Padding{ frameThickness, Max<double>(frameThickness, roundSize) };
+			result.minSize += Padding{ frameThickness, Max<int32>(frameThickness, roundSize) };
 			return result;
 		}
 
-		virtual Array<RectF> arrange(RectF rect) override
+		virtual Array<Rect> arrange(Rect rect) override
 		{
-			return Container::arrange(rect - Padding{ frameThickness, Max<double>(frameThickness, roundSize) });
+			return Container::arrange(rect - Padding{ frameThickness, Max<int32>(frameThickness, roundSize) });
 		}
 
-		virtual void update(RectF rect) override
+		virtual void update(Rect rect) override
 		{
 			Container::update(rect);
 
@@ -92,9 +92,9 @@ namespace SivImGui
 			}
 		}
 
-		virtual void draw(RectF rect) const override
+		virtual void draw(Rect rect) const override
 		{
-			RoundRect rrect{ rect, roundSize };
+			RoundRect rrect(rect, roundSize);
 
 			ColorF backCol;
 			ColorF frameCol;

@@ -35,7 +35,7 @@ namespace SivImGui
 
 		Property<ColorF> frameColor{ this, Palette::Black, PropertyFlag::Layout };
 
-		Property<double> frameThickness{ this, 1, PropertyFlag::Layout };
+		Property<int32> frameThickness{ this, 1, PropertyFlag::Layout };
 
 	protected:
 
@@ -46,12 +46,12 @@ namespace SivImGui
 			return result;
 		}
 
-		virtual Array<RectF> arrange(RectF rect) override
+		virtual Array<Rect> arrange(Rect rect) override
 		{
 			return Container::arrange(rect - Padding{ frameThickness });
 		}
 
-		virtual void draw(RectF rect) const override
+		virtual void draw(Rect rect) const override
 		{
 			rect.draw(backColor).drawFrame(frameThickness, 0, frameColor);
 			Container::draw(rect);

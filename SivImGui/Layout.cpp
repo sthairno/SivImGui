@@ -3,6 +3,18 @@
 
 namespace SivImGui
 {
+	template<uint8 i>
+	static inline Point::value_type& Ref(Point& v)
+	{
+		return i ? v.x : v.y;
+	}
+
+	template<uint8 i>
+	static inline const Point::value_type& Ref(const Point& v)
+	{
+		return i ? v.x : v.y;
+	}
+
 	template<uint8 i, class T>
 	static inline T& Ref(Vector2D<T>& v)
 	{
@@ -15,7 +27,7 @@ namespace SivImGui
 		return i ? v.x : v.y;
 	}
 
-	static double calcLeadPosition(Alignment alignment, double pos, double size, double itemSize)
+	static int32 calcLeadPosition(Alignment alignment, int32 pos, int32 size, int32 itemSize)
 	{
 		switch (alignment)
 		{
@@ -30,10 +42,10 @@ namespace SivImGui
 
 	template<uint8 primary>
 	static void arrangeVH(
-		Array<RectF>& result,
+		Array<Rect>& result,
 		const std::vector<WidgetBase*>& children,
-		const RectF rect,
-		const double space,
+		const Rect rect,
+		const int32 space,
 		const Alignment primaryAlignment,
 		const Alignment secondaryAlignment
 	)
@@ -43,8 +55,8 @@ namespace SivImGui
 		std::vector<bool> expand(children.size());
 		int expandCount = 0;
 
-		const double totalSpace = (Max<size_t>(children.size(), 1) - 1) * space;
-		double allocatedSize = totalSpace;
+		const int32 totalSpace = (Max<size_t>(children.size(), 1) - 1) * space;
+		int32 allocatedSize = totalSpace;
 
 		// 分配の用意
 
@@ -79,12 +91,12 @@ namespace SivImGui
 		while (expandCount > 0 && allocatedSize < Ref<primary>(rect.size))
 		{
 			const int prevExpandCount = expandCount;
-			const double sizePerWidget = (Ref<primary>(rect.size) - allocatedSize) / expandCount;
+			const int32 sizePerWidget = (Ref<primary>(rect.size) - allocatedSize) / expandCount;
 
 			for (auto [idx, child] : Indexed(children))
 			{
-				const double minSize = Ref<primary>(child->measuredSize().minSize);
-				double& size = Ref<primary>(result[idx].size);
+				const int32 minSize = Ref<primary>(child->measuredSize().minSize);
+				int32& size = Ref<primary>(result[idx].size);
 
 				if (not expand[idx])
 				{
@@ -114,7 +126,7 @@ namespace SivImGui
 
 		for (auto [idx, child] : Indexed(children))
 		{
-			double& size = Ref<primary>(result[idx].size);
+			int32& size = Ref<primary>(result[idx].size);
 
 			if (not expand[idx])
 			{
@@ -127,11 +139,11 @@ namespace SivImGui
 		}
 
 		// 位置の確定
-		Vec2 next = rect.pos;
+		Point next = rect.pos;
 		Ref<primary>(next) = calcLeadPosition(primaryAlignment, Ref<primary>(rect.pos), Ref<primary>(rect.size), allocatedSize);
 		for (auto [idx, child] : Indexed(children))
 		{
-			RectF& childRect = result[idx];
+			Rect& childRect = result[idx];
 			childRect.pos = next;
 			Ref<secondary>(childRect.pos) = calcLeadPosition(secondaryAlignment, Ref<secondary>(rect.pos), Ref<secondary>(rect.size), Ref<secondary>(childRect.size));
 			Ref<primary>(next) += Ref<primary>(childRect.size) + space;
@@ -154,10 +166,10 @@ namespace SivImGui
 		return result;
 	}
 
-	Array<RectF> HorizontalLayout::arrange(RectF rect, const std::vector<WidgetBase*>& children) const
+	Array<Rect> HorizontalLayout::arrange(Rect rect, const std::vector<WidgetBase*>& children) const
 	{
 		rect -= padding;
-		Array<RectF> result(children.size(), RectF{ 0, 0, 0, 0 });
+		Array<Rect> result(children.size(), Rect{ 0, 0, 0, 0 });
 		arrangeVH<1>(result, children, rect, space, horizontalAlignment, verticalAlignment);
 		return result;
 	}
@@ -178,10 +190,10 @@ namespace SivImGui
 		return result;
 	}
 
-	Array<RectF> VerticalLayout::arrange(RectF rect, const std::vector<WidgetBase*>& children) const
+	Array<Rect> VerticalLayout::arrange(Rect rect, const std::vector<WidgetBase*>& children) const
 	{
 		rect -= padding;
-		Array<RectF> result(children.size(), RectF{ 0, 0, 0, 0 });
+		Array<Rect> result(children.size(), Rect{ 0, 0, 0, 0 });
 		arrangeVH<0>(result, children, rect, space, verticalAlignment, horizontalAlignment);
 		return result;
 	}
@@ -201,15 +213,15 @@ namespace SivImGui
 		return result;
 	}
 
-	Array<RectF> StackLayout::arrange(RectF rect, const std::vector<WidgetBase*>& children) const
+	Array<Rect> StackLayout::arrange(Rect rect, const std::vector<WidgetBase*>& children) const
 	{
 		rect -= padding;
-		Array<RectF> result(Arg::reserve = children.size());
+		Array<Rect> result(Arg::reserve = children.size());
 		for (auto child : children)
 		{
 			const auto& childResult = child->measuredSize();
 
-			SizeF childSize{
+			Size childSize{
 				(childResult.expand.x || horizontalAlignment == Alignment::Stretch)
 					? Max(childResult.minSize.x, rect.w)
 					: childResult.minSize.x,
@@ -217,7 +229,7 @@ namespace SivImGui
 					? Max(childResult.minSize.y, rect.h)
 					: childResult.minSize.y,
 			};
-			result.emplace_back(RectF{
+			result.emplace_back(Rect{
 				calcLeadPosition(horizontalAlignment, rect.x, rect.w, childSize.x),
 				calcLeadPosition(verticalAlignment, rect.y, rect.h, childSize.y),
 				childSize

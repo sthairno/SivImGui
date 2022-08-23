@@ -74,13 +74,13 @@ namespace SivImGui
 		);
 	}
 
-	void WidgetBase::layoutCore(SizeF availableSize)
+	void WidgetBase::layoutCore(Size availableSize)
 	{
 		checkChildrenVisibility();
 
 		measureCore();
 
-		RectF rect{
+		Rect rect{
 			0,
 			0,
 			m_measuredSize.expand.x ? Max(m_measuredSize.minSize.x, availableSize.x) : m_measuredSize.minSize.x,
@@ -94,14 +94,13 @@ namespace SivImGui
 		m_enabled = this->enabled && enabled;
 
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
-		update(RectF{ 0, 0, m_rect.size });
+		update({ 0, 0, m_rect.size });
 	}
 
 	void WidgetBase::drawCore() const
 	{
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
 		draw({ 0, 0, m_rect.size });
-		
 	}
 
 	void WidgetBase::measureCore()
@@ -140,7 +139,7 @@ namespace SivImGui
 		}
 	}
 
-	void WidgetBase::arrangeCore(RectF rect)
+	void WidgetBase::arrangeCore(Rect rect)
 	{
 		m_rect.pos = rect.pos;
 

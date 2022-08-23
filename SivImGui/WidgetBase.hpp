@@ -45,7 +45,7 @@ namespace SivImGui
 
 		Property<Optional<bool>> enableMouseOver{ this, { }, PropertyFlag::Layout };
 
-		Property<SizeF> minSize{ this, { 0, 0 }, PropertyFlag::Layout };
+		Property<Size> minSize{ this, { 0, 0 }, PropertyFlag::Layout };
 
 		Property<Layout> layout{ this, VerticalLayout{}, PropertyFlag::Layout };
 
@@ -65,11 +65,11 @@ namespace SivImGui
 
 		const auto& visibleChildren() const { return m_visibleChildren; }
 
-		RectF rect() const { return m_rect; };
+		Rect rect() const { return m_rect; };
 
-		Vec2 pos() const { return m_rect.pos; };
+		Point pos() const { return m_rect.pos; };
 
-		SizeF size() const { return m_rect.size; };
+		Size size() const { return m_rect.size; };
 
 		MeasureResult measuredSize() const { return m_measuredSize; };
 
@@ -81,7 +81,7 @@ namespace SivImGui
 
 		WidgetBase* hitTest(Vec2 pos)
 		{
-			return hitTest(RectF{ 0, 0, m_rect.size }, pos - m_rect.pos);
+			return hitTest({ 0, 0, m_rect.size }, pos - m_rect.pos);
 		}
 
 		void requestLayout();
@@ -96,13 +96,13 @@ namespace SivImGui
 
 		virtual MeasureResult measure() const = 0;
 
-		virtual Array<RectF> arrange(RectF rect) = 0;
+		virtual Array<Rect> arrange(Rect rect) = 0;
 
-		virtual WidgetBase* hitTest(RectF rect, Vec2 pos) = 0;
+		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) = 0;
 
-		virtual void update(RectF rect) = 0;
+		virtual void update(Rect rect) = 0;
 
-		virtual void draw(RectF rect) const = 0;
+		virtual void draw(Rect rect) const = 0;
 
 		void builderPush();
 
@@ -124,7 +124,7 @@ namespace SivImGui
 
 		bool m_mouseOver = false;
 
-		void layoutCore(SizeF availableSize);
+		void layoutCore(Size availableSize);
 
 		void updateCore(bool enabled);
 
@@ -138,7 +138,7 @@ namespace SivImGui
 
 		std::vector<WidgetBase*> m_visibleChildren;
 
-		RectF m_rect{ 0, 0, 0, 0 };
+		Rect m_rect{ 0, 0, 0, 0 };
 
 		MeasureResult m_measuredSize;
 
@@ -150,7 +150,7 @@ namespace SivImGui
 
 		int32 m_layoutUpdatedAt = 0;
 
-		void arrangeCore(RectF rect);
+		void arrangeCore(Rect rect);
 
 		void measureCore();
 

@@ -39,12 +39,12 @@ namespace SivImGui
 
 	protected:
 
-		virtual SizeF region() const override
+		virtual Size region() const override
 		{
-			return fitScale ? SizeF{ 0, 0 } : texture->size();
+			return fitScale ? Size{ 0, 0 } : texture->size();
 		}
 
-		virtual void draw(RectF rect) const override
+		virtual void draw(Rect rect) const override
 		{
 			if (fitScale)
 			{

@@ -24,10 +24,22 @@ namespace SivImGui
 
 		void draw(Point pos = { 0, 0 }) const;
 
-		WidgetBase& getWidgetById(const StringView id);
+		template<class WidgetT>
+		WidgetT* findWidget(const StringView name = U"")
+		{
+			return reinterpret_cast<WidgetT*>(getWidget(name, WidgetT::TypeInfo().id));
+		}
+
+		WidgetBase* findWidget(const StringView name, Optional<size_t> typeId = none);
 
 		template<class WidgetT>
-		WidgetT& getWidgetById(const StringView id);
+		Array<WidgetT*> findAllWidgets(const StringView name = U"")
+		{
+			return findAllWidgets(name, WidgetT::TypeInfo().id)
+				.map([](WidgetBase* w) { return reinterpret_cast<WidgetT*>(w); });
+		}
+
+		Array<WidgetBase*> findAllWidgets(const StringView name, Optional<size_t> typeId = none);
 
 	private:
 

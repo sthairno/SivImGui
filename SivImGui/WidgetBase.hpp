@@ -33,7 +33,7 @@ namespace SivImGui
 
 	public:
 
-		Property<String> id{ this, U"" };
+		Property<String> name{ this, U"" };
 
 		Property<bool> visible{ this, true, PropertyFlag::Layout };
 

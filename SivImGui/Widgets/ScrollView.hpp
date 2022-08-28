@@ -281,7 +281,16 @@ namespace SivImGui
 		virtual void draw(Rect rect) const override
 		{
 			{
-				Transformer2D t(Mat3x2::Translate(m_contentRect.pos), TransformCursor::Yes);
+				const Mat3x2& currentMat = Graphics2D::GetLocalTransform();
+				Float2 tl = currentMat.transformPoint(rect.tl()).asPoint();
+				Float2 br = currentMat.transformPoint(rect.br()).asPoint();
+
+				ScopedViewport2D v(
+					tl.asPoint(),
+					(br - tl).asPoint()
+				);
+				Transformer2D t1(Mat3x2::Identity(), Transformer2D::Target::SetLocal);
+				Transformer2D t2(Mat3x2::Translate(m_contentRect.pos), TransformCursor::Yes);
 				Container::draw(rect);
 			}
 

@@ -3,12 +3,12 @@
 namespace SivImGui
 {
 	class WidgetBase;
-}
 
-#include "WidgetBase.hpp"
+	namespace detail
+	{
+		void RequestLayout(WidgetBase& widget);
+	}
 
-namespace SivImGui
-{
 	enum class PropertyFlag
 	{
 		None = 0,
@@ -23,7 +23,7 @@ namespace SivImGui
 	public:
 
 		template<class WidgetT>
-		Property(WidgetT* _this, const T defaultValue, PropertyFlag flag = PropertyFlag::None, const StringView name = U"")
+		Property(WidgetT* _this, const T defaultValue, PropertyFlag flag = PropertyFlag::None)
 			: m_value(defaultValue)
 			, m_widget(*_this)
 			, m_flag(flag)
@@ -40,7 +40,7 @@ namespace SivImGui
 			{
 				if (m_flag & PropertyFlag::Layout)
 				{
-					m_widget.requestLayout();
+					detail::RequestLayout(m_widget);
 				}
 				return m_value = value;
 			}
@@ -53,7 +53,7 @@ namespace SivImGui
 			{
 				if (m_flag & PropertyFlag::Layout)
 				{
-					m_widget.requestLayout();
+					detail::RequestLayout(m_widget);
 				}
 				return m_value = value;
 			}
@@ -77,7 +77,7 @@ namespace SivImGui
 }
 
 #define SIVIMGUI_PROPERTY(TYPE, NAME, VALUE)\
-Property<TYPE> NAME{ this, VALUE, PropertyFlag::None, U"" #NAME}
+Property<TYPE> NAME{ this, VALUE, PropertyFlag::None}
 
 #define SIVIMGUI_LAYOUT_PROPERTY(TYPE, NAME, VALUE)\
-Property<TYPE> NAME{ this, VALUE, PropertyFlag::Layout, U"" #NAME}
+Property<TYPE> NAME{ this, VALUE, PropertyFlag::Layout}

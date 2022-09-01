@@ -24,6 +24,8 @@ namespace SivImGui
 
 		using WidgetContainer = std::vector<std::unique_ptr<WidgetBase>>;
 
+		using WidgetRefContainer = std::vector<WidgetBase*>;
+
 		WidgetBase(const WidgetTypeInfo& typeInfo, bool isContainer)
 			: typeInfo(typeInfo)
 			, isContainer(isContainer)
@@ -63,7 +65,7 @@ namespace SivImGui
 
 		const WidgetContainer& children() const { return m_children; }
 
-		const auto& visibleChildren() const { return m_visibleChildren; }
+		const WidgetRefContainer& visibleChildren() const { return m_visibleChildren; }
 
 		Rect rect() const { return m_rect; };
 
@@ -108,9 +110,9 @@ namespace SivImGui
 
 		void builderPop();
 
-		void updateChildren(const std::vector<WidgetBase*>& children);
+		void updateChildren(const WidgetRefContainer& children);
 
-		void drawChildren(const std::vector<WidgetBase*>& children) const;
+		void drawChildren(const WidgetRefContainer& children) const;
 
 	private:
 
@@ -136,7 +138,7 @@ namespace SivImGui
 
 		WidgetContainer m_children;
 
-		std::vector<WidgetBase*> m_visibleChildren;
+		WidgetRefContainer m_visibleChildren;
 
 		Rect m_rect{ 0, 0, 0, 0 };
 

@@ -58,7 +58,7 @@ namespace SivImGui
 		m_builder->pop();
 	}
 
-	void WidgetBase::updateChildren(const std::vector<WidgetBase*>& children)
+	void WidgetBase::updateChildren(const WidgetRefContainer& children)
 	{
 		std::for_each(
 			children.rbegin(), children.rend(),
@@ -66,7 +66,7 @@ namespace SivImGui
 		);
 	}
 
-	void WidgetBase::drawChildren(const std::vector<WidgetBase*>& children) const
+	void WidgetBase::drawChildren(const WidgetRefContainer& children) const
 	{
 		std::for_each(
 			children.begin(), children.end(),

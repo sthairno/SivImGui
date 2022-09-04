@@ -8,11 +8,9 @@
 #include "Widgets/Box.hpp"
 #include "Widgets/Label.hpp"
 #include "Widgets/ScrollView.hpp"
+#include "Widgets/Image.hpp"
 
 const Size gridSize{ 5, 6 };
-
-std::unique_ptr<Font> font;
-std::unique_ptr<Font> heavyFont;
 
 Array<String> tileChars;
 
@@ -22,124 +20,128 @@ void Reset()
 	tileChars.emplace_back(U"");
 }
 
-void DrawInfo(Vec2 pos, const SivImGui::WidgetBase& w, bool* mouseOver = nullptr)
-{
-	const RectF rect = w.rect().movedBy(pos);
-	const ColorF baseColor = w.layoutUpdatedAt() == Scene::FrameCount()
-		? Palette::Red
-		: Palette::Blue;
-
-	rect.drawFrame(1, 0, baseColor);
-
-	bool tmp = false;
-	if (not mouseOver)
-	{
-		mouseOver = &tmp;
-	}
-	for (auto& child : w.children())
-	{
-		DrawInfo(rect.pos, *child, mouseOver);
-	}
-
-	if (not *mouseOver && rect.mouseOver())
-	{
-		*mouseOver = true;
-
-		if (not Window::GetState().sizeMove)
-		{
-			rect.draw(ColorF(baseColor, 0.2));
-			std::u32string text;
-			if (w.isContainer)
-			{
-				std::u32string_view layoutName = U"";
-				switch (w.layout->index())
-				{
-				case 0: layoutName = U"HorizontalLayout"; break;
-				case 1: layoutName = U"VerticalLayout"; break;
-				case 2: layoutName = U"StackLayout"; break;
-				}
-				fmt::format_to(std::back_inserter(text), U"Type: {}(Container)\nRect: {}\nExpand: ({}, {})\nLayout: {}", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value(), layoutName);
-			}
-			else
-			{
-				fmt::format_to(std::back_inserter(text), U"Type: {}(Widget)\nRect: {}\nExpand: ({}, {})", w.typeInfo.name, w.rect(), w.xExpand.value(), w.yExpand.value());
-			}
-			const auto drawableText = (*font)(text);
-			const auto cursorPos = Cursor::PosF();
-
-			RectF diagRect{ cursorPos + Vec2{ 20, 20 }, drawableText.region().size + SivImGui::Padding{4} };
-			if (diagRect.x + diagRect.w >= Scene::Width())
-			{
-				diagRect.x = cursorPos.x - diagRect.w - 4;
-			}
-			if (diagRect.y + diagRect.h >= Scene::Height())
-			{
-				diagRect.y = cursorPos.y - diagRect.h - 4;
-			}
-			diagRect.draw(ColorF(1, 0.5)).drawFrame(0, 2, ColorF(1, 0.9));
-			drawableText.draw(diagRect - SivImGui::Padding{ 4 }, Palette::Black);
-		}
-	}
-}
-
 void BuildHeader(SivImGui::Builder& ctx)
 {
 	SivImGui::Box::New(ctx, ColorF(0.9))([&](SivImGui::Box& b) {
+		b.layout = SivImGui::VerticalLayout{
+			.padding = { 0 },
+			.space = 0
+		};
 		b.xExpand = true;
 		b.minSize = { 10, 50 };
-		b.layout = SivImGui::StackLayout{
-			.horizontalAlignment = SivImGui::Alignment::Start
-		};
 		b.frameThickness = 0;
 		b.enableMouseOver = true;
 
+		auto windowStyle = Window::GetStyle();
+		auto& windowState = Window::GetState();
+
+		if (windowStyle == WindowStyle::Frameless)
+		{
+			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+				c.layout = SivImGui::HorizontalLayout{
+					.padding = { 0 },
+					.space = 0,
+					.horizontalAlignment = SivImGui::Alignment::End
+				};
+				c.minSize = { 0, windowState.titleBarHeight };
+
+				auto& minimizeBtn = SivImGui::Button::New(ctx)([&](SivImGui::Button& c) {
+					c.name = U"wndbtn";
+					c.mouseOverBackgroundColor = ColorF(1, 0.5);
+					SivImGui::Image::New(ctx, TextureAsset(U"minimize"))
+						.diffuse = Palette::Black;
+				});
+				auto& maximizeBtn = SivImGui::Button::New(ctx)([&](SivImGui::Button& c) {
+					c.name = U"wndbtn";
+					c.mouseOverBackgroundColor = ColorF(1, 0.5);
+					SivImGui::Image::New(ctx, windowState.maximized ? TextureAsset(U"restore") : TextureAsset(U"maximize"))
+						.diffuse = Palette::Black;
+				});
+				auto& closeBtn = SivImGui::Button::New(ctx)([&](SivImGui::Button& c) {
+					c.name = U"wndbtn";
+					c.mouseOverBackgroundColor = Color(232, 17, 35);
+					SivImGui::Image::New(ctx, TextureAsset(U"close"))
+						.diffuse = c.mouseOver() ? Palette::White : Palette::Black;
+				});
+
+				if (minimizeBtn.clicked())
+				{
+					if (windowState.minimized)
+					{
+						Window::Restore();
+					}
+					else
+					{
+						Window::Minimize();
+					}
+				}
+				if (maximizeBtn.clicked())
+				{
+					if (windowState.maximized)
+					{
+						Window::Restore();
+					}
+					else
+					{
+						Window::Maximize();
+					}
+				}
+				if (closeBtn.clicked())
+				{
+					System::Exit();
+				}
+			});
+		}
+
 		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-			c.layout = SivImGui::HorizontalLayout{
-				.padding = { 0.0 }
+			c.layout = SivImGui::StackLayout{
+				.padding = { 0 }
 			};
 
-			auto& resetBtn = SivImGui::SimpleButton::New(ctx, U"Reset");
-			resetBtn.enabled = tileChars[0].size() > 0;
-			if (resetBtn.clicked())
-			{
-				Reset();
-			}
+			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+				c.layout = SivImGui::HorizontalLayout{ };
 
-			SivImGui::Container::New(ctx).xExpand = true;
-
-			auto windowStyle = Window::GetStyle();
-			if (SivImGui::SimpleButton::New(ctx,
-				windowStyle == WindowStyle::Frameless ? U"Frameless" : U"Normal").clicked())
-			{
-				if (windowStyle == WindowStyle::Frameless)
+				auto& resetBtn = SivImGui::SimpleButton::New(ctx, U"Reset");
+				resetBtn.enabled = tileChars[0].size() > 0;
+				if (resetBtn.clicked())
 				{
-					Window::SetStyle(WindowStyle::Sizable);
+					Reset();
 				}
-				else
+
+				SivImGui::Container::New(ctx).xExpand = true;
+
+				if (SivImGui::SimpleButton::New(ctx,
+					windowStyle == WindowStyle::Frameless ? U"Frameless" : U"Normal").clicked())
 				{
-					Window::SetStyle(WindowStyle::Frameless);
+					if (windowStyle == WindowStyle::Frameless)
+					{
+						Window::SetStyle(WindowStyle::Sizable);
+					}
+					else
+					{
+						Window::SetStyle(WindowStyle::Frameless);
+					}
 				}
-			}
-		});
+			});
 
-		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-			c.layout = SivImGui::VerticalLayout{
-				.padding = { 0.0 },
-				.space = 0.0,
-				.horizontalAlignment = SivImGui::Alignment::Center,
-				.verticalAlignment = SivImGui::Alignment::Center,
-			};
-			c.xExpand = true;
+			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+				c.layout = SivImGui::VerticalLayout{
+					.padding = { 0 },
+					.space = 0,
+					.horizontalAlignment = SivImGui::Alignment::Center,
+					.verticalAlignment = SivImGui::Alignment::Center,
+				};
+				c.xExpand = true;
 
-			SivImGui::Label::New(ctx, U"Layout Demo")([&](SivImGui::Label& l) {
-				l.textColor = ColorF(0.1);
+				SivImGui::Label::New(ctx, U"Layout Demo")([&](SivImGui::Label& l) {
+					l.textColor = ColorF(0.1);
+				});
 			});
 		});
 
 		static bool moving = false;
 
-		if (Window::GetStyle() == WindowStyle::Frameless &&
-			b.mouseOver() && MouseL.down())
+		if (b.mouseOver() && MouseL.down())
 		{
 			moving = true;
 		}
@@ -148,6 +150,9 @@ void BuildHeader(SivImGui::Builder& ctx)
 		{
 			moving = false;
 		}
+
+		moving &= windowStyle == WindowStyle::Frameless;
+		moving &= not windowState.maximized;
 
 		if (moving)
 		{
@@ -160,7 +165,7 @@ void BuildTile(SivImGui::Builder& ctx, char32_t chr, bool editing)
 {
 	SivImGui::Box::New(ctx, editing ? ColorF(1) : ColorF(0.5))([&](SivImGui::Box& b) {
 		b.layout = SivImGui::VerticalLayout{
-			.padding = { 0.0 },
+			.padding = { 0 },
 			.horizontalAlignment = SivImGui::Alignment::Center,
 			.verticalAlignment = SivImGui::Alignment::Center,
 		};
@@ -171,7 +176,7 @@ void BuildTile(SivImGui::Builder& ctx, char32_t chr, bool editing)
 		if (chr)
 		{
 			auto& l = SivImGui::Label::New(ctx, String(1, chr).uppercase());
-			l.font = *heavyFont;
+			l.font = FontAsset(U"heavy28");
 			l.textColor = editing ? Palette::Black : Palette::White;
 		}
 	});
@@ -181,8 +186,8 @@ void BuildTiles(SivImGui::Builder& ctx)
 {
 	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
 		c.layout = SivImGui::VerticalLayout{
-			.padding = { 0.0 },
-			.space = 5.0,
+			.padding = { 0 },
+			.space = 5,
 		};
 		for (int y : Iota(gridSize.y))
 		{
@@ -191,8 +196,8 @@ void BuildTiles(SivImGui::Builder& ctx)
 
 			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
 				c.layout = SivImGui::HorizontalLayout{
-					.padding = { 0.0 },
-					.space = 5.0,
+					.padding = { 0 },
+					.space = 5,
 				};
 
 				for (int x : Iota(gridSize.x))
@@ -291,21 +296,23 @@ String BuildKeyboard(SivImGui::Builder& ctx)
 
 void Main()
 {
-	Scene::SetBackground(Palette::White);
 	Window::SetStyle(WindowStyle::Sizable);
 
-	font = std::make_unique<Font>(14);
-	heavyFont = std::make_unique<Font>(28, Typeface::Heavy);
+	FontAsset::Register(U"heavy28", 28, Typeface::Heavy);
+	TextureAsset::Register(U"minimize", Icon{ Icon::Type::MaterialDesign, 0xF05B0 }, 20);
+	TextureAsset::Register(U"maximize", Icon{ Icon::Type::MaterialDesign, 0xF05AF }, 20);
+	TextureAsset::Register(U"restore", Icon{ Icon::Type::MaterialDesign, 0xF05B2 }, 20);
+	TextureAsset::Register(U"close", Icon{ Icon::Type::MaterialDesign, 0xF05AD }, 20);
 
-	auto root = std::make_unique<SivImGui::ScrollView>();
+	SivImGui::GUI gui(std::make_unique<SivImGui::Box>());
+	auto& root = reinterpret_cast<SivImGui::Box&>(gui.getRootWidget());
 	{
-		root->layout = SivImGui::VerticalLayout{
+		root.layout = SivImGui::VerticalLayout{
 			.padding = { 0 },
 			.space = 0
 		};
-		root->mode = SivImGui::ScrollView::Mode::Both;
+		root.frameColor = Palette::Gray;
 	}
-	SivImGui::GUI gui(std::move(root));
 
 	SivImGui::Builder ctx(gui.getRootWidget());
 	bool showInfo = false;
@@ -322,7 +329,7 @@ void Main()
 
 		input.clear();
 		BuildHeader(ctx);
-		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+		SivImGui::ScrollView::New(ctx, SivImGui::ScrollView::Mode::Both)([&](SivImGui::ScrollView& c) {
 			c.layout = SivImGui::VerticalLayout{
 				.padding = { 0, 10, 10 },
 				.space = 0,
@@ -342,6 +349,21 @@ void Main()
 			input += BuildKeyboard(ctx);
 			input += TextInput::GetRawInput();
 		});
+
+		for (auto w : gui.findAllWidgets<SivImGui::Button>(U"wndbtn"))
+		{
+			w->roundSize = 0;
+			w->frameThickness = 0;
+			w->layout = SivImGui::HorizontalLayout{
+				.padding = { 0 },
+				.horizontalAlignment = SivImGui::Alignment::Center
+			};
+			w->minSize = { 40, 0 };
+			w->backgroundColor = ColorF::Zero();
+			w->disabledBackgroundColor = ColorF::Zero();
+		}
+
+		root.frameThickness = Window::GetState().style == WindowStyle::Frameless ? 1 : 0;
 
 		for (const auto c : input)
 		{
@@ -380,10 +402,9 @@ void Main()
 		ctx.finalize();
 		gui.layout(Scene::Size());
 		{
-			const SizeF minSize = gui.getRootWidget().measuredSize().minSize;
 			const Size windowCurrentSize = Scene::Size();
-			const Size windowMinSize = SizeF{ Math::Ceil(minSize.x), Math::Ceil(minSize.y) }.asPoint();
-			const Size windowNewSize {
+			const Size windowMinSize = gui.getRootWidget().measuredSize().minSize;
+			const Size windowNewSize{
 				Max(windowCurrentSize.x, windowMinSize.x),
 				Max(windowCurrentSize.y, windowMinSize.y)
 			};
@@ -398,17 +419,6 @@ void Main()
 		gui.draw();
 
 		/////////
-
-		// デバッグ情報の表示切替
-
-		if (KeySpace.down())
-		{
-			showInfo = !showInfo;
-		}
-		if (showInfo)
-		{
-			DrawInfo({ 0, 0 }, gui.getRootWidget());
-		}
 	}
 }
 

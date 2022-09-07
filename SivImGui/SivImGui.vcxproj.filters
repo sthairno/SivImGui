@@ -73,31 +73,37 @@
     <Filter Include="Source Files\Reflection">
       <UniqueIdentifier>{ddf953c6-4e7b-4cc3-a142-346779a126a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{0b4acd13-8f83-40bf-b88f-17ea0de8fdfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{d58e1fb8-08f0-4160-bdf9-7aa53e360336}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Builder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Layout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WidgetBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Property.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Reflection\DB.cpp">
       <Filter>Source Files\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GUI.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Layout.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Property.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\WidgetBase.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Builder.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,21 +380,6 @@
     <ClInclude Include="Widgets\Widget.hpp">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="Builder.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Layout.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MeasureResult.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Space.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WidgetBase.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Widgets\Box.hpp">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
@@ -397,12 +388,6 @@
     </ClInclude>
     <ClInclude Include="Widgets\Image.hpp">
       <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Property.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI.hpp">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\ScrollView.hpp">
       <Filter>Header Files\Widgets</Filter>
@@ -415,6 +400,27 @@
     </ClInclude>
     <ClInclude Include="Reflection\PropertyInfo.hpp">
       <Filter>Header Files\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Layout.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MeasureResult.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Property.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Space.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\WidgetBase.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Builder.hpp">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

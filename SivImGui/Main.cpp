@@ -1,5 +1,6 @@
 ﻿#include <Siv3D.hpp> // OpenSiv3D v0.6.5
-#include "GUI.hpp"
+
+#include "Core/GUI.hpp"
 
 #include "Widgets/Widget.hpp"
 #include "Widgets/Container.hpp"
@@ -297,7 +298,7 @@ String BuildKeyboard(SivImGui::Builder& ctx)
 void Main()
 {
 	Window::SetStyle(WindowStyle::Sizable);
-
+	
 	FontAsset::Register(U"heavy28", 28, Typeface::Heavy);
 	TextureAsset::Register(U"minimize", Icon{ Icon::Type::MaterialDesign, 0xF05B0 }, 20);
 	TextureAsset::Register(U"maximize", Icon{ Icon::Type::MaterialDesign, 0xF05AF }, 20);

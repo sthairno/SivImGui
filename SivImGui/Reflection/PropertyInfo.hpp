@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
 #include <any>
-#include "../WidgetBase.hpp"
+#include "../Core/WidgetBase.hpp"
 
 namespace SivImGui::Reflection
 {

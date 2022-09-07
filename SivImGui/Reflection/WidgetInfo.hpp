@@ -17,6 +17,8 @@ namespace SivImGui::Reflection
 
 		HashTable<String, PropertyInfo> properties;
 
+		Optional<String> textPropertyName;
+
 		std::unique_ptr<WidgetBase> createInstance() const
 		{
 			return generator();

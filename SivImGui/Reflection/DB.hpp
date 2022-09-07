@@ -24,7 +24,7 @@ namespace SivImGui::Reflection
 			}
 
 			template<class PropertyT>
-			RegistrationHelper& prop(PropertyT WidgetT::* ref)
+			RegistrationHelper& prop(PropertyT WidgetT::* ref, bool textProperty = false)
 			{
 				m_ref.properties.emplace(PropertyT::Name, PropertyInfo{
 					.name = PropertyT::Name,
@@ -41,6 +41,10 @@ namespace SivImGui::Reflection
 						(w.*ref) = std::any_cast<PropertyT::ValueType>(v);
 					},
 				});
+				if (textProperty && std::is_same_v<PropertyT::ValueType, String>)
+				{
+					m_ref.textPropertyName = PropertyT::Name;
+				}
 				return *this;
 			}
 

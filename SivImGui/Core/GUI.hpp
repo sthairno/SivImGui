@@ -9,9 +9,14 @@ namespace SivImGui
 	public:
 
 		GUI(std::unique_ptr<WidgetBase>&& widget)
-			: m_widget(std::move(widget))
 		{
-			assert(m_widget);
+			setRootWidget(std::move(widget));
+		}
+
+		void setRootWidget(std::unique_ptr<WidgetBase>&& widget)
+		{
+			assert(widget);
+			m_widget = std::move(widget);
 		}
 
 		WidgetBase& getRootWidget() { return *m_widget; }

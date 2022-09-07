@@ -104,23 +104,23 @@ namespace SivImGui
 				if (m_pressed)
 				{
 					backCol = mouseOverBackgroundColor;
-					frameCol = mouseOverFlameColor;
+					frameCol = mouseOverFrameColor;
 				}
 				else if (mouseOver())
 				{
 					backCol = mouseOverBackgroundColor;
-					frameCol = mouseOverFlameColor;
+					frameCol = mouseOverFrameColor;
 				}
 				else
 				{
 					backCol = backgroundColor;
-					frameCol = flameColor;
+					frameCol = frameColor;
 				}
 			}
 			else
 			{
 				backCol = disabledBackgroundColor;
-				frameCol = disabledFlameColor;
+				frameCol = disabledFrameColor;
 			}
 
 			rrect.draw(backCol);

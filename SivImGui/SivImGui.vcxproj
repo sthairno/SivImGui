@@ -118,6 +118,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Property.cpp" />
+    <ClCompile Include="Reflection\DB.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -218,7 +219,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Builder.hpp" />
+    <ClInclude Include="Reflection\DB.hpp" />
     <ClInclude Include="Property.hpp" />
+    <ClInclude Include="Reflection\PropertyInfo.hpp" />
+    <ClInclude Include="Reflection\WidgetInfo.hpp" />
     <ClInclude Include="Widgets\Image.hpp" />
     <ClInclude Include="Widgets\Label.hpp" />
     <ClInclude Include="Layout.hpp" />

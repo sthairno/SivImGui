@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Widgets">
       <UniqueIdentifier>{4ab1d233-9407-491a-9940-8e1140e4ad8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Reflection">
+      <UniqueIdentifier>{a21fc7b0-a479-4381-8e10-18010d325547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Reflection">
+      <UniqueIdentifier>{ddf953c6-4e7b-4cc3-a142-346779a126a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -89,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Property.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Reflection\DB.cpp">
+      <Filter>Source Files\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -397,6 +406,15 @@
     </ClInclude>
     <ClInclude Include="Widgets\ScrollView.hpp">
       <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\DB.hpp">
+      <Filter>Header Files\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\WidgetInfo.hpp">
+      <Filter>Header Files\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\PropertyInfo.hpp">
+      <Filter>Header Files\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

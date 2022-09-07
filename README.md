@@ -10,7 +10,7 @@
 
 ```cpp
 #include <Siv3D.hpp>
-#include "Root.hpp"
+#include "Core/GUI.hpp"
 #include "Widgets/Container.hpp"
 #include "Widgets/Label.hpp"
 #include "Widgets/Image.hpp"
@@ -28,14 +28,15 @@ void Main()
 	// 横幅,縦幅を広げ、子要素を中央に配置
 	root->xExpand = true;
 	root->yExpand = true;
-	root->layout = { SivImGui::HorizontalLayout{
-		.axisXAlignment = SivImGui::Alignment::Center,
-		.axisYAlignment = SivImGui::Alignment::Center
-	} };
+	root->layout = SivImGui::HorizontalLayout{
+		.horizontalAlignment = SivImGui::Alignment::Center,
+		.verticalAlignment = SivImGui::Alignment::Center
+	};
 
 	{
-		// コンテナを追加
+		// コンテナを追加、レイアウトの向きを水平に
 		auto container = std::make_unique<SivImGui::Container>();
+		container->layout = SivImGui::HorizontalLayout{};
 		{
 			// ラベル"Hello, SivImGui!"を追加
 			auto label = std::make_unique<SivImGui::Label>();
@@ -53,7 +54,7 @@ void Main()
 	}
 
 	// GUI環境を作成
-	SivImGui::Root gui(std::move(root));
+	SivImGui::GUI gui(std::move(root));
 
 	while (System::Update())
 	{
@@ -68,7 +69,8 @@ void Main()
 
 ```cpp
 #include <Siv3D.hpp>
-#include "Root.hpp"
+#include "Core/GUI.hpp"
+#include "Core/Builder.hpp"
 #include "Widgets/Container.hpp"
 #include "Widgets/Label.hpp"
 #include "Widgets/Image.hpp"
@@ -81,16 +83,16 @@ void Main()
 	const Texture rocketTex(U"🚀"_emoji);
 
 	// GUI環境を作成
-	SivImGui::Root gui(std::make_unique<SivImGui::Container>());
+	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
 
 	// 横幅,縦幅を広げ、子要素を中央に配置
-	auto& root = gui.getWidget();
+	auto& root = gui.getRootWidget();
 	root.xExpand = true;
 	root.yExpand = true;
-	root.layout = { SivImGui::HorizontalLayout{
-		.axisXAlignment = SivImGui::Alignment::Center,
-		.axisYAlignment = SivImGui::Alignment::Center
-	} };
+	root.layout = SivImGui::HorizontalLayout{
+		.horizontalAlignment = SivImGui::Alignment::Center,
+		.verticalAlignment = SivImGui::Alignment::Center
+	};
 
 	// 操作対象をrootに設定する
 	SivImGui::Builder builder(root);
@@ -104,7 +106,10 @@ void Main()
 		// ↓ ↓ ↓ ↓ ↓
 
 		// コンテナの定義
-		SivImGui::Container::New(builder)([&] {
+		SivImGui::Container::New(builder)([&](SivImGui::Container& c) {
+			// レイアウトの向きを水平に
+			c.layout = SivImGui::HorizontalLayout{};
+
 			// ラベル"Hello, SivImGui!"を定義
 			SivImGui::Label::New(builder, U"Hello, SivImGui!")([&](SivImGui::Label& l) {
 				l.textColor = Palette::Black;

@@ -30,17 +30,17 @@ namespace SivImGui
 
 		SIVIMGUI_PROPERTY(ColorF, backgroundColor, ColorF{ 1.0 });
 
-		SIVIMGUI_PROPERTY(ColorF, flameColor, ColorF{ 0.67 });
+		SIVIMGUI_PROPERTY(ColorF, frameColor, ColorF{ 0.67 });
 
 		SIVIMGUI_PROPERTY(ColorF, disabledBackgroundColor, ColorF{ 0.92 });
 
-		SIVIMGUI_PROPERTY(ColorF, disabledFlameColor, ColorF{ 0.67 });
+		SIVIMGUI_PROPERTY(ColorF, disabledFrameColor, ColorF{ 0.67 });
 
 		SIVIMGUI_PROPERTY(ColorF, disabledTextColor, ColorF{ 0.67 });
 
 		SIVIMGUI_PROPERTY(ColorF, mouseOverBackgroundColor, ColorF{ 0.9, 0.95, 1.0 });
 
-		SIVIMGUI_PROPERTY(ColorF, mouseOverFlameColor, ColorF{ 0.67 });
+		SIVIMGUI_PROPERTY(ColorF, mouseOverFrameColor, ColorF{ 0.67 });
 
 		SIVIMGUI_LAYOUT_PROPERTY(int32, frameThickness, 1);
 

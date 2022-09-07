@@ -45,11 +45,11 @@ namespace SivImGui
 
 	public:
 
-		Property<Mode> mode{ this, Mode::None, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Mode, mode, Mode::None);
 
-		Property<int32> scrollbarSize{ this, 20, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(int32, scrollbarSize, 20);
 
-		Property<Size> step{ this, { 20, 20 }, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Size, step, { 20, 20 });
 
 	protected:
 

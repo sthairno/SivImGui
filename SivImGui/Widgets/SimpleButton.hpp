@@ -30,7 +30,7 @@ namespace SivImGui
 
 	public:
 
-		Property<String> text{ this, U"", PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(String, text, U"");
 
 	public:
 

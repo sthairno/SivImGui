@@ -31,11 +31,11 @@ namespace SivImGui
 
 	public:
 
-		Property<ColorF> backColor{ this, Palette::White, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(ColorF, backColor, Palette::White);
 
-		Property<ColorF> frameColor{ this, Palette::Black, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(ColorF, frameColor, Palette::Black);
 
-		Property<int32> frameThickness{ this, 1, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(int32, frameThickness, 1);
 
 	protected:
 

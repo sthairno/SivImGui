@@ -17,17 +17,22 @@ namespace SivImGui
 	};
 	DEFINE_BITMASK_OPERATORS(PropertyFlag);
 
-	template<class T>
+	template<class T, auto GetNameCallback, PropertyFlag _Flag = PropertyFlag::None>
 	class Property
 	{
 	public:
 
 		template<class WidgetT>
-		Property(WidgetT* _this, const T defaultValue, PropertyFlag flag = PropertyFlag::None)
+		Property(WidgetT* _this, const T defaultValue)
 			: m_value(defaultValue)
 			, m_widget(*_this)
-			, m_flag(flag)
 		{ }
+
+		using ValueType = T;
+
+		constexpr static StringView Name = GetNameCallback();
+
+		constexpr static PropertyFlag Flag = _Flag;
 
 	public:
 
@@ -38,11 +43,11 @@ namespace SivImGui
 		{
 			if (m_value != value)
 			{
-				if (m_flag & PropertyFlag::Layout)
+				if constexpr (Flag & PropertyFlag::Layout)
 				{
 					detail::RequestLayout(m_widget);
 				}
-				return m_value = value;
+				m_value = value;
 			}
 			return m_value;
 		}
@@ -51,11 +56,11 @@ namespace SivImGui
 		{
 			if (m_value != value)
 			{
-				if (m_flag & PropertyFlag::Layout)
+				if constexpr (Flag & PropertyFlag::Layout)
 				{
 					detail::RequestLayout(m_widget);
 				}
-				return m_value = value;
+				m_value = value;
 			}
 			return m_value;
 		}
@@ -68,16 +73,17 @@ namespace SivImGui
 
 	private:
 
-		const PropertyFlag m_flag;
-
 		WidgetBase& m_widget;
 
 		T m_value;
 	};
 }
 
-#define SIVIMGUI_PROPERTY(TYPE, NAME, VALUE)\
-Property<TYPE> NAME{ this, VALUE, PropertyFlag::None}
+#define SIVIMGUI_PROPERTY_TYPE(VALUE_TYPE, NAME, FLAG) \
+::SivImGui::Property<VALUE_TYPE, []{ return U ## #NAME; }, FLAG>
 
-#define SIVIMGUI_LAYOUT_PROPERTY(TYPE, NAME, VALUE)\
-Property<TYPE> NAME{ this, VALUE, PropertyFlag::Layout}
+#define SIVIMGUI_PROPERTY(VALUE_TYPE, VALUE_NAME, ...) \
+SIVIMGUI_PROPERTY_TYPE(VALUE_TYPE, VALUE_NAME, ::SivImGui::PropertyFlag::None) VALUE_NAME{ this, __VA_ARGS__ }
+
+#define SIVIMGUI_LAYOUT_PROPERTY(VALUE_TYPE, VALUE_NAME, ...) \
+SIVIMGUI_PROPERTY_TYPE(VALUE_TYPE, VALUE_NAME, ::SivImGui::PropertyFlag::Layout) VALUE_NAME{ this, __VA_ARGS__ }

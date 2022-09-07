@@ -35,25 +35,25 @@ namespace SivImGui
 
 	public:
 
-		Property<String> name{ this, U"" };
+		SIVIMGUI_LAYOUT_PROPERTY(String, name, U"");
 
-		Property<bool> visible{ this, true, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(bool, visible, true);
 
-		Property<bool> xExpand{ this, false, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(bool, xExpand, false);
 
-		Property<bool> yExpand{ this, false, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(bool, yExpand, false);
 
-		Property<bool> enabled{ this, true, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(bool, enabled, true);
 
-		Property<Optional<bool>> enableMouseOver{ this, { }, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Optional<bool>, enableMouseOver, { });
 
-		Property<Size> minSize{ this, { 0, 0 }, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Size, minSize, { 0, 0 });
 
-		Property<Layout> layout{ this, VerticalLayout{}, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Layout, layout, VerticalLayout{});
 
-		Property<Point> gridPos{ this, { 0, 0 }, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Point, gridPos, { 0, 0 });
 
-		Property<Size> gridSpan{ this, { 1, 1 }, PropertyFlag::Layout };
+		SIVIMGUI_LAYOUT_PROPERTY(Size, gridSpan, { 1, 1 });
 
 	public:
 

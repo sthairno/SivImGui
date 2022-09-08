@@ -11,155 +11,75 @@
 #include "Widgets/ScrollView.hpp"
 #include "Widgets/Image.hpp"
 
-const Size gridSize{ 5, 6 };
+#include "Reflection/DB.hpp"
+#include "Util/XMLParser.hpp"
 
+constexpr Size gridSize = { 5, 6 };
 Array<String> tileChars;
+SivImGui::Reflection::DB db;
+
+# if SIV3D_PLATFORM(WINDOWS)
+
+# include <Siv3D/Windows/Windows.hpp>
+
+bool LaunchFile(FilePathView path)
+{
+	const std::wstring file = FileSystem::NativePath(path);
+
+	const INT_PTR result = reinterpret_cast<INT_PTR>(::ShellExecuteW(0, 0, file.c_str(), 0, 0, SW_SHOW));
+
+	if ((result == 0)
+		|| (result == ERROR_FILE_NOT_FOUND)
+		|| (result == ERROR_PATH_NOT_FOUND)
+		|| (result == ERROR_BAD_FORMAT))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+# else
+
+bool LaunchFile(FilePathView path)
+{
+	return false;
+}
+
+# endif
+
+void RegisterTypes()
+{
+	db.push<SivImGui::Widget>();
+	db.push<SivImGui::Container>();
+	db.push<SivImGui::Box>()
+		.base<SivImGui::Container>()
+		.prop(&SivImGui::Box::backColor)
+		.prop(&SivImGui::Box::frameColor)
+		.prop(&SivImGui::Box::frameThickness);
+	db.push<SivImGui::Button>()
+		.base<SivImGui::Container>()
+		.prop(&SivImGui::Button::backgroundColor)
+		.prop(&SivImGui::Button::frameColor)
+		.prop(&SivImGui::Button::disabledBackgroundColor)
+		.prop(&SivImGui::Button::disabledFrameColor)
+		.prop(&SivImGui::Button::disabledTextColor)
+		.prop(&SivImGui::Button::mouseOverBackgroundColor)
+		.prop(&SivImGui::Button::mouseOverFrameColor)
+		.prop(&SivImGui::Button::frameThickness)
+		.prop(&SivImGui::Button::roundSize);
+	db.push<SivImGui::Label>()
+		.base<SivImGui::Widget>()
+		.prop(&SivImGui::Label::text, true)
+		.prop(&SivImGui::Label::textColor)
+		.prop(&SivImGui::Label::font)
+		.prop(&SivImGui::Label::fitHeight);
+}
 
 void Reset()
 {
 	tileChars.clear();
 	tileChars.emplace_back(U"");
-}
-
-void BuildHeader(SivImGui::Builder& ctx)
-{
-	SivImGui::Box::New(ctx, ColorF(0.9))([&](SivImGui::Box& b) {
-		b.layout = SivImGui::VerticalLayout{
-			.padding = { 0 },
-			.space = 0
-		};
-		b.xExpand = true;
-		b.minSize = { 10, 50 };
-		b.frameThickness = 0;
-		b.enableMouseOver = true;
-
-		auto windowStyle = Window::GetStyle();
-		auto& windowState = Window::GetState();
-
-		if (windowStyle == WindowStyle::Frameless)
-		{
-			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-				c.layout = SivImGui::HorizontalLayout{
-					.padding = { 0 },
-					.space = 0,
-					.horizontalAlignment = SivImGui::Alignment::End
-				};
-				c.minSize = { 0, windowState.titleBarHeight };
-
-				auto& minimizeBtn = SivImGui::Button::New(ctx)([&](SivImGui::Button& c) {
-					c.name = U"wndbtn";
-					c.mouseOverBackgroundColor = ColorF(1, 0.5);
-					SivImGui::Image::New(ctx, TextureAsset(U"minimize"))
-						.diffuse = Palette::Black;
-				});
-				auto& maximizeBtn = SivImGui::Button::New(ctx)([&](SivImGui::Button& c) {
-					c.name = U"wndbtn";
-					c.mouseOverBackgroundColor = ColorF(1, 0.5);
-					SivImGui::Image::New(ctx, windowState.maximized ? TextureAsset(U"restore") : TextureAsset(U"maximize"))
-						.diffuse = Palette::Black;
-				});
-				auto& closeBtn = SivImGui::Button::New(ctx)([&](SivImGui::Button& c) {
-					c.name = U"wndbtn";
-					c.mouseOverBackgroundColor = Color(232, 17, 35);
-					SivImGui::Image::New(ctx, TextureAsset(U"close"))
-						.diffuse = c.mouseOver() ? Palette::White : Palette::Black;
-				});
-
-				if (minimizeBtn.clicked())
-				{
-					if (windowState.minimized)
-					{
-						Window::Restore();
-					}
-					else
-					{
-						Window::Minimize();
-					}
-				}
-				if (maximizeBtn.clicked())
-				{
-					if (windowState.maximized)
-					{
-						Window::Restore();
-					}
-					else
-					{
-						Window::Maximize();
-					}
-				}
-				if (closeBtn.clicked())
-				{
-					System::Exit();
-				}
-			});
-		}
-
-		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-			c.layout = SivImGui::StackLayout{
-				.padding = { 0 }
-			};
-
-			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-				c.layout = SivImGui::HorizontalLayout{ };
-
-				auto& resetBtn = SivImGui::SimpleButton::New(ctx, U"Reset");
-				resetBtn.enabled = tileChars[0].size() > 0;
-				if (resetBtn.clicked())
-				{
-					Reset();
-				}
-
-				SivImGui::Container::New(ctx).xExpand = true;
-
-				if (SivImGui::SimpleButton::New(ctx,
-					windowStyle == WindowStyle::Frameless ? U"Frameless" : U"Normal").clicked())
-				{
-					if (windowStyle == WindowStyle::Frameless)
-					{
-						Window::SetStyle(WindowStyle::Sizable);
-					}
-					else
-					{
-						Window::SetStyle(WindowStyle::Frameless);
-					}
-				}
-			});
-
-			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-				c.layout = SivImGui::VerticalLayout{
-					.padding = { 0 },
-					.space = 0,
-					.horizontalAlignment = SivImGui::Alignment::Center,
-					.verticalAlignment = SivImGui::Alignment::Center,
-				};
-				c.xExpand = true;
-
-				SivImGui::Label::New(ctx, U"Layout Demo")([&](SivImGui::Label& l) {
-					l.textColor = ColorF(0.1);
-				});
-			});
-		});
-
-		static bool moving = false;
-
-		if (b.mouseOver() && MouseL.down())
-		{
-			moving = true;
-		}
-
-		if (moving && not MouseL.pressed())
-		{
-			moving = false;
-		}
-
-		moving &= windowStyle == WindowStyle::Frameless;
-		moving &= not windowState.maximized;
-
-		if (moving)
-		{
-			Window::SetPos(Window::GetPos() + Cursor::ScreenDelta());
-		}
-	});
 }
 
 void BuildTile(SivImGui::Builder& ctx, char32_t chr, bool editing)
@@ -236,60 +156,58 @@ String BuildKeyboard(SivImGui::Builder& ctx)
 {
 	String keyInput;
 
+	ctx.current().layout = SivImGui::VerticalLayout{
+		.space = 5,
+		.horizontalAlignment = SivImGui::Alignment::Center
+	};
+
 	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-		c.layout = SivImGui::VerticalLayout{
-			.padding = { 0 },
-			.horizontalAlignment = SivImGui::Alignment::Center
+		c.layout = SivImGui::HorizontalLayout{
+			.space = 5
 		};
 
-		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-			c.layout = SivImGui::HorizontalLayout{
-				.padding = { 0 }
-			};
+		BuildKey(ctx, keyInput, U'q');
+		BuildKey(ctx, keyInput, U'w');
+		BuildKey(ctx, keyInput, U'e');
+		BuildKey(ctx, keyInput, U'r');
+		BuildKey(ctx, keyInput, U't');
+		BuildKey(ctx, keyInput, U'y');
+		BuildKey(ctx, keyInput, U'u');
+		BuildKey(ctx, keyInput, U'i');
+		BuildKey(ctx, keyInput, U'o');
+		BuildKey(ctx, keyInput, U'p');
+	});
 
-			BuildKey(ctx, keyInput, U'q');
-			BuildKey(ctx, keyInput, U'w');
-			BuildKey(ctx, keyInput, U'e');
-			BuildKey(ctx, keyInput, U'r');
-			BuildKey(ctx, keyInput, U't');
-			BuildKey(ctx, keyInput, U'y');
-			BuildKey(ctx, keyInput, U'u');
-			BuildKey(ctx, keyInput, U'i');
-			BuildKey(ctx, keyInput, U'o');
-			BuildKey(ctx, keyInput, U'p');
-		});
+	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+		c.layout = SivImGui::HorizontalLayout{
+			.space = 5
+		};
 
-		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-			c.layout = SivImGui::HorizontalLayout{
-				.padding = { 0 }
-			};
+		BuildKey(ctx, keyInput, U'a');
+		BuildKey(ctx, keyInput, U's');
+		BuildKey(ctx, keyInput, U'd');
+		BuildKey(ctx, keyInput, U'f');
+		BuildKey(ctx, keyInput, U'g');
+		BuildKey(ctx, keyInput, U'h');
+		BuildKey(ctx, keyInput, U'j');
+		BuildKey(ctx, keyInput, U'k');
+		BuildKey(ctx, keyInput, U'l');
+	});
 
-			BuildKey(ctx, keyInput, U'a');
-			BuildKey(ctx, keyInput, U's');
-			BuildKey(ctx, keyInput, U'd');
-			BuildKey(ctx, keyInput, U'f');
-			BuildKey(ctx, keyInput, U'g');
-			BuildKey(ctx, keyInput, U'h');
-			BuildKey(ctx, keyInput, U'j');
-			BuildKey(ctx, keyInput, U'k');
-			BuildKey(ctx, keyInput, U'l');
-		});
+	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+		c.layout = SivImGui::HorizontalLayout{
+			.space = 5
+		};
 
-		SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-			c.layout = SivImGui::HorizontalLayout{
-				.padding = { 0 }
-			};
-
-			BuildKey(ctx, keyInput, U'\n', U"Enter");
-			BuildKey(ctx, keyInput, U'z');
-			BuildKey(ctx, keyInput, U'x');
-			BuildKey(ctx, keyInput, U'c');
-			BuildKey(ctx, keyInput, U'v');
-			BuildKey(ctx, keyInput, U'b');
-			BuildKey(ctx, keyInput, U'n');
-			BuildKey(ctx, keyInput, U'm');
-			BuildKey(ctx, keyInput, U'\b', U"Bksp");
-		});
+		BuildKey(ctx, keyInput, U'\n', U"Enter");
+		BuildKey(ctx, keyInput, U'z');
+		BuildKey(ctx, keyInput, U'x');
+		BuildKey(ctx, keyInput, U'c');
+		BuildKey(ctx, keyInput, U'v');
+		BuildKey(ctx, keyInput, U'b');
+		BuildKey(ctx, keyInput, U'n');
+		BuildKey(ctx, keyInput, U'm');
+		BuildKey(ctx, keyInput, U'\b', U"Bksp");
 	});
 
 	return keyInput;
@@ -298,73 +216,73 @@ String BuildKeyboard(SivImGui::Builder& ctx)
 void Main()
 {
 	Window::SetStyle(WindowStyle::Sizable);
-	
+
+	const String xmlPath = FileSystem::FullPath(U"UI.xml");
+	const String directoryPath = FileSystem::ParentPath(xmlPath);
+	DirectoryWatcher watcher(directoryPath);
+	bool loaded = false;
+	Stopwatch reloadTimer(1s, StartImmediately::Yes);
+
 	FontAsset::Register(U"heavy28", 28, Typeface::Heavy);
-	TextureAsset::Register(U"minimize", Icon{ Icon::Type::MaterialDesign, 0xF05B0 }, 20);
-	TextureAsset::Register(U"maximize", Icon{ Icon::Type::MaterialDesign, 0xF05AF }, 20);
-	TextureAsset::Register(U"restore", Icon{ Icon::Type::MaterialDesign, 0xF05B2 }, 20);
-	TextureAsset::Register(U"close", Icon{ Icon::Type::MaterialDesign, 0xF05AD }, 20);
 
-	SivImGui::GUI gui(std::make_unique<SivImGui::Box>());
-	auto& root = reinterpret_cast<SivImGui::Box&>(gui.getRootWidget());
-	{
-		root.layout = SivImGui::VerticalLayout{
-			.padding = { 0 },
-			.space = 0
-		};
-		root.frameColor = Palette::Gray;
-	}
-
-	SivImGui::Builder ctx(gui.getRootWidget());
-	bool showInfo = false;
-	String input;
+	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
+	RegisterTypes();
 
 	Reset();
 
 	while (System::Update())
 	{
-		gui.update();
-		ctx.reset();
+		// XMLの更新を監視, 自動再読み込み
 
-		/////////
-
-		input.clear();
-		BuildHeader(ctx);
-		SivImGui::ScrollView::New(ctx, SivImGui::ScrollView::Mode::Both)([&](SivImGui::ScrollView& c) {
-			c.layout = SivImGui::VerticalLayout{
-				.padding = { 0, 10, 10 },
-				.space = 0,
-				.horizontalAlignment = SivImGui::Alignment::Center,
-			};
-			c.xExpand = true;
-			c.yExpand = true;
-
-			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
-				c.layout = SivImGui::VerticalLayout{
-					.padding = { 10 },
-					.verticalAlignment = SivImGui::Alignment::Center,
-				};
-				c.yExpand = true;
-				BuildTiles(ctx);
-			});
-			input += BuildKeyboard(ctx);
-			input += TextInput::GetRawInput();
-		});
-
-		for (auto w : gui.findAllWidgets<SivImGui::Button>(U"wndbtn"))
+		bool reload = KeyF5.down();
+		for (auto& event : watcher.retrieveChanges())
 		{
-			w->roundSize = 0;
-			w->frameThickness = 0;
-			w->layout = SivImGui::HorizontalLayout{
-				.padding = { 0 },
-				.horizontalAlignment = SivImGui::Alignment::Center
-			};
-			w->minSize = { 40, 0 };
-			w->backgroundColor = ColorF::Zero();
-			w->disabledBackgroundColor = ColorF::Zero();
+			reload |=
+				(event.action == FileAction::Added || event.action == FileAction::Modified) &&
+				FileSystem::FullPath(event.path) == xmlPath;
+		}
+		if (reload)
+		{
+			loaded = false;
+			reloadTimer.restart();
+		}
+		if (reloadTimer.elapsed() >= 0.5s && not loaded)
+		{
+			ClearPrint();
+			SivImGui::Util::XMLParser parser(db);
+			try
+			{
+				StringView path = xmlPath;
+				XMLReader reader(path);
+				if (reader)
+				{
+					gui.setRootWidget(parser.parse(reader));
+				}
+				else
+				{
+					Print << U"XMLParseError";
+				}
+			}
+			catch (std::out_of_range ex)
+			{
+				Print << Unicode::FromUTF8(ex.what());
+			}
+
+			loaded = true;
 		}
 
-		root.frameThickness = Window::GetState().style == WindowStyle::Frameless ? 1 : 0;
+		// 入力/更新処理
+		gui.update();
+
+		///// UI更新/アプリ処理 /////
+
+		String input = TextInput::GetRawInput();
+		// ソフトキーボード処理
+		if (auto keyboard = gui.findWidget<SivImGui::Container>(U"SoftKeyboard"))
+		{
+			SivImGui::Builder ctx(*keyboard);
+			input += BuildKeyboard(ctx);
+		}
 
 		for (const auto c : input)
 		{
@@ -398,10 +316,37 @@ void Main()
 			}
 		}
 
-		/////////
+		// タイル処理
+		if (auto tileArea = gui.findWidget<SivImGui::Container>(U"Tiles"))
+		{
+			SivImGui::Builder ctx(*tileArea);
+			BuildTiles(ctx);
+		}
 
-		ctx.finalize();
+		// リセットボタン
+		if (auto resetBtn = gui.findWidget<SivImGui::Button>(U"ResetBtn"))
+		{
+			resetBtn->enabled = tileChars[0].size() > 0;
+			if (resetBtn->clicked())
+			{
+				Reset();
+			}
+		}
+
+		if (auto editBtn = gui.findWidget<SivImGui::Button>(U"EditBtn"))
+		{
+			if (editBtn->clicked())
+			{
+				LaunchFile(xmlPath);
+			}
+		}
+
+		///////////
+
+		// レイアウト更新
 		gui.layout(Scene::Size());
+
+		// ウィンドウの最小サイズを変更
 		{
 			const Size windowCurrentSize = Scene::Size();
 			const Size windowMinSize = gui.getRootWidget().measuredSize().minSize;
@@ -417,9 +362,8 @@ void Main()
 				Window::ResizeVirtual(windowNewSize, Centering::No);
 			}
 		}
-		gui.draw();
 
-		/////////
+		// 描画
+		gui.draw();
 	}
 }
-

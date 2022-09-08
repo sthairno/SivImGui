@@ -1,0 +1,60 @@
+<Box frameThickness="0">
+    <!-- Header -->
+    <Box name="Header" backColor="#e5e5e5" xExpand="true" frameThickness="0">
+        <Container minSize="0, 30" visible="false">
+            <HorizontalLayout horizontalAlignment="end">
+                <Button name="MinimizeBtn"></Button>
+                <Button name="MinimizeBtn"></Button>
+                <Button name="CloseBtn"></Button>
+            </HorizontalLayout>
+        </Container>
+        <Container>
+            <StackLayout>
+                <Container>
+                    <HorizontalLayout padding="10">
+                        <Button name="ResetBtn">
+                            <HorizontalLayout padding="3, 12">
+                                <Label textColor="black">Reset</Label>
+                            </HorizontalLayout>
+                        </Button>
+                        <Container xExpand="true"></Container>
+                        <Button name="EditBtn">
+                            <HorizontalLayout padding="3, 12">
+                                <Label textColor="black">Open UI.xml</Label>
+                            </HorizontalLayout>
+                        </Button>
+                    </HorizontalLayout>
+                </Container>
+                <Container>
+                    <HorizontalLayout horizontalAlignment="center" verticalAlignment="center">
+                        <Label textColor="black">Layout Demo</Label>
+                    </HorizontalLayout>
+                </Container>
+            </StackLayout>
+        </Container>
+    </Box>
+    <!-- Contents -->
+    <Container xExpand="true" yExpand="true">
+        <VerticalLayout horizontalAlignment="center" padding="0, 16, 16">
+            <Container yExpand="true">
+                <VerticalLayout verticalAlignment="center" padding="20">
+                    <!-- Tile -->
+                    <Container name="Tiles">
+                        <!-- ◻◻◻◻◻ -->
+                        <!-- ◻◻◻◻◻ -->
+                        <!-- ◻◻◻◻◻ -->
+                        <!-- ◻◻◻◻◻ -->
+                        <!-- ◻◻◻◻◻ -->
+                        <!-- ◻◻◻◻◻ -->
+                    </Container>
+                </VerticalLayout>
+            </Container>
+            <!-- Keyboard -->
+            <Container name="SoftKeyboard">
+                <!-- QWERTYUIOP -->
+                <!-- ASDFGHJKL -->
+                <!-- [Enter]ZXCVBNM[Bksp] -->
+            </Container>
+        </VerticalLayout>
+    </Container>
+</Box>

@@ -45,6 +45,13 @@ namespace SivImGui
 		std::deque<State> m_stack;
 
 		WidgetBase& nextImpl(const WidgetTypeInfo& info, std::function<std::unique_ptr<WidgetBase>()> generator);
+
+	public:
+
+		~Builder()
+		{
+			finalize();
+		}
 	};
 }
 

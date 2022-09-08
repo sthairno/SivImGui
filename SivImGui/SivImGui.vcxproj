@@ -118,12 +118,14 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Core\GUI.cpp" />
     <ClCompile Include="Core\Property.cpp" />
+    <ClCompile Include="Util\ParseCSSLikeColor.cpp" />
     <ClCompile Include="Reflection\DB.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Core\WidgetBase.cpp" />
+    <ClCompile Include="Util\XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -219,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Builder.hpp" />
+    <ClInclude Include="Util\ParseCSSLikeColor.hpp" />
     <ClInclude Include="Reflection\DB.hpp" />
     <ClInclude Include="Core\Property.hpp" />
     <ClInclude Include="Reflection\PropertyInfo.hpp" />
@@ -237,6 +240,7 @@
     <ClInclude Include="Widgets\ScrollView.hpp" />
     <ClInclude Include="Widgets\SimpleButton.hpp" />
     <ClInclude Include="Widgets\Widget.hpp" />
+    <ClInclude Include="Util\XMLParser.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,6 +5,7 @@ namespace SivImGui
 	Builder::Builder(WidgetBase& root)
 		: m_root(root)
 	{
+		m_root.m_builder = this;
 		reset();
 	}
 
@@ -19,6 +20,7 @@ namespace SivImGui
 			{
 				WidgetBase* child = state.nextItr->get();
 				state.nextItr++;
+				child->m_builder = this;
 				return *child;
 			}
 			else

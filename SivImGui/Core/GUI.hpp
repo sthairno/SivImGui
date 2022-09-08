@@ -32,7 +32,7 @@ namespace SivImGui
 		template<class WidgetT>
 		WidgetT* findWidget(const StringView name = U"")
 		{
-			return reinterpret_cast<WidgetT*>(getWidget(name, WidgetT::TypeInfo().id));
+			return reinterpret_cast<WidgetT*>(findWidget(name, WidgetT::TypeInfo().id));
 		}
 
 		WidgetBase* findWidget(const StringView name, Optional<size_t> typeId = none);

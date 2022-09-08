@@ -14,9 +14,9 @@ namespace SivImGui
 
 	struct HorizontalLayout
 	{
-		Padding padding{ 10 };
+		Padding padding{ 0 };
 
-		int32 space = 5;
+		int32 space = 0;
 
 		Alignment horizontalAlignment = Alignment::Start;
 
@@ -29,9 +29,9 @@ namespace SivImGui
 
 	struct VerticalLayout
 	{
-		Padding padding{ 10 };
+		Padding padding{ 0 };
 
-		int32 space = 5;
+		int32 space = 0;
 
 		Alignment horizontalAlignment = Alignment::Stretch;
 
@@ -44,7 +44,7 @@ namespace SivImGui
 
 	struct StackLayout
 	{
-		Padding padding{ 10 };
+		Padding padding{ 0 };
 
 		Alignment horizontalAlignment = Alignment::Stretch;
 

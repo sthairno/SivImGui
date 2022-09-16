@@ -155,7 +155,10 @@ namespace SivImGui
 		assert(result.size() == m_visibleChildren.size());
 		for (auto [idx, child] : Indexed(m_visibleChildren))
 		{
-			child->arrangeCore(result[idx]);
+			if (auto& rect = result[idx])
+			{
+				child->arrangeCore(*rect);
+			}
 		}
 
 		m_layoutUpdatedAt = Scene::FrameCount();

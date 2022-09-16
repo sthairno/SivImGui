@@ -24,7 +24,7 @@ namespace SivImGui
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
-		Array<Rect> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
+		Array<Optional<Rect>> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
 	};
 
 	struct VerticalLayout
@@ -39,7 +39,7 @@ namespace SivImGui
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
-		Array<Rect> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
+		Array<Optional<Rect>> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
 	};
 
 	struct StackLayout
@@ -52,7 +52,7 @@ namespace SivImGui
 
 		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
 
-		Array<Rect> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
+		Array<Optional<Rect>> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
 	};
 
 	using Layout = std::variant<HorizontalLayout, VerticalLayout, StackLayout>;

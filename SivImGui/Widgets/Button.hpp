@@ -65,7 +65,7 @@ namespace SivImGui
 			return result;
 		}
 
-		virtual Array<Rect> arrange(Rect rect) override
+		virtual Array<Optional<Rect>> arrange(Rect rect) override
 		{
 			return Container::arrange(rect - Padding{ frameThickness, Max<int32>(frameThickness, roundSize) });
 		}

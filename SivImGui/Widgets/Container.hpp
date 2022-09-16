@@ -42,7 +42,7 @@ namespace SivImGui
 			}, layout.value());
 		}
 
-		virtual Array<Rect> arrange(Rect rect) override
+		virtual Array<Optional<Rect>> arrange(Rect rect) override
 		{
 			return std::visit([this, rect](auto& l) {
 				return l.arrange(rect, visibleChildren());

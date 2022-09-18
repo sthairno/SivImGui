@@ -2,156 +2,162 @@
 
 namespace SivImGui::Util
 {
-	const static HashTable<String, Color> colorDic = {
-		{ U"transparent", Color::Zero() },
-		{ U"black", Palette::Black },
-		{ U"dimgray", Palette::Dimgray },
-		{ U"dimgrey", Palette::Dimgrey },
-		{ U"gray", Palette::Gray },
-		{ U"grey", Palette::Grey },
-		{ U"darkgray", Palette::Darkgray },
-		{ U"darkgrey", Palette::Darkgrey },
-		{ U"silver", Palette::Silver },
-		{ U"lightgray", Palette::Lightgray },
-		{ U"lightgrey", Palette::Lightgrey },
-		{ U"gainsboro", Palette::Gainsboro },
-		{ U"whitesmoke", Palette::Whitesmoke },
-		{ U"white", Palette::White },
-		{ U"snow", Palette::Snow },
-		{ U"ghostwhite", Palette::Ghostwhite },
-		{ U"floralwhite", Palette::Floralwhite },
-		{ U"linen", Palette::Linen },
-		{ U"antiquewhite", Palette::Antiquewhite },
-		{ U"papayawhip", Palette::Papayawhip },
-		{ U"blanchedalmond", Palette::Blanchedalmond },
-		{ U"bisque", Palette::Bisque },
-		{ U"moccasin", Palette::Moccasin },
-		{ U"navajowhite", Palette::Navajowhite },
-		{ U"peachpuff", Palette::Peachpuff },
-		{ U"mistyrose", Palette::Mistyrose },
-		{ U"lavenderblush", Palette::Lavenderblush },
-		{ U"seashell", Palette::Seashell },
-		{ U"oldlace", Palette::Oldlace },
-		{ U"ivory", Palette::Ivory },
-		{ U"honeydew", Palette::Honeydew },
-		{ U"mintcream", Palette::Mintcream },
-		{ U"azure", Palette::Azure },
-		{ U"aliceblue", Palette::Aliceblue },
-		{ U"lavender", Palette::Lavender },
-		{ U"lightsteelblue", Palette::Lightsteelblue },
-		{ U"lightslategray", Palette::Lightslategray },
-		{ U"lightslategrey", Palette::Lightslategrey },
-		{ U"slategray", Palette::Slategray },
-		{ U"slategrey", Palette::Slategrey },
-		{ U"steelblue", Palette::Steelblue },
-		{ U"royalblue", Palette::Royalblue },
-		{ U"midnightblue", Palette::Midnightblue },
-		{ U"navy", Palette::Navy },
-		{ U"darkblue", Palette::Darkblue },
-		{ U"mediumblue", Palette::Mediumblue },
-		{ U"blue", Palette::Blue },
-		{ U"dodgerblue", Palette::Dodgerblue },
-		{ U"cornflowerblue", Palette::Cornflowerblue },
-		{ U"deepskyblue", Palette::Deepskyblue },
-		{ U"lightskyblue", Palette::Lightskyblue },
-		{ U"skyblue", Palette::Skyblue },
-		{ U"lightblue", Palette::Lightblue },
-		{ U"powderblue", Palette::Powderblue },
-		{ U"paleturquoise", Palette::Paleturquoise },
-		{ U"lightcyan", Palette::Lightcyan },
-		{ U"cyan", Palette::Cyan },
-		{ U"aqua", Palette::Aqua },
-		{ U"turquoise", Palette::Turquoise },
-		{ U"mediumturquoise", Palette::Mediumturquoise },
-		{ U"darkturquoise", Palette::Darkturquoise },
-		{ U"lightseagreen", Palette::Lightseagreen },
-		{ U"cadetblue", Palette::Cadetblue },
-		{ U"darkcyan", Palette::Darkcyan },
-		{ U"teal", Palette::Teal },
-		{ U"darkslategray", Palette::Darkslategray },
-		{ U"darkslategrey", Palette::Darkslategrey },
-		{ U"darkgreen", Palette::Darkgreen },
-		{ U"green", Palette::Green },
-		{ U"forestgreen", Palette::Forestgreen },
-		{ U"seagreen", Palette::Seagreen },
-		{ U"mediumseagreen", Palette::Mediumseagreen },
-		{ U"mediumaquamarine", Palette::Mediumaquamarine },
-		{ U"darkseagreen", Palette::Darkseagreen },
-		{ U"aquamarine", Palette::Aquamarine },
-		{ U"palegreen", Palette::Palegreen },
-		{ U"lightgreen", Palette::Lightgreen },
-		{ U"springgreen", Palette::Springgreen },
-		{ U"mediumspringgreen", Palette::Mediumspringgreen },
-		{ U"lawngreen", Palette::Lawngreen },
-		{ U"chartreuse", Palette::Chartreuse },
-		{ U"greenyellow", Palette::Greenyellow },
-		{ U"lime", Palette::Lime },
-		{ U"limegreen", Palette::Limegreen },
-		{ U"yellowgreen", Palette::Yellowgreen },
-		{ U"darkolivegreen", Palette::Darkolivegreen },
-		{ U"olivedrab", Palette::Olivedrab },
-		{ U"olive", Palette::Olive },
-		{ U"darkkhaki", Palette::Darkkhaki },
-		{ U"palegoldenrod", Palette::Palegoldenrod },
-		{ U"cornsilk", Palette::Cornsilk },
-		{ U"beige", Palette::Beige },
-		{ U"lightyellow", Palette::Lightyellow },
-		{ U"lightgoldenrodyellow", Palette::Lightgoldenrodyellow },
-		{ U"lemonchiffon", Palette::Lemonchiffon },
-		{ U"wheat", Palette::Wheat },
-		{ U"burlywood", Palette::Burlywood },
-		{ U"tan", Palette::Tan },
-		{ U"khaki", Palette::Khaki },
-		{ U"yellow", Palette::Yellow },
-		{ U"gold", Palette::Gold },
-		{ U"orange", Palette::Orange },
-		{ U"sandybrown", Palette::Sandybrown },
-		{ U"darkorange", Palette::Darkorange },
-		{ U"goldenrod", Palette::Goldenrod },
-		{ U"peru", Palette::Peru },
-		{ U"darkgoldenrod", Palette::Darkgoldenrod },
-		{ U"chocolate", Palette::Chocolate },
-		{ U"sienna", Palette::Sienna },
-		{ U"saddlebrown", Palette::Saddlebrown },
-		{ U"maroon", Palette::Maroon },
-		{ U"darkred", Palette::Darkred },
-		{ U"brown", Palette::Brown },
-		{ U"firebrick", Palette::Firebrick },
-		{ U"indianred", Palette::Indianred },
-		{ U"rosybrown", Palette::Rosybrown },
-		{ U"darksalmon", Palette::Darksalmon },
-		{ U"lightcoral", Palette::Lightcoral },
-		{ U"salmon", Palette::Salmon },
-		{ U"lightsalmon", Palette::Lightsalmon },
-		{ U"coral", Palette::Coral },
-		{ U"tomato", Palette::Tomato },
-		{ U"orangered", Palette::Orangered },
-		{ U"red", Palette::Red },
-		{ U"crimson", Palette::Crimson },
-		{ U"mediumvioletred", Palette::Mediumvioletred },
-		{ U"deeppink", Palette::Deeppink },
-		{ U"hotpink", Palette::Hotpink },
-		{ U"palevioletred", Palette::Palevioletred },
-		{ U"pink", Palette::Pink },
-		{ U"lightpink", Palette::Lightpink },
-		{ U"thistle", Palette::Thistle },
-		{ U"magenta", Palette::Magenta },
-		{ U"fuchsia", Palette::Fuchsia },
-		{ U"violet", Palette::Violet },
-		{ U"plum", Palette::Plum },
-		{ U"orchid", Palette::Orchid },
-		{ U"mediumorchid", Palette::Mediumorchid },
-		{ U"darkorchid", Palette::Darkorchid },
-		{ U"darkviolet", Palette::Darkviolet },
-		{ U"darkmagenta", Palette::Darkmagenta },
-		{ U"purple", Palette::Purple },
-		{ U"indigo", Palette::Indigo },
-		{ U"darkslateblue", Palette::Darkslateblue },
-		{ U"blueviolet", Palette::Blueviolet },
-		{ U"mediumpurple", Palette::Mediumpurple },
-		{ U"slateblue", Palette::Slateblue },
-		{ U"mediumslateblue", Palette::Mediumslateblue }
+	const static std::map<StringView, ColorF> ColorDic {
+		{ U"transparent", ColorF::Zero() },
+		{ U"black", Linear::Palette::Black },
+		{ U"dimgray", Linear::Palette::Dimgray },
+		{ U"dimgrey", Linear::Palette::Dimgrey },
+		{ U"gray", Linear::Palette::Gray },
+		{ U"grey", Linear::Palette::Grey },
+		{ U"darkgray", Linear::Palette::Darkgray },
+		{ U"darkgrey", Linear::Palette::Darkgrey },
+		{ U"silver", Linear::Palette::Silver },
+		{ U"lightgray", Linear::Palette::Lightgray },
+		{ U"lightgrey", Linear::Palette::Lightgrey },
+		{ U"gainsboro", Linear::Palette::Gainsboro },
+		{ U"whitesmoke", Linear::Palette::Whitesmoke },
+		{ U"white", Linear::Palette::White },
+		{ U"snow", Linear::Palette::Snow },
+		{ U"ghostwhite", Linear::Palette::Ghostwhite },
+		{ U"floralwhite", Linear::Palette::Floralwhite },
+		{ U"linen", Linear::Palette::Linen },
+		{ U"antiquewhite", Linear::Palette::Antiquewhite },
+		{ U"papayawhip", Linear::Palette::Papayawhip },
+		{ U"blanchedalmond", Linear::Palette::Blanchedalmond },
+		{ U"bisque", Linear::Palette::Bisque },
+		{ U"moccasin", Linear::Palette::Moccasin },
+		{ U"navajowhite", Linear::Palette::Navajowhite },
+		{ U"peachpuff", Linear::Palette::Peachpuff },
+		{ U"mistyrose", Linear::Palette::Mistyrose },
+		{ U"lavenderblush", Linear::Palette::Lavenderblush },
+		{ U"seashell", Linear::Palette::Seashell },
+		{ U"oldlace", Linear::Palette::Oldlace },
+		{ U"ivory", Linear::Palette::Ivory },
+		{ U"honeydew", Linear::Palette::Honeydew },
+		{ U"mintcream", Linear::Palette::Mintcream },
+		{ U"azure", Linear::Palette::Azure },
+		{ U"aliceblue", Linear::Palette::Aliceblue },
+		{ U"lavender", Linear::Palette::Lavender },
+		{ U"lightsteelblue", Linear::Palette::Lightsteelblue },
+		{ U"lightslategray", Linear::Palette::Lightslategray },
+		{ U"lightslategrey", Linear::Palette::Lightslategrey },
+		{ U"slategray", Linear::Palette::Slategray },
+		{ U"slategrey", Linear::Palette::Slategrey },
+		{ U"steelblue", Linear::Palette::Steelblue },
+		{ U"royalblue", Linear::Palette::Royalblue },
+		{ U"midnightblue", Linear::Palette::Midnightblue },
+		{ U"navy", Linear::Palette::Navy },
+		{ U"darkblue", Linear::Palette::Darkblue },
+		{ U"mediumblue", Linear::Palette::Mediumblue },
+		{ U"blue", Linear::Palette::Blue },
+		{ U"dodgerblue", Linear::Palette::Dodgerblue },
+		{ U"cornflowerblue", Linear::Palette::Cornflowerblue },
+		{ U"deepskyblue", Linear::Palette::Deepskyblue },
+		{ U"lightskyblue", Linear::Palette::Lightskyblue },
+		{ U"skyblue", Linear::Palette::Skyblue },
+		{ U"lightblue", Linear::Palette::Lightblue },
+		{ U"powderblue", Linear::Palette::Powderblue },
+		{ U"paleturquoise", Linear::Palette::Paleturquoise },
+		{ U"lightcyan", Linear::Palette::Lightcyan },
+		{ U"cyan", Linear::Palette::Cyan },
+		{ U"aqua", Linear::Palette::Aqua },
+		{ U"turquoise", Linear::Palette::Turquoise },
+		{ U"mediumturquoise", Linear::Palette::Mediumturquoise },
+		{ U"darkturquoise", Linear::Palette::Darkturquoise },
+		{ U"lightseagreen", Linear::Palette::Lightseagreen },
+		{ U"cadetblue", Linear::Palette::Cadetblue },
+		{ U"darkcyan", Linear::Palette::Darkcyan },
+		{ U"teal", Linear::Palette::Teal },
+		{ U"darkslategray", Linear::Palette::Darkslategray },
+		{ U"darkslategrey", Linear::Palette::Darkslategrey },
+		{ U"darkgreen", Linear::Palette::Darkgreen },
+		{ U"green", Linear::Palette::Green },
+		{ U"forestgreen", Linear::Palette::Forestgreen },
+		{ U"seagreen", Linear::Palette::Seagreen },
+		{ U"mediumseagreen", Linear::Palette::Mediumseagreen },
+		{ U"mediumaquamarine", Linear::Palette::Mediumaquamarine },
+		{ U"darkseagreen", Linear::Palette::Darkseagreen },
+		{ U"aquamarine", Linear::Palette::Aquamarine },
+		{ U"palegreen", Linear::Palette::Palegreen },
+		{ U"lightgreen", Linear::Palette::Lightgreen },
+		{ U"springgreen", Linear::Palette::Springgreen },
+		{ U"mediumspringgreen", Linear::Palette::Mediumspringgreen },
+		{ U"lawngreen", Linear::Palette::Lawngreen },
+		{ U"chartreuse", Linear::Palette::Chartreuse },
+		{ U"greenyellow", Linear::Palette::Greenyellow },
+		{ U"lime", Linear::Palette::Lime },
+		{ U"limegreen", Linear::Palette::Limegreen },
+		{ U"yellowgreen", Linear::Palette::Yellowgreen },
+		{ U"darkolivegreen", Linear::Palette::Darkolivegreen },
+		{ U"olivedrab", Linear::Palette::Olivedrab },
+		{ U"olive", Linear::Palette::Olive },
+		{ U"darkkhaki", Linear::Palette::Darkkhaki },
+		{ U"palegoldenrod", Linear::Palette::Palegoldenrod },
+		{ U"cornsilk", Linear::Palette::Cornsilk },
+		{ U"beige", Linear::Palette::Beige },
+		{ U"lightyellow", Linear::Palette::Lightyellow },
+		{ U"lightgoldenrodyellow", Linear::Palette::Lightgoldenrodyellow },
+		{ U"lemonchiffon", Linear::Palette::Lemonchiffon },
+		{ U"wheat", Linear::Palette::Wheat },
+		{ U"burlywood", Linear::Palette::Burlywood },
+		{ U"tan", Linear::Palette::Tan },
+		{ U"khaki", Linear::Palette::Khaki },
+		{ U"yellow", Linear::Palette::Yellow },
+		{ U"gold", Linear::Palette::Gold },
+		{ U"orange", Linear::Palette::Orange },
+		{ U"sandybrown", Linear::Palette::Sandybrown },
+		{ U"darkorange", Linear::Palette::Darkorange },
+		{ U"goldenrod", Linear::Palette::Goldenrod },
+		{ U"peru", Linear::Palette::Peru },
+		{ U"darkgoldenrod", Linear::Palette::Darkgoldenrod },
+		{ U"chocolate", Linear::Palette::Chocolate },
+		{ U"sienna", Linear::Palette::Sienna },
+		{ U"saddlebrown", Linear::Palette::Saddlebrown },
+		{ U"maroon", Linear::Palette::Maroon },
+		{ U"darkred", Linear::Palette::Darkred },
+		{ U"brown", Linear::Palette::Brown },
+		{ U"firebrick", Linear::Palette::Firebrick },
+		{ U"indianred", Linear::Palette::Indianred },
+		{ U"rosybrown", Linear::Palette::Rosybrown },
+		{ U"darksalmon", Linear::Palette::Darksalmon },
+		{ U"lightcoral", Linear::Palette::Lightcoral },
+		{ U"salmon", Linear::Palette::Salmon },
+		{ U"lightsalmon", Linear::Palette::Lightsalmon },
+		{ U"coral", Linear::Palette::Coral },
+		{ U"tomato", Linear::Palette::Tomato },
+		{ U"orangered", Linear::Palette::Orangered },
+		{ U"red", Linear::Palette::Red },
+		{ U"crimson", Linear::Palette::Crimson },
+		{ U"mediumvioletred", Linear::Palette::Mediumvioletred },
+		{ U"deeppink", Linear::Palette::Deeppink },
+		{ U"hotpink", Linear::Palette::Hotpink },
+		{ U"palevioletred", Linear::Palette::Palevioletred },
+		{ U"pink", Linear::Palette::Pink },
+		{ U"lightpink", Linear::Palette::Lightpink },
+		{ U"thistle", Linear::Palette::Thistle },
+		{ U"magenta", Linear::Palette::Magenta },
+		{ U"fuchsia", Linear::Palette::Fuchsia },
+		{ U"violet", Linear::Palette::Violet },
+		{ U"plum", Linear::Palette::Plum },
+		{ U"orchid", Linear::Palette::Orchid },
+		{ U"mediumorchid", Linear::Palette::Mediumorchid },
+		{ U"darkorchid", Linear::Palette::Darkorchid },
+		{ U"darkviolet", Linear::Palette::Darkviolet },
+		{ U"darkmagenta", Linear::Palette::Darkmagenta },
+		{ U"purple", Linear::Palette::Purple },
+		{ U"indigo", Linear::Palette::Indigo },
+		{ U"darkslateblue", Linear::Palette::Darkslateblue },
+		{ U"blueviolet", Linear::Palette::Blueviolet },
+		{ U"mediumpurple", Linear::Palette::Mediumpurple },
+		{ U"slateblue", Linear::Palette::Slateblue },
+		{ U"mediumslateblue", Linear::Palette::Mediumslateblue }
 	};
+
+	const static RegExp FuncRgx{ UR"(^([a-z]+)\((.*)\)$)" };
+
+	const static RegExp HexColorRgx{ UR"(^(#[\d|a-f]{3,8})$)" };
+
+	const static RegExp RgbArgsRgx{ UR"(^\s*(?<r>[\d\.]+)(?<p>%?)\s*,\s*(?<g>[\d\.]+)\k<p>\s*,\s*(?<b>[\d\.]+)\k<p>\s*(,\s*(?<a>[\d\.]+)(?<ap>%?)\s*)?$)" };
 
 	Optional<ColorF> ParseCSSLikeColor(const StringView s)
 	{
@@ -161,23 +167,23 @@ namespace SivImGui::Util
 		}
 
 		String str{ s };
-		str.remove_if([](char32_t c) {
-			return c == U' ' || c == U'\t'; // Whitespace
-		});
+		str.trim();
 		str.lowercase();
 
 		// named-color
 		{
-			auto itr = colorDic.find(str);
-			if (itr != colorDic.cend())
+			auto itr = ColorDic.find(str);
+			if (itr != ColorDic.cend())
 			{
 				return itr->second;
 			}
 		}
 
 		// hex-color
-		if (str.starts_with(U'#'))
+		if (HexColorRgx.fullMatch(str))
 		{
+			const StringView hex = StringView(str).substr(1);
+
 			switch (str.size())
 			{
 			case 4: // #rgb
@@ -185,11 +191,77 @@ namespace SivImGui::Util
 			case 7: // #rrggbb
 			case 9: // #rrggbbaa
 				return Color{ str };
-			default:
-				return none;
 			}
+
+			return none;
 		}
-		
+
+		// abc( 1, 2, 3, def )
+		// -> funcName: "abc"
+		//    funcArg:  " 1, 2, 3, def "
+
+		StringView funcName, funcArg;
+		if (auto match = FuncRgx.match(str))
+		{
+			funcName = match[1];
+			funcArg = match[2];
+		}
+		else
+		{
+			return none;
+		}
+
+		// rgb(r,g,b(,a)), rgba(r,g,b(,a))
+		//if (funcName == U"rgb" || funcName == U"rgba")
+		//{
+		//	const MatchResults match = RgbArgsRgx.match(funcArg);
+
+		//	if (match.isEmpty())
+		//	{
+		//		return none;
+		//	}
+
+		//	ColorF col;
+
+		//	const auto r = ParseOpt<double>(match[1]);
+		//	const auto g = ParseOpt<double>(match[3]);
+		//	const auto b = ParseOpt<double>(match[4]);
+
+		//	if (r && g && b)
+		//	{
+		//		// 0% ~ 100%, 0 ~ 255
+
+		//		const double mul = (match[2] == U"%" ? 1. / 100 : 1. / 255);
+		//		col.r = Clamp(*r * mul, 0., 1.);
+		//		col.g = Clamp(*g * mul, 0., 1.);
+		//		col.b = Clamp(*b * mul, 0., 1.);
+		//	}
+		//	else
+		//	{
+		//		return none;
+		//	}
+
+		//	const auto a = ParseOpt<double>(match[5]);
+
+		//	if (a)
+		//	{
+		//		// 0% ~ 100%, 0 ~ 1
+
+		//		const double mul = (match[6] == U"%" ? 1. / 100 : 1.);
+		//		col.a = Clamp(*a * mul, 0., 1.);
+		//	}
+		//	else
+		//	{
+		//		col.a = 1;
+		//	}
+
+		//	return col;
+		//}
+		//else if (funcName == U"hsl" || funcName == U"hsla")
+		//{
+		//	return none;
+		//}
+
 		return none;
 	}
 }

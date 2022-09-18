@@ -118,6 +118,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Core\GUI.cpp" />
     <ClCompile Include="Core\Property.cpp" />
+    <ClCompile Include="Widgets\TabView.cpp" />
     <ClCompile Include="Util\ParseCSSLikeColor.cpp" />
     <ClCompile Include="Reflection\DB.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -221,6 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Builder.hpp" />
+    <ClInclude Include="Widgets\TabView.hpp" />
     <ClInclude Include="Util\ParseCSSLikeColor.hpp" />
     <ClInclude Include="Reflection\DB.hpp" />
     <ClInclude Include="Core\Property.hpp" />

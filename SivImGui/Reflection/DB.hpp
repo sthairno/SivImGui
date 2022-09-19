@@ -41,7 +41,7 @@ namespace SivImGui::Reflection
 						(w.*ref) = std::any_cast<PropertyT::ValueType>(v);
 					},
 				});
-				if (textProperty && std::is_same_v<PropertyT::ValueType, String>)
+				if (textProperty)
 				{
 					m_ref.textPropertyName = PropertyT::Name;
 				}

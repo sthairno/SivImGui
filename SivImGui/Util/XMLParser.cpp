@@ -3,58 +3,22 @@
 
 namespace SivImGui::Util
 {
-	static std::any ParseProperty(std::type_index type, const StringView str)
+	Texture detail::TextureNameParser(StringView str)
 	{
-		static auto opt2any = [](auto v) -> std::any
+		if (auto result = UR"(^\s*asset:\s*(\S+)\s*$)"_re.match(str))
 		{
-			return v ? *v : std::any{};
-		};
+			return TextureAsset(result[1]);
+		}
+		return { };
+	}
 
-		if (type == typeid(String))
+	Font detail::FontNameParser(StringView str)
+	{
+		if (auto result = UR"(^\s*asset:\s*(\S+)\s*$)"_re.match(str))
 		{
-			return String(str);
+			return FontAsset(result[1]);
 		}
-		else if (type == typeid(ColorF))
-		{
-			if (auto col = Util::ParseCSSLikeColor(str))
-			{
-				return *col;
-			}
-		}
-		else if (type == typeid(Point))
-		{
-			if (auto list = MathParser(str).evalArray())
-			{
-				if (list.size() == 2)
-				{
-					return Vec2{ list[0], list[1] }.asPoint();
-				}
-			}
-		}
-		else if (type == typeid(Vector2D<double>))
-		{
-			if (auto list = MathParser(str).evalArray())
-			{
-				if (list.size() == 2)
-				{
-					return Vector2D<double>{ list[0], list[1] };
-				}
-			}
-		}
-		else if (type == typeid(bool))
-		{
-			return opt2any(ParseOpt<bool>(str));
-		}
-		else if (type == typeid(int))
-		{
-			return opt2any(MathParser(str).evalOpt().map([](double v) { return static_cast<int>(v); }));
-		}
-		else if (type == typeid(double))
-		{
-			return opt2any(MathParser(str).evalOpt());
-		}
-
-		return {};
+		return { };
 	}
 
 	static void ParseLayout(WidgetBase& widget, const XMLElement& e)
@@ -142,17 +106,12 @@ namespace SivImGui::Util
 		auto properties = m_db.getAllProperties(widget);
 		auto instance = widget.createInstance();
 
-		if (widget.textPropertyName && elem.text())
-		{
-			properties.at(widget.textPropertyName.value()).set(*instance, elem.text());
-		}
-
 		for (auto& [key, value] : elem.attributes())
 		{
 			try
 			{
 				auto& property = properties.at(key);
-				property.set(*instance, ParseProperty(property.type, value));
+				property.set(*instance, parseProperty(property.type, value));
 			}
 			catch (std::out_of_range)
 			{
@@ -164,6 +123,12 @@ namespace SivImGui::Util
 				Print << U"Parse error: {}=\"{}\""_fmt(key, value);
 				// Parse error
 			}
+		}
+
+		if (widget.textPropertyName && elem.text())
+		{
+			auto& property = properties.at(widget.textPropertyName.value());
+			property.set(*instance, parseProperty(property.type, elem.text()));
 		}
 
 		XMLElement firstChild = elem.firstChild();
@@ -195,5 +160,67 @@ namespace SivImGui::Util
 		}
 
 		return std::move(instance);
+	}
+
+	std::any XMLParser::parseProperty(std::type_index type, const StringView str) const
+	{
+		static auto opt2any = [](auto v) -> std::any
+		{
+			return v ? *v : std::any{};
+		};
+
+		if (type == typeid(String))
+		{
+			return String(str);
+		}
+		else if (type == typeid(ColorF))
+		{
+			if (auto col = Util::ParseCSSLikeColor(str))
+			{
+				return *col;
+			}
+		}
+		else if (type == typeid(Point))
+		{
+			if (auto list = MathParser(str).evalArray())
+			{
+				if (list.size() == 2)
+				{
+					return Vec2{ list[0], list[1] }.asPoint();
+				}
+			}
+		}
+		else if (type == typeid(Vector2D<double>))
+		{
+			if (auto list = MathParser(str).evalArray())
+			{
+				if (list.size() == 2)
+				{
+					return Vector2D<double>{ list[0], list[1] };
+				}
+			}
+		}
+		else if (type == typeid(bool))
+		{
+			return opt2any(ParseOpt<bool>(str));
+		}
+		else if (type == typeid(int))
+		{
+			return opt2any(MathParser(str).evalOpt().map([](double v) { return static_cast<int>(v); }));
+		}
+		else if (type == typeid(double))
+		{
+			return opt2any(MathParser(str).evalOpt());
+		}
+		else if (type == typeid(Texture))
+		{
+			return textureNameParser ? textureNameParser(str) : Texture{ };
+		}
+		else if (type == typeid(Font))
+		{
+			return fontNameParser ? fontNameParser(str) : Font{ };
+		}
+
+		return {};
 	}
 }

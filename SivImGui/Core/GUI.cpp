@@ -40,7 +40,7 @@ namespace SivImGui
 		m_widget->layoutCore(availableSize);
 	}
 
-	void GUI::update(Point pos, bool allowMouseOver)
+	void GUI::update(Point pos, Size availableSize, bool allowMouseOver)
 	{
 		auto& windowState = Window::GetState();
 
@@ -61,6 +61,8 @@ namespace SivImGui
 
 		Transformer2D t(Mat3x2::Translate(pos), TransformCursor::Yes);
 		m_widget->updateCore(m_enabled);
+
+		layout(availableSize);
 	}
 
 	void GUI::draw(Point pos) const

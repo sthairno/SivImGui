@@ -23,9 +23,9 @@ namespace SivImGui
 
 		void setEnabled(bool enable) { m_enabled = enable; }
 
-		void layout(Size availableSize);
+		void layout(Size availableSize = Scene::Size());
 
-		void update(Point pos = { 0, 0 }, bool allowMouseOver = true);
+		void update(Point pos = { 0, 0 }, Size availableSize = Scene::Size(), bool allowMouseOver = true);
 
 		void draw(Point pos = { 0, 0 }) const;
 

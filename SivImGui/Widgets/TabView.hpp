@@ -33,23 +33,39 @@ namespace SivImGui
 
 		SIVIMGUI_LAYOUT_PROPERTY(Font, font, SimpleGUI::GetFont());
 
-		SIVIMGUI_LAYOUT_PROPERTY(int32, frameThickness, 2);
+		SIVIMGUI_LAYOUT_PROPERTY(int32, frameThickness, 1);
 
-		SIVIMGUI_LAYOUT_PROPERTY(int32, tabRound, 5);
+		SIVIMGUI_LAYOUT_PROPERTY(int32, tabRound, 6);
 
-		SIVIMGUI_LAYOUT_PROPERTY(Padding, tabPadding, { 2, 4 });
+		SIVIMGUI_LAYOUT_PROPERTY(Padding, tabPadding, { 2, 10 });
 
-		SIVIMGUI_LAYOUT_PROPERTY(int32, tabSpace, 2);
+		SIVIMGUI_LAYOUT_PROPERTY(int32, tabSpace, 1);
 
-		SIVIMGUI_PROPERTY(ColorF, tabInactiveColor, ColorF{ 0.8 });
+		SIVIMGUI_PROPERTY(ColorF, tabActiveColor, Palette::White);
+
+		SIVIMGUI_PROPERTY(ColorF, tabInactiveColor, ColorF{ 0.9 });
+
+		SIVIMGUI_PROPERTY(ColorF, tabDisabledColor, ColorF{ 0.76 });
+
+		SIVIMGUI_PROPERTY(ColorF, tabMouseOverColor, ColorF{ 1 });
+
+		SIVIMGUI_PROPERTY(ColorF, textActiveColor, Palette::Black);
+
+		SIVIMGUI_PROPERTY(ColorF, textInactiveColor, Palette::Black);
+
+		SIVIMGUI_PROPERTY(ColorF, textDisabledColor, Palette::Gray);
+
+		SIVIMGUI_PROPERTY(ColorF, textMouseOverColor, Palette::Black);
 
 		SIVIMGUI_PROPERTY(ColorF, frameColor, ColorF{ 0.67 });
 
-		SIVIMGUI_PROPERTY(ColorF, backgroundColor, Palette::White);
+		SIVIMGUI_PROPERTY(ColorF, backgroundColor, Color::Zero());
 
 	protected:
 
 		int32 m_selectedTabIdx = 0;
+
+		int32 m_hoveredTabIdx = -1;
 
 		std::vector<Rect> m_tabRectList;
 

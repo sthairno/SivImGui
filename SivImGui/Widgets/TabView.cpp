@@ -2,8 +2,36 @@
 
 namespace SivImGui
 {
-	static std::pair<Polygon, Polygon> BuildActiveTabShape(Rect contentRect, Rect tabRect, int32 tabRound, int32 frameThickness)
+	static std::tuple<Polygon, Polygon, Rect> BuildActiveTabShape(Rect contentRect, Rect tabRect, int32 tabRound, int32 frameThickness)
 	{
+		Polygon innerTabPolygon;
+		if (tabRound <= frameThickness)
+		{
+			innerTabPolygon =
+				tabRect
+				.stretched(-frameThickness, -frameThickness, frameThickness, -frameThickness)
+				.asPolygon();
+		}
+		else
+		{
+			int32 r = tabRound - frameThickness;
+			innerTabPolygon =
+				tabRect
+				.stretched(-frameThickness, -frameThickness, frameThickness, -frameThickness)
+				.rounded(r, r, 0, 0);
+		}
+
+		Rect innerContentRect = contentRect.stretched(-frameThickness);
+
+		if (frameThickness <= 0)
+		{
+			return {
+				Polygon{ },
+				innerTabPolygon,
+				innerContentRect
+			};
+		}
+
 		Array<Vec2> outerVertices =
 			tabRect
 			.rounded(tabRound, tabRound, 0, 0)
@@ -11,37 +39,16 @@ namespace SivImGui
 		outerVertices.insert(outerVertices.cend() - 1, { contentRect.tr(), contentRect.br(), contentRect.bl(), contentRect.tl() });
 		outerVertices.unique_consecutive();
 
-		Array<Vec2> innerVertices;
-		if (tabRound <= frameThickness)
-		{
-			innerVertices = tabRect
-				.stretched(-frameThickness, -frameThickness, frameThickness, -frameThickness)
-				.outline();
-		}
-		else
-		{
-			int32 r = tabRound - frameThickness;
-			innerVertices =
-				tabRect
-				.stretched(-frameThickness, -frameThickness, frameThickness, -frameThickness)
-				.rounded(r, r, 0, 0)
-				.outer();
-		}
-		innerVertices.insert(
-			innerVertices.cend() - 1,
-			{
-				contentRect.tr() + Point{ -frameThickness, frameThickness },
-				contentRect.br() + Point{ -frameThickness, -frameThickness },
-				contentRect.bl() + Point{ frameThickness, -frameThickness },
-				contentRect.tl() + Point{ frameThickness, frameThickness },
-			});
-		innerVertices.unique_consecutive();
+		Array<Vec2> reversedInnerVertices(Arg::reserve = innerTabPolygon.vertices().size() + 4);
+		reversedInnerVertices.insert(reversedInnerVertices.end(), innerTabPolygon.vertices().back());
+		reversedInnerVertices.insert(reversedInnerVertices.end(), { innerContentRect.tl(), innerContentRect.bl(), innerContentRect.br(), innerContentRect.tr() });
+		reversedInnerVertices.insert(reversedInnerVertices.end(), innerTabPolygon.vertices().crbegin() + 1, innerTabPolygon.vertices().crend());
+		reversedInnerVertices.unique_consecutive();
 
-		auto result = static_cast<uint8>(Polygon::Validate(outerVertices, { innerVertices.reversed() }));
-		assert(result == 0);
 		return {
-			Polygon{ outerVertices, { innerVertices.reversed() } },
-			Polygon{ innerVertices },
+			Polygon{ outerVertices, { reversedInnerVertices } },
+			innerTabPolygon,
+			innerContentRect
 		};
 	}
 
@@ -98,10 +105,14 @@ namespace SivImGui
 			};
 		}
 
-		MeasureResult result = std::visit([this](auto& l) {
-			WidgetBase* selectedItem = visibleChildren()[m_selectedTabIdx];
-			return l.measure({ selectedItem });
-		}, layout.value());
+		for (WidgetBase* child : visibleChildren())
+		{
+			std::visit([child](auto& l) {
+				return l.measure({ child });
+			}, layout.value());
+		}
+
+		MeasureResult result = visibleChildren()[m_selectedTabIdx]->measuredSize();
 		result.minSize += Size{
 			frameThickness * 2,
 			frameThickness * 2
@@ -115,8 +126,7 @@ namespace SivImGui
 			tabAreaSize.y = Max(tabAreaSize.y, tabSize.y);
 		}
 		tabAreaSize.x += (static_cast<int32>(visibleChildren().size()) - 1) * tabSpace;
-
-		result.minSize.x = Min(result.minSize.x, tabAreaSize.x);
+		result.minSize.x = Max(result.minSize.x, tabAreaSize.x);
 		result.minSize.y += tabAreaSize.y;
 
 		return result;
@@ -169,6 +179,36 @@ namespace SivImGui
 			return;
 		}
 
+		m_hoveredTabIdx = -1;
+
+		if (mouseOver())
+		{
+			for (auto [idx, child] : Indexed(visibleChildren()))
+			{
+				const bool isActive = idx == m_selectedTabIdx;
+				const bool isEnabled = this->isEnabled() && child->enabled;
+
+				if (isActive || not isEnabled)
+				{
+					continue;
+				}
+
+				const Rect tabRect = m_tabRectList[idx];
+
+				if (tabRect.mouseOver())
+				{
+					m_hoveredTabIdx = idx;
+				}
+			}
+		}
+
+		if (m_hoveredTabIdx != -1 &&
+			MouseL.down())
+		{
+			m_selectedTabIdx = m_hoveredTabIdx;
+			requestLayout();
+		}
+
 		WidgetBase* selectedItem = visibleChildren()[m_selectedTabIdx];
 		updateChildren({ selectedItem });
 	}
@@ -182,30 +222,62 @@ namespace SivImGui
 			return;
 		}
 
+		if (m_hoveredTabIdx != -1)
+		{
+			Cursor::RequestStyle(CursorStyle::Hand);
+		}
+
 		for (auto [idx, child] : Indexed(visibleChildren()))
 		{
+			const bool isActive = idx == m_selectedTabIdx;
+			const bool isHovered = idx == m_hoveredTabIdx;
+			const bool isEnabled = this->isEnabled() && child->enabled;
 			const Rect tabRect = m_tabRectList[idx];
 
-			if (idx == m_selectedTabIdx)
+			ColorF tabColor, textColor;
+			if (isActive)
 			{
-				auto [frame, content] =
+				tabColor = tabActiveColor;
+				textColor = textActiveColor;
+			}
+			else if (not isEnabled)
+			{
+				tabColor = tabDisabledColor;
+				textColor = textDisabledColor;
+			}
+			else if (isHovered)
+			{
+				tabColor = tabMouseOverColor;
+				textColor = textMouseOverColor;
+			}
+			else
+			{
+				tabColor = tabInactiveColor;
+				textColor = textInactiveColor;
+			}
+
+			if (isActive)
+			{
+				auto [frame, tab, content] =
 					BuildActiveTabShape(m_contentRect, tabRect, tabRound, frameThickness);
 				
 				frame.draw(frameColor);
+				tab.draw(tabColor);
+
 				content.draw(backgroundColor);
 				drawChildren({ child });
 			}
 			else
 			{
-				auto [frame, content] =
+				auto [frame, tab] =
 					BuildInactiveTabShape(tabRect, tabRound, frameThickness);
 
 				frame.draw(frameColor);
-				content.draw(tabInactiveColor);
+				tab.draw(tabColor);
 			}
 
 			(*font)(getTabName(idx))
-				.drawAt((tabRect - Padding{ frameThickness, frameThickness, 0 }).center(), Palette::Black);
+				.drawAt((tabRect - Padding{ frameThickness, frameThickness, 0 }).center(), textColor);
 		}
 	}
 
@@ -214,7 +286,7 @@ namespace SivImGui
 		StringView name = visibleChildren()[index]->name.value();
 		if (name.empty())
 		{
-			return U"Tab {}"_fmt(index);
+			return U"Tab {}"_fmt(index + 1);
 		}
 		return String{ name };
 	}
@@ -225,6 +297,6 @@ namespace SivImGui
 			(*font)(getTabName(index)).region().size.asPoint()
 			+ tabPadding
 			+ Padding{ frameThickness, frameThickness, 0 };
-		return { Max<int32>(size.x * 2, tabRound), Max<int32>(size.y, tabRound) };
+		return { Max<int32>(size.x, tabRound * 2), Max<int32>(size.y, tabRound) };
 	}
 }

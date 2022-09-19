@@ -1,6 +1,6 @@
-<Box frameThickness="0">
+<Box frameThickness="0" backColor="#e5e5e5">
     <!-- Header -->
-    <Box name="Header" backColor="#e5e5e5" xExpand="true" frameThickness="0">
+    <Box name="Header" backColor="transparent" xExpand="true" frameThickness="0">
         <Container minSize="0, 30" visible="false">
             <HorizontalLayout horizontalAlignment="end">
                 <Button name="MinimizeBtn"></Button>
@@ -11,16 +11,11 @@
         <Container>
             <StackLayout>
                 <Container>
-                    <HorizontalLayout padding="10">
-                        <Button name="ResetBtn">
-                            <HorizontalLayout padding="3, 12">
-                                <Label textColor="black">Reset</Label>
-                            </HorizontalLayout>
-                        </Button>
-                        <Container xExpand="true"></Container>
+                    <HorizontalLayout padding="10" horizontalAlignment="end">
                         <Button name="EditBtn">
-                            <HorizontalLayout padding="3, 12">
-                                <Label textColor="black">Open UI.xml</Label>
+                            <HorizontalLayout padding="4, 4" space="3">
+                                <Image diffuse="gray">asset:mdi-file-edit</Image>
+                                <Label textColor="gray">UI.xml</Label>
                             </HorizontalLayout>
                         </Button>
                     </HorizontalLayout>
@@ -34,27 +29,39 @@
         </Container>
     </Box>
     <!-- Contents -->
-    <Container xExpand="true" yExpand="true">
-        <VerticalLayout horizontalAlignment="center" padding="0, 16, 16">
-            <Container yExpand="true">
-                <VerticalLayout verticalAlignment="center" padding="20">
-                    <!-- Tile -->
-                    <Container name="Tiles">
-                        <!-- ◻◻◻◻◻ -->
-                        <!-- ◻◻◻◻◻ -->
-                        <!-- ◻◻◻◻◻ -->
-                        <!-- ◻◻◻◻◻ -->
-                        <!-- ◻◻◻◻◻ -->
-                        <!-- ◻◻◻◻◻ -->
-                    </Container>
-                </VerticalLayout>
-            </Container>
-            <!-- Keyboard -->
-            <Container name="SoftKeyboard">
-                <!-- QWERTYUIOP -->
-                <!-- ASDFGHJKL -->
-                <!-- [Enter]ZXCVBNM[Bksp] -->
-            </Container>
-        </VerticalLayout>
-    </Container>
+    <TabView backgroundColor="white" xExpand="true" yExpand="true">
+        <Container name="WORDLE?" xExpand="true" yExpand="true">
+            <VerticalLayout horizontalAlignment="center" padding="0, 16, 16">
+                <Container yExpand="true">
+                    <VerticalLayout verticalAlignment="center" horizontalAlignment="start" padding="20" space="5">
+                        <Button name="ResetBtn">
+                            <HorizontalLayout padding="6, 5">
+                                <Image diffuse="gray">asset:mdi-delete</Image>
+                            </HorizontalLayout>
+                        </Button>
+                        <!-- Tile -->
+                        <Container name="Tiles">
+                            <!-- ◻◻◻◻◻ -->
+                            <!-- ◻◻◻◻◻ -->
+                            <!-- ◻◻◻◻◻ -->
+                            <!-- ◻◻◻◻◻ -->
+                            <!-- ◻◻◻◻◻ -->
+                            <!-- ◻◻◻◻◻ -->
+                        </Container>
+                    </VerticalLayout>
+                </Container>
+                <Container>
+                </Container>
+                <!-- Keyboard -->
+                <Container name="SoftKeyboard">
+                    <!-- QWERTYUIOP -->
+                    <!-- ASDFGHJKL -->
+                    <!-- [Enter]ZXCVBNM[Bksp] -->
+                </Container>
+            </VerticalLayout>
+        </Container>
+        <Container name="Disabled" enabled="false"></Container>
+        <Container><Label textColor="black">Hoge</Label></Container>
+        <Container><Label textColor="black">Fuga</Label></Container>
+    </TabView>
 </Box>

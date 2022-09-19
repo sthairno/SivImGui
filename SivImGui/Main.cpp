@@ -10,6 +10,7 @@
 #include "Widgets/Label.hpp"
 #include "Widgets/ScrollView.hpp"
 #include "Widgets/Image.hpp"
+#include "Widgets/TabView.hpp"
 
 #include "Reflection/DB.hpp"
 #include "Util/XMLParser.hpp"
@@ -74,8 +75,22 @@ void RegisterTypes()
 		.prop(&SivImGui::Label::textColor)
 		.prop(&SivImGui::Label::font)
 		.prop(&SivImGui::Label::fitHeight);
+	db.push<SivImGui::TabView>()
+		.base<SivImGui::Container>()
+		.prop(&SivImGui::TabView::font)
+		.prop(&SivImGui::TabView::frameThickness)
+		.prop(&SivImGui::TabView::tabRound)
+		.prop(&SivImGui::TabView::tabPadding)
+		.prop(&SivImGui::TabView::tabSpace)
+		.prop(&SivImGui::TabView::tabInactiveColor)
+		.prop(&SivImGui::TabView::frameColor)
+		.prop(&SivImGui::TabView::backgroundColor);
+	db.push<SivImGui::Image>()
+		.base<SivImGui::Widget>()
+		.prop(&SivImGui::Image::texture, true)
+		.prop(&SivImGui::Image::fitScale)
+		.prop(&SivImGui::Image::diffuse);
 }
-
 void Reset()
 {
 	tileChars.clear();
@@ -224,6 +239,8 @@ void Main()
 	Stopwatch reloadTimer(1s, StartImmediately::Yes);
 
 	FontAsset::Register(U"heavy28", 28, Typeface::Heavy);
+	TextureAsset::Register(U"mdi-file-edit", { Icon::Type::MaterialDesign, 0xF11E7 }, 30);
+	TextureAsset::Register(U"mdi-delete", { Icon::Type::MaterialDesign, 0xF01B4 }, 30);
 
 	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
 	RegisterTypes();
@@ -344,7 +361,7 @@ void Main()
 		///////////
 
 		// レイアウト更新
-		gui.layout(Scene::Size());
+		gui.layout();
 
 		// ウィンドウの最小サイズを変更
 		{

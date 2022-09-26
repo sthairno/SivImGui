@@ -1,6 +1,7 @@
 ﻿#include <Siv3D.hpp> // OpenSiv3D v0.6.5
 
 #include "Core/GUI.hpp"
+#include "Core/Builder.hpp"
 
 #include "Widgets/Widget.hpp"
 #include "Widgets/Container.hpp"
@@ -90,6 +91,14 @@ void RegisterTypes()
 		.prop(&SivImGui::Image::texture, true)
 		.prop(&SivImGui::Image::fitScale)
 		.prop(&SivImGui::Image::diffuse);
+	db.push<SivImGui::ScrollView>()
+		.base<SivImGui::Container>()
+		.prop(&SivImGui::ScrollView::mode)
+		.prop(&SivImGui::ScrollView::scrollbarSize)
+		.prop(&SivImGui::ScrollView::step);
+	db.push<SivImGui::SimpleButton>()
+		.base<SivImGui::Widget>()
+		.prop(&SivImGui::SimpleButton::text, true);
 }
 void Reset()
 {
@@ -97,30 +106,32 @@ void Reset()
 	tileChars.emplace_back(U"");
 }
 
-void BuildTile(SivImGui::Builder& ctx, char32_t chr, bool editing)
+void BuildTile(SivImGui::Builder& b, char32_t chr, bool editing)
 {
-	SivImGui::Box::New(ctx, editing ? ColorF(1) : ColorF(0.5))([&](SivImGui::Box& b) {
-		b.layout = SivImGui::VerticalLayout{
+	b.next<SivImGui::Box>()([&](SivImGui::Box& w) {
+		w.layout = SivImGui::VerticalLayout{
 			.padding = { 0 },
 			.horizontalAlignment = SivImGui::Alignment::Center,
 			.verticalAlignment = SivImGui::Alignment::Center,
 		};
-		b.minSize = { 60, 60 };
-		b.frameThickness = 2;
-		b.frameColor = chr ? ColorF(0.5) : ColorF(0.7);
+		w.minSize = { 60, 60 };
+		w.frameThickness = 2;
+		w.frameColor = chr ? ColorF(0.5) : ColorF(0.7);
+		w.backColor = editing ? ColorF(1) : ColorF(0.5);
 
 		if (chr)
 		{
-			auto& l = SivImGui::Label::New(ctx, String(1, chr).uppercase());
+			auto& l = b.next<SivImGui::Label>()();
+			l.text = String(1, chr).uppercase();
 			l.font = FontAsset(U"heavy28");
 			l.textColor = editing ? Palette::Black : Palette::White;
 		}
 	});
 }
 
-void BuildTiles(SivImGui::Builder& ctx)
+void BuildTiles(SivImGui::Builder& b)
 {
-	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+	b.next<SivImGui::Container>()([&](SivImGui::Container& c) {
 		c.layout = SivImGui::VerticalLayout{
 			.padding = { 0 },
 			.space = 5,
@@ -130,7 +141,7 @@ void BuildTiles(SivImGui::Builder& ctx)
 			bool editing = y >= tileChars.size() - 1;
 			const String line = y < tileChars.size() ? tileChars[y] : U"";
 
-			SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+			b.next<SivImGui::Container>()([&](SivImGui::Container& c) {
 				c.layout = SivImGui::HorizontalLayout{
 					.padding = { 0 },
 					.space = 5,
@@ -139,7 +150,7 @@ void BuildTiles(SivImGui::Builder& ctx)
 				for (int x : Iota(gridSize.x))
 				{
 					BuildTile(
-						ctx,
+						b,
 						x < line.size() ? line[x] : U'\0',
 						editing
 					);
@@ -149,17 +160,20 @@ void BuildTiles(SivImGui::Builder& ctx)
 	});
 }
 
-void BuildKey(SivImGui::Builder& ctx, String& str, const char32_t chr, const char32_t* label = nullptr)
+void BuildKey(SivImGui::Builder& b, String& str, const char32_t chr, const char32_t* label = nullptr)
 {
-	auto& key = SivImGui::Button::New(ctx);
-	key([&](SivImGui::Button& b) {
-		b.minSize = { 60, 46 };
-		b.layout = SivImGui::VerticalLayout{
+	auto& key =
+		b.next<SivImGui::Button>()([&](SivImGui::Button& w) {
+		w.minSize = { 60, 46 };
+		w.layout = SivImGui::VerticalLayout{
 			.padding = { 4, 20 },
 			.horizontalAlignment = SivImGui::Alignment::Center,
 			.verticalAlignment = SivImGui::Alignment::Center
 		};
-		SivImGui::Label::New(ctx, label ? label : String(1, chr).uppercase()).textColor = Palette::Black;
+
+		auto& l = b.next<SivImGui::Label>()();
+		l.text = label ? label : String(1, chr).uppercase();
+		l.textColor = Palette::Black;
 	});
 	if (key.clicked())
 	{
@@ -167,62 +181,62 @@ void BuildKey(SivImGui::Builder& ctx, String& str, const char32_t chr, const cha
 	}
 }
 
-String BuildKeyboard(SivImGui::Builder& ctx)
+String BuildKeyboard(SivImGui::Builder& b)
 {
 	String keyInput;
 
-	ctx.current().layout = SivImGui::VerticalLayout{
+	b.current().layout = SivImGui::VerticalLayout{
 		.space = 5,
 		.horizontalAlignment = SivImGui::Alignment::Center
 	};
 
-	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+	b.next<SivImGui::Container>()([&](SivImGui::Container& c) {
 		c.layout = SivImGui::HorizontalLayout{
 			.space = 5
 		};
 
-		BuildKey(ctx, keyInput, U'q');
-		BuildKey(ctx, keyInput, U'w');
-		BuildKey(ctx, keyInput, U'e');
-		BuildKey(ctx, keyInput, U'r');
-		BuildKey(ctx, keyInput, U't');
-		BuildKey(ctx, keyInput, U'y');
-		BuildKey(ctx, keyInput, U'u');
-		BuildKey(ctx, keyInput, U'i');
-		BuildKey(ctx, keyInput, U'o');
-		BuildKey(ctx, keyInput, U'p');
+		BuildKey(b, keyInput, U'q');
+		BuildKey(b, keyInput, U'w');
+		BuildKey(b, keyInput, U'e');
+		BuildKey(b, keyInput, U'r');
+		BuildKey(b, keyInput, U't');
+		BuildKey(b, keyInput, U'y');
+		BuildKey(b, keyInput, U'u');
+		BuildKey(b, keyInput, U'i');
+		BuildKey(b, keyInput, U'o');
+		BuildKey(b, keyInput, U'p');
 	});
 
-	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+	b.next<SivImGui::Container>()([&](SivImGui::Container& c) {
 		c.layout = SivImGui::HorizontalLayout{
 			.space = 5
 		};
 
-		BuildKey(ctx, keyInput, U'a');
-		BuildKey(ctx, keyInput, U's');
-		BuildKey(ctx, keyInput, U'd');
-		BuildKey(ctx, keyInput, U'f');
-		BuildKey(ctx, keyInput, U'g');
-		BuildKey(ctx, keyInput, U'h');
-		BuildKey(ctx, keyInput, U'j');
-		BuildKey(ctx, keyInput, U'k');
-		BuildKey(ctx, keyInput, U'l');
+		BuildKey(b, keyInput, U'a');
+		BuildKey(b, keyInput, U's');
+		BuildKey(b, keyInput, U'd');
+		BuildKey(b, keyInput, U'f');
+		BuildKey(b, keyInput, U'g');
+		BuildKey(b, keyInput, U'h');
+		BuildKey(b, keyInput, U'j');
+		BuildKey(b, keyInput, U'k');
+		BuildKey(b, keyInput, U'l');
 	});
 
-	SivImGui::Container::New(ctx)([&](SivImGui::Container& c) {
+	b.next<SivImGui::Container>()([&](SivImGui::Container& c) {
 		c.layout = SivImGui::HorizontalLayout{
 			.space = 5
 		};
 
-		BuildKey(ctx, keyInput, U'\n', U"Enter");
-		BuildKey(ctx, keyInput, U'z');
-		BuildKey(ctx, keyInput, U'x');
-		BuildKey(ctx, keyInput, U'c');
-		BuildKey(ctx, keyInput, U'v');
-		BuildKey(ctx, keyInput, U'b');
-		BuildKey(ctx, keyInput, U'n');
-		BuildKey(ctx, keyInput, U'm');
-		BuildKey(ctx, keyInput, U'\b', U"Bksp");
+		BuildKey(b, keyInput, U'\n', U"Enter");
+		BuildKey(b, keyInput, U'z');
+		BuildKey(b, keyInput, U'x');
+		BuildKey(b, keyInput, U'c');
+		BuildKey(b, keyInput, U'v');
+		BuildKey(b, keyInput, U'b');
+		BuildKey(b, keyInput, U'n');
+		BuildKey(b, keyInput, U'm');
+		BuildKey(b, keyInput, U'\b', U"Bksp");
 	});
 
 	return keyInput;
@@ -297,8 +311,8 @@ void Main()
 		// ソフトキーボード処理
 		if (auto keyboard = gui.findWidget<SivImGui::Container>(U"SoftKeyboard"))
 		{
-			SivImGui::Builder ctx(*keyboard);
-			input += BuildKeyboard(ctx);
+			SivImGui::Builder builder(*keyboard);
+			input += BuildKeyboard(builder);
 		}
 
 		for (const auto c : input)
@@ -336,8 +350,8 @@ void Main()
 		// タイル処理
 		if (auto tileArea = gui.findWidget<SivImGui::Container>(U"Tiles"))
 		{
-			SivImGui::Builder ctx(*tileArea);
-			BuildTiles(ctx);
+			SivImGui::Builder builder(*tileArea);
+			BuildTiles(builder);
 		}
 
 		// リセットボタン

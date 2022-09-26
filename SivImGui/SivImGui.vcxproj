@@ -221,6 +221,7 @@
     <None Include="App\engine\soundfont\GMGSx.sf2.zstdcmp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\BuilderHelper.hpp" />
     <ClInclude Include="Core\Builder.hpp" />
     <ClInclude Include="Widgets\TabView.hpp" />
     <ClInclude Include="Util\ParseCSSLikeColor.hpp" />

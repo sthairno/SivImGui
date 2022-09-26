@@ -2,10 +2,24 @@
 
 namespace SivImGui
 {
+	void detail::BuilderPush(Builder& builder, WidgetBase& widget)
+	{
+		builder.m_stack.emplace_back(Builder::State{
+			.widget = &widget,
+			.nextItr = widget.children().begin()
+		});
+	}
+
+	void detail::BuilderPop(Builder& builder)
+	{
+		auto& state = builder.m_stack.back();
+		state.widget->removeChildrenFrom(state.nextItr);
+		builder.m_stack.pop_back();
+	}
+
 	Builder::Builder(WidgetBase& root)
 		: m_root(root)
 	{
-		m_root.m_builder = this;
 		reset();
 	}
 
@@ -20,7 +34,6 @@ namespace SivImGui
 			{
 				WidgetBase* child = state.nextItr->get();
 				state.nextItr++;
-				child->m_builder = this;
 				return *child;
 			}
 			else
@@ -33,37 +46,21 @@ namespace SivImGui
 		state.nextItr = children.end();
 
 		WidgetBase& newChild = *children.back();
-		newChild.m_builder = this;
 		return newChild;
-	}
-
-	void Builder::push(WidgetBase& widget)
-	{
-		m_stack.emplace_back(State{
-			.widget = &widget,
-			.nextItr = widget.children().begin()
-		});
-	}
-
-	void Builder::pop()
-	{
-		auto& state = m_stack.back();
-		state.widget->removeChildrenFrom(state.nextItr);
-		m_stack.pop_back();
 	}
 
 	void Builder::reset()
 	{
 		m_stack.clear();
-		push(m_root);
+		detail::BuilderPush(*this, m_root);
 	}
 
 	void Builder::finalize()
 	{
 		while (not m_stack.empty())
 		{
-			pop();
+			detail::BuilderPop(*this);
 		}
-		push(m_root);
+		detail::BuilderPush(*this, m_root);
 	}
 }

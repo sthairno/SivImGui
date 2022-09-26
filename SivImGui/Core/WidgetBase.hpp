@@ -6,7 +6,6 @@
 
 namespace SivImGui
 {
-	class Builder;
 	class GUI;
 
 	struct WidgetTypeInfo
@@ -106,19 +105,9 @@ namespace SivImGui
 
 		virtual void draw(Rect rect) const = 0;
 
-		void builderPush();
-
-		void builderPop();
-
 		void updateChildren(const WidgetRefContainer& children);
 
 		void drawChildren(const WidgetRefContainer& children) const;
-
-	private:
-
-		friend Builder;
-
-		Builder* m_builder = nullptr;
 
 	private:
 

@@ -446,5 +446,8 @@
     <ClInclude Include="Widgets\TabView.hpp">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
+    <ClInclude Include="Core\BuilderHelper.hpp">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

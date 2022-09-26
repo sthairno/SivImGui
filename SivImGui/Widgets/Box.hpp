@@ -5,14 +5,7 @@ namespace SivImGui
 {
 	class Box : public Container
 	{
-		SIVIMGUI_BUILDER_HELPER(Box);
-
-		static Box& New(Builder& ctx, ColorF backColor)
-		{
-			auto& w = ctx.next<Box>();
-			w.backColor = backColor;
-			return w;
-		}
+	public:
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

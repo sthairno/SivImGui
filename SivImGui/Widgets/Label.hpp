@@ -5,14 +5,7 @@ namespace SivImGui
 {
 	class Label : public Widget
 	{
-		SIVIMGUI_BUILDER_HELPER(Label);
-
-		static Label& New(Builder& ctx, const StringView text)
-		{
-			auto& w = ctx.next<Label>();
-			w.text = text;
-			return w;
-		}
+	public:
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

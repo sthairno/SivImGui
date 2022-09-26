@@ -46,18 +46,6 @@ namespace SivImGui
 		requestLayout();
 	}
 
-	void WidgetBase::builderPush()
-	{
-		assert(m_builder);
-		m_builder->push(*this);
-	}
-
-	void WidgetBase::builderPop()
-	{
-		assert(m_builder);
-		m_builder->pop();
-	}
-
 	void WidgetBase::updateChildren(const WidgetRefContainer& children)
 	{
 		std::for_each(

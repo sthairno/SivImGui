@@ -1,17 +1,11 @@
 ﻿#pragma once
 #include "../Core/WidgetBase.hpp"
-#include "../Core/Builder.hpp"
 
 namespace SivImGui
 {
 	class Container : public WidgetBase
 	{
-		SIVIMGUI_BUILDER_HELPER(Container);
-
-		static Container& New(Builder& ctx)
-		{
-			return ctx.next<Container>();
-		}
+	public:
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

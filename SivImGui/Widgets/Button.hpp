@@ -5,12 +5,7 @@ namespace SivImGui
 {
 	class Button : public Container
 	{
-		SIVIMGUI_BUILDER_HELPER(Button);
-
-		static Button& New(Builder& ctx)
-		{
-			return ctx.next<Button>();
-		}
+	public:
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

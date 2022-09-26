@@ -5,15 +5,9 @@ namespace SivImGui
 {
 	class ScrollView : public Container
 	{
-		SIVIMGUI_BUILDER_HELPER(ScrollView);
-
-		static constexpr double ButtonScale = 0.6;
-
-		static constexpr double HandleScale = 0.4;
-
 	public:
 
-		enum class Mode : int8
+		enum class Mode
 		{
 			None = 0b00,
 			Horizontal = 0b10,
@@ -21,12 +15,9 @@ namespace SivImGui
 			Both = 0b11,
 		};
 
-		static ScrollView& New(Builder& ctx, Mode mode)
-		{
-			auto& w = ctx.next<ScrollView>();
-			w.mode = mode;
-			return w;
-		}
+		static constexpr double ButtonScale = 0.6;
+
+		static constexpr double HandleScale = 0.4;
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

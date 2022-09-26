@@ -5,14 +5,7 @@ namespace SivImGui
 {
 	class TabView : public Container
 	{
-		SIVIMGUI_BUILDER_HELPER(TabView);
-
 	public:
-
-		static TabView& New(Builder& ctx)
-		{
-			return ctx.next<TabView>();
-		}
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

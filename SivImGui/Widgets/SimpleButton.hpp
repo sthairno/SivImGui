@@ -5,14 +5,7 @@ namespace SivImGui
 {
 	class SimpleButton : public Widget
 	{
-		SIVIMGUI_BUILDER_HELPER(SimpleButton);
-
-		static SimpleButton& New(Builder& ctx, const StringView text)
-		{
-			auto& w = ctx.next<SimpleButton>();
-			w.text = text;
-			return w;
-		}
+	public:
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

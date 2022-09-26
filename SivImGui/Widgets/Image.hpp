@@ -5,14 +5,7 @@ namespace SivImGui
 {
 	class Image : public Widget
 	{
-		SIVIMGUI_BUILDER_HELPER(Image);
-
-		static Image& New(Builder& ctx, const Texture& texture)
-		{
-			auto& w = ctx.next<Image>();
-			w.texture = texture;
-			return w;
-		}
+	public:
 
 		static const WidgetTypeInfo& TypeInfo()
 		{

@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
-#include "WidgetBase.hpp"
+#include "Core.hpp"
 
 namespace SivImGui
 {

@@ -113,20 +113,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Builder.cpp" />
+    <ClCompile Include="Builder\Builder.cpp" />
     <ClCompile Include="Core\Layout.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Core\GUI.cpp" />
     <ClCompile Include="Core\Property.cpp" />
-    <ClCompile Include="Widgets\TabView.cpp" />
-    <ClCompile Include="Util\ParseCSSLikeColor.cpp" />
+    <ClCompile Include="Core\WidgetBase.cpp" />
+    <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Reflection\DB.cpp" />
+    <ClCompile Include="Reflection\XMLParser.cpp" />
+    <ClCompile Include="Util\ParseCSSLikeColor.cpp" />
+    <ClCompile Include="Widgets\TabView.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Core\WidgetBase.cpp" />
-    <ClCompile Include="Util\XMLParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -221,29 +221,35 @@
     <None Include="App\engine\soundfont\GMGSx.sf2.zstdcmp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Core\BuilderHelper.hpp" />
-    <ClInclude Include="Core\Builder.hpp" />
-    <ClInclude Include="Widgets\TabView.hpp" />
-    <ClInclude Include="Util\ParseCSSLikeColor.hpp" />
-    <ClInclude Include="Reflection\DB.hpp" />
-    <ClInclude Include="Core\Property.hpp" />
-    <ClInclude Include="Reflection\PropertyInfo.hpp" />
-    <ClInclude Include="Reflection\WidgetInfo.hpp" />
-    <ClInclude Include="Widgets\Image.hpp" />
-    <ClInclude Include="Widgets\Label.hpp" />
+    <ClInclude Include="Builder.hpp" />
+    <ClInclude Include="Builder\Builder.hpp" />
+    <ClInclude Include="Builder\detail\BuilderHelper.hpp" />
+    <ClInclude Include="Core.hpp" />
     <ClInclude Include="Core\Layout.hpp" />
     <ClInclude Include="Core\MeasureResult.hpp" />
-    <ClInclude Include="Widgets\Box.hpp" />
-    <ClInclude Include="Core\GUI.hpp" />
+    <ClInclude Include="Core\Property.hpp" />
     <ClInclude Include="Core\Space.hpp" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Core\WidgetBase.hpp" />
+    <ClInclude Include="Core\PropertyFlag.hpp" />
+    <ClInclude Include="GUI.hpp" />
+    <ClInclude Include="Reflection.hpp" />
+    <ClInclude Include="Reflection\DB.hpp" />
+    <ClInclude Include="Reflection\PropertyInfo.hpp" />
+    <ClInclude Include="Reflection\WidgetInfo.hpp" />
+    <ClInclude Include="Reflection\XMLParser.hpp" />
+    <ClInclude Include="Reflection\detail\RegistrationHelper.hpp" />
+    <ClInclude Include="Util\ParseCSSLikeColor.hpp" />
+    <ClInclude Include="Widgets\TabView.hpp" />
+    <ClInclude Include="Widgets\Image.hpp" />
+    <ClInclude Include="Widgets\Label.hpp" />
+    <ClInclude Include="Widgets\Box.hpp" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Widgets\Button.hpp" />
     <ClInclude Include="Widgets\Container.hpp" />
     <ClInclude Include="Widgets\ScrollView.hpp" />
     <ClInclude Include="Widgets\SimpleButton.hpp" />
     <ClInclude Include="Widgets\Widget.hpp" />
-    <ClInclude Include="Util\XMLParser.hpp" />
+    <ClInclude Include="Core\WidgetTypeInfo.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

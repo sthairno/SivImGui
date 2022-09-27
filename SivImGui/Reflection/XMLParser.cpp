@@ -1,7 +1,7 @@
 ﻿#include "XMLParser.hpp"
-#include "ParseCSSLikeColor.hpp"
+#include "../Util/ParseCSSLikeColor.hpp"
 
-namespace SivImGui::Util
+namespace SivImGui::Reflection
 {
 	Texture detail::TextureNameParser(StringView str)
 	{

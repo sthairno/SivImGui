@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "../Reflection/DB.hpp"
+#include "DB.hpp"
 
-namespace SivImGui::Util
+namespace SivImGui::Reflection
 {
 	namespace detail
 	{
@@ -14,7 +14,7 @@ namespace SivImGui::Util
 	{
 	public:
 
-		XMLParser(const Reflection::DB& db)
+		XMLParser(const DB& db)
 			: m_db(db) {}
 
 	public:
@@ -27,7 +27,7 @@ namespace SivImGui::Util
 
 	private:
 
-		const Reflection::DB& m_db;
+		const DB& m_db;
 
 		std::any parseProperty(std::type_index type, const StringView str) const;
 	};

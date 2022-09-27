@@ -1,7 +1,8 @@
 ﻿#include <Siv3D.hpp> // OpenSiv3D v0.6.5
 
-#include "Core/GUI.hpp"
-#include "Core/Builder.hpp"
+#include "Core.hpp"
+#include "Builder.hpp"
+#include "Reflection.hpp"
 
 #include "Widgets/Widget.hpp"
 #include "Widgets/Container.hpp"
@@ -13,8 +14,7 @@
 #include "Widgets/Image.hpp"
 #include "Widgets/TabView.hpp"
 
-#include "Reflection/DB.hpp"
-#include "Util/XMLParser.hpp"
+#include "GUI.hpp"
 
 constexpr Size gridSize = { 5, 6 };
 Array<String> tileChars;
@@ -280,7 +280,7 @@ void Main()
 		if (reloadTimer.elapsed() >= 0.5s && not loaded)
 		{
 			ClearPrint();
-			SivImGui::Util::XMLParser parser(db);
+			SivImGui::Reflection::XMLParser parser(db);
 			try
 			{
 				StringView path = xmlPath;

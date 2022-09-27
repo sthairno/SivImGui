@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
-#include "WidgetBase.hpp"
-#include "BuilderHelper.hpp"
+#include "../Core/WidgetBase.hpp"
+#include "detail/BuilderHelper.hpp"
 
 namespace SivImGui
 {
@@ -19,7 +19,7 @@ namespace SivImGui
 		WidgetBase& current() const { return *m_stack.back().widget; }
 
 		template<class WidgetT>
-		BuilderHelper<WidgetT> next()
+		detail::BuilderHelper<WidgetT> next()
 		{
 			return {
 				.builder = *this,

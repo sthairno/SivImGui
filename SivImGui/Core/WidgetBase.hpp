@@ -3,19 +3,11 @@
 #include "Property.hpp"
 #include "Space.hpp"
 #include "Layout.hpp"
+#include "WidgetTypeInfo.hpp"
 
 namespace SivImGui
 {
 	class GUI;
-
-	struct WidgetTypeInfo
-	{
-		size_t id;
-
-		StringView name;
-
-		bool enableMouseOver = true;
-	};
 
 	class WidgetBase
 	{

@@ -61,64 +61,82 @@
     <Filter Include="Resource Files\engine\font\min">
       <UniqueIdentifier>{1b103960-f11a-4515-b4f1-f59333ce00d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Widgets">
-      <UniqueIdentifier>{c9467c31-70ff-4d3c-9ecb-c7f283fe4880}</UniqueIdentifier>
+    <Filter Include="Header Files\SivImGui">
+      <UniqueIdentifier>{75d77528-7015-4363-99d4-01660df39461}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Widgets">
+    <Filter Include="Source Files\SivImGui">
+      <UniqueIdentifier>{adf595b3-43c3-4761-bcfa-d965f9253931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SivImGui\Widgets">
       <UniqueIdentifier>{4ab1d233-9407-491a-9940-8e1140e4ad8b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Reflection">
-      <UniqueIdentifier>{a21fc7b0-a479-4381-8e10-18010d325547}</UniqueIdentifier>
+    <Filter Include="Header Files\SivImGui\Widgets">
+      <UniqueIdentifier>{c9467c31-70ff-4d3c-9ecb-c7f283fe4880}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Reflection">
-      <UniqueIdentifier>{ddf953c6-4e7b-4cc3-a142-346779a126a2}</UniqueIdentifier>
+    <Filter Include="Header Files\SivImGui\Util">
+      <UniqueIdentifier>{0cacb941-1677-43de-963a-e4c08d66b20c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{0b4acd13-8f83-40bf-b88f-17ea0de8fdfb}</UniqueIdentifier>
+    <Filter Include="Header Files\SivImGui\Builder">
+      <UniqueIdentifier>{4be4a0fa-3711-45ae-92b2-1fde1d5ccd19}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{d58e1fb8-08f0-4160-bdf9-7aa53e360336}</UniqueIdentifier>
+    <Filter Include="Header Files\SivImGui\Builder\detail">
+      <UniqueIdentifier>{be355ddd-fb04-4e93-b135-82fc0a4edf6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Util">
-      <UniqueIdentifier>{35eb8943-3952-44df-b7dd-88d8221bab0a}</UniqueIdentifier>
+    <Filter Include="Header Files\SivImGui\Reflection">
+      <UniqueIdentifier>{207503d1-f4e6-4708-b8e6-9e6b6b6271c9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Util">
-      <UniqueIdentifier>{699b363f-be09-402d-851f-58fe969697ce}</UniqueIdentifier>
+    <Filter Include="Source Files\SivImGui\Util">
+      <UniqueIdentifier>{ed32ac0e-94d2-411f-8757-95b59983ed7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SivImGui\Core">
+      <UniqueIdentifier>{ba787f71-4e44-4a3f-abba-5a79690f6de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SivImGui\Builder">
+      <UniqueIdentifier>{5dcbc97f-0ba3-448a-be42-580fbbacd4fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SivImGui\Reflection">
+      <UniqueIdentifier>{bf24594b-b398-4e6e-a914-04fcde212487}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SivImGui\Core">
+      <UniqueIdentifier>{e872272d-3672-47e8-af86-12bdbade219d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SivImGui\Reflection\detail">
+      <UniqueIdentifier>{fcc46c5d-698a-4d67-a0bd-703b263ee8c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Reflection\DB.cpp">
-      <Filter>Source Files\Reflection</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\GUI.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="Widgets\TabView.cpp">
+      <Filter>Source Files\SivImGui\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="Core\Layout.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Source Files\SivImGui\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Property.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Source Files\SivImGui\Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\WidgetBase.cpp">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Source Files\SivImGui\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Builder.cpp">
-      <Filter>Source Files\Core</Filter>
+    <ClCompile Include="Builder\Builder.cpp">
+      <Filter>Source Files\SivImGui\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="Reflection\DB.cpp">
+      <Filter>Source Files\SivImGui\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="Reflection\XMLParser.cpp">
+      <Filter>Source Files\SivImGui\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="Util\ParseCSSLikeColor.cpp">
-      <Filter>Source Files\Util</Filter>
+      <Filter>Source Files\SivImGui\Util</Filter>
     </ClCompile>
-    <ClCompile Include="Util\XMLParser.cpp">
-      <Filter>Source Files\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="Widgets\TabView.cpp">
-      <Filter>Source Files\Widgets</Filter>
+    <ClCompile Include="GUI.cpp">
+      <Filter>Source Files\SivImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,70 +402,88 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\SimpleButton.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\Button.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\Container.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\Widget.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\Box.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\Label.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\Image.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\ScrollView.hpp">
-      <Filter>Header Files\Widgets</Filter>
-    </ClInclude>
-    <ClInclude Include="Reflection\DB.hpp">
-      <Filter>Header Files\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="Reflection\WidgetInfo.hpp">
-      <Filter>Header Files\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="Reflection\PropertyInfo.hpp">
-      <Filter>Header Files\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\GUI.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Layout.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\MeasureResult.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Property.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Space.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\WidgetBase.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Builder.hpp">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\ParseCSSLikeColor.hpp">
-      <Filter>Header Files\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\XMLParser.hpp">
-      <Filter>Header Files\Util</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Widgets\TabView.hpp">
-      <Filter>Header Files\Widgets</Filter>
+      <Filter>Header Files\SivImGui\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="Core\BuilderHelper.hpp">
-      <Filter>Header Files\Core</Filter>
+    <ClInclude Include="Core\Layout.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MeasureResult.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Property.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Space.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\WidgetBase.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\ParseCSSLikeColor.hpp">
+      <Filter>Header Files\SivImGui\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\Builder.hpp">
+      <Filter>Header Files\SivImGui\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\detail\BuilderHelper.hpp">
+      <Filter>Header Files\SivImGui\Builder\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\DB.hpp">
+      <Filter>Header Files\SivImGui\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\PropertyInfo.hpp">
+      <Filter>Header Files\SivImGui\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\WidgetInfo.hpp">
+      <Filter>Header Files\SivImGui\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\XMLParser.hpp">
+      <Filter>Header Files\SivImGui\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\PropertyFlag.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\WidgetTypeInfo.hpp">
+      <Filter>Header Files\SivImGui\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\detail\RegistrationHelper.hpp">
+      <Filter>Header Files\SivImGui\Reflection\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder.hpp">
+      <Filter>Header Files\SivImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.hpp">
+      <Filter>Header Files\SivImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection.hpp">
+      <Filter>Header Files\SivImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.hpp">
+      <Filter>Header Files\SivImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

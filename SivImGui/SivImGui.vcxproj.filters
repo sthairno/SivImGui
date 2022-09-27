@@ -126,7 +126,7 @@
     <ClCompile Include="Builder\Builder.cpp">
       <Filter>Source Files\SivImGui\Builder</Filter>
     </ClCompile>
-    <ClCompile Include="Reflection\DB.cpp">
+    <ClCompile Include="Reflection\TypeDB.cpp">
       <Filter>Source Files\SivImGui\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="Reflection\XMLParser.cpp">
@@ -452,7 +452,7 @@
     <ClInclude Include="Builder\detail\BuilderHelper.hpp">
       <Filter>Header Files\SivImGui\Builder\detail</Filter>
     </ClInclude>
-    <ClInclude Include="Reflection\DB.hpp">
+    <ClInclude Include="Reflection\TypeDB.hpp">
       <Filter>Header Files\SivImGui\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="Reflection\PropertyInfo.hpp">

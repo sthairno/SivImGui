@@ -4,11 +4,11 @@
 
 namespace SivImGui::Reflection
 {
-	class DB
+	class TypeDB
 	{
 	public:
 
-		DB();
+		TypeDB();
 
 	public:
 

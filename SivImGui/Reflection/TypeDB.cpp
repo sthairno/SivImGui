@@ -1,8 +1,8 @@
-﻿#include "DB.hpp"
+﻿#include "TypeDB.hpp"
 
 namespace SivImGui::Reflection
 {
-	DB::DB()
+	TypeDB::TypeDB()
 	{
 		auto [tpl, _] = m_widgetInfo.emplace(0, WidgetInfo{
 			.name = U"WidgetBase",
@@ -25,7 +25,7 @@ namespace SivImGui::Reflection
 			.prop(&SivImGui::WidgetBase::gridSpan);
 	}
 
-	HashTable<String, PropertyInfo> DB::getAllProperties(size_t id) const
+	HashTable<String, PropertyInfo> TypeDB::getAllProperties(size_t id) const
 	{
 		HashTable<String, PropertyInfo> properties;
 

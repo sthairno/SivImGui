@@ -18,7 +18,7 @@
 
 constexpr Size gridSize = { 5, 6 };
 Array<String> tileChars;
-SivImGui::Reflection::DB db;
+SivImGui::Reflection::TypeDB db;
 
 # if SIV3D_PLATFORM(WINDOWS)
 

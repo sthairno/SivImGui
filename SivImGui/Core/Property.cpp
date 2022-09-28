@@ -1,9 +1,9 @@
 ﻿#include "Property.hpp"
-#include "WidgetBase.hpp"
+#include "UIElement.hpp"
 
 namespace SivImGui::detail
 {
-	void RequestLayout(WidgetBase& widget)
+	void RequestLayout(UIElement& widget)
 	{
 		widget.requestLayout();
 	}

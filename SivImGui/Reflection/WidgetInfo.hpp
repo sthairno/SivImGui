@@ -13,13 +13,13 @@ namespace SivImGui::Reflection
 
 		Optional<size_t> baseId;
 
-		std::function<std::unique_ptr<WidgetBase>()> generator;
+		std::function<std::unique_ptr<UIElement>()> generator;
 
 		HashTable<String, PropertyInfo> properties;
 
 		Optional<String> textPropertyName;
 
-		std::unique_ptr<WidgetBase> createInstance() const
+		std::unique_ptr<UIElement> createInstance() const
 		{
 			return generator();
 		}

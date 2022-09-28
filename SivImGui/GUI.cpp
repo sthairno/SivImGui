@@ -2,7 +2,7 @@
 
 namespace SivImGui
 {
-	static WidgetBase* FindWidgetImpl(WidgetBase* widget, const StringView name, Optional<size_t> typeId)
+	static UIElement* FindWidgetImpl(UIElement* widget, const StringView name, Optional<size_t> typeId)
 	{
 		if ((not typeId || widget->typeInfo.id == typeId) &&
 			widget->name.value() == name)
@@ -21,7 +21,7 @@ namespace SivImGui
 		return nullptr;
 	}
 
-	static void FindAllWidgetsImpl(WidgetBase* widget, Array<WidgetBase*>& result, const StringView name, Optional<size_t> typeId)
+	static void FindAllWidgetsImpl(UIElement* widget, Array<UIElement*>& result, const StringView name, Optional<size_t> typeId)
 	{
 		if ((not typeId || widget->typeInfo.id == typeId) &&
 			widget->name.value() == name)
@@ -71,14 +71,14 @@ namespace SivImGui
 		m_widget->drawCore();
 	}
 
-	WidgetBase* GUI::findWidget(const StringView name, Optional<size_t> typeId)
+	UIElement* GUI::findWidget(const StringView name, Optional<size_t> typeId)
 	{
 		return FindWidgetImpl(m_widget.get(), name, typeId);
 	}
 
-	Array<WidgetBase*> GUI::findAllWidgets(const StringView name, Optional<size_t> typeId)
+	Array<UIElement*> GUI::findAllWidgets(const StringView name, Optional<size_t> typeId)
 	{
-		Array<WidgetBase*> result;
+		Array<UIElement*> result;
 		FindAllWidgetsImpl(m_widget.get(), result, name, typeId);
 		return result;
 	}

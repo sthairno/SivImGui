@@ -3,11 +3,11 @@
 
 namespace SivImGui
 {
-	class WidgetBase;
+	class UIElement;
 
 	namespace detail
 	{
-		void RequestLayout(WidgetBase& widget);
+		void RequestLayout(UIElement& widget);
 
 		template<class T, auto GetNameCallback, PropertyFlag _Flag = PropertyFlag::None>
 		class Property
@@ -65,7 +65,7 @@ namespace SivImGui
 
 		private:
 
-			WidgetBase& m_widget;
+			UIElement& m_widget;
 
 			T m_value;
 		};

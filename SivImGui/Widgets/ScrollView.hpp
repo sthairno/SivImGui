@@ -58,9 +58,9 @@ namespace SivImGui
 			switch (mode)
 			{
 			case Mode::Horizontal:
-				//      
-				//      
-				//      
+				//
+				//
+				//
 				// <--->
 				result.minSize.x = scrollbarSize * 2;
 				result.minSize.y += scrollbarSize;
@@ -96,9 +96,9 @@ namespace SivImGui
 
 			if (m_barVisible.x && not m_barVisible.y)
 			{
-				//      
-				//      
-				//      
+				//
+				//
+				//
 				// <--->
 				m_barRect[0] = {
 					Arg::bottomLeft = rect.bl() + Point{ *scrollbarSize, 0 },
@@ -154,7 +154,7 @@ namespace SivImGui
 			return Container::arrange({ 0, 0, m_contentRect.size });
 		}
 
-		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) override
+		virtual UIElement* hitTest(Rect rect, Vec2 pos) override
 		{
 			if (not rect.contains(pos))
 			{

@@ -9,7 +9,7 @@ namespace SivImGui::Reflection
 
 		Font FontNameParser(StringView str);
 	}
-	
+
 	class XMLParser
 	{
 	public:
@@ -23,7 +23,7 @@ namespace SivImGui::Reflection
 
 		std::function<Font(StringView)> fontNameParser = detail::FontNameParser;
 
-		std::unique_ptr<WidgetBase> parse(const XMLElement& elem);
+		std::unique_ptr<UIElement> parse(const XMLElement& elem);
 
 	private:
 

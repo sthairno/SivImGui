@@ -3,11 +3,11 @@
 namespace SivImGui
 {
 	class Builder;
-	class WidgetBase;
+	class UIElement;
 
 	namespace detail
 	{
-		void BuilderPush(Builder& builder, WidgetBase& widget);
+		void BuilderPush(Builder& builder, UIElement& widget);
 
 		void BuilderPop(Builder& builder);
 

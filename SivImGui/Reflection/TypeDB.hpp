@@ -47,17 +47,17 @@ namespace SivImGui::Reflection
 			return m_widgetInfo.at(getWidgetId(name));
 		}
 
-		std::unique_ptr<WidgetBase> createInstance(size_t id) const
+		std::unique_ptr<UIElement> createInstance(size_t id) const
 		{
 			return getWidgetInfo(id).generator();
 		}
 
-		std::unique_ptr<WidgetBase> createInstance(const StringView name) const
+		std::unique_ptr<UIElement> createInstance(const StringView name) const
 		{
 			return createInstance(getWidgetId(name));
 		}
 
-		std::unique_ptr<WidgetBase> createInstance(const WidgetInfo& info) const
+		std::unique_ptr<UIElement> createInstance(const WidgetInfo& info) const
 		{
 			return createInstance(info.id);
 		}

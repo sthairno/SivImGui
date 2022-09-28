@@ -2,7 +2,7 @@
 
 namespace SivImGui
 {
-	void detail::BuilderPush(Builder& builder, WidgetBase& widget)
+	void detail::BuilderPush(Builder& builder, UIElement& widget)
 	{
 		builder.m_stack.emplace_back(Builder::State{
 			.widget = &widget,
@@ -17,13 +17,13 @@ namespace SivImGui
 		builder.m_stack.pop_back();
 	}
 
-	Builder::Builder(WidgetBase& root)
+	Builder::Builder(UIElement& root)
 		: m_root(root)
 	{
 		reset();
 	}
 
-	WidgetBase& Builder::nextImpl(const WidgetTypeInfo& info, std::function<std::unique_ptr<WidgetBase>()> generator)
+	UIElement& Builder::nextImpl(const WidgetTypeInfo& info, std::function<std::unique_ptr<UIElement>()> generator)
 	{
 		auto& state = m_stack.back();
 		auto& children = state.widget->children();
@@ -32,7 +32,7 @@ namespace SivImGui
 		{
 			if (state.nextItr->get()->typeInfo.id == info.id)
 			{
-				WidgetBase* child = state.nextItr->get();
+				UIElement* child = state.nextItr->get();
 				state.nextItr++;
 				return *child;
 			}
@@ -45,7 +45,7 @@ namespace SivImGui
 		state.widget->addChild(generator());
 		state.nextItr = children.end();
 
-		WidgetBase& newChild = *children.back();
+		UIElement& newChild = *children.back();
 		return newChild;
 	}
 

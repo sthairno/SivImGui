@@ -21,7 +21,7 @@ namespace SivImGui::Reflection
 		return { };
 	}
 
-	static void ParseLayout(WidgetBase& widget, const XMLElement& e)
+	static void ParseLayout(UIElement& widget, const XMLElement& e)
 	{
 		static const HashTable<String, Alignment> str2align = {
 			{U"start", Alignment::Start},
@@ -100,7 +100,7 @@ namespace SivImGui::Reflection
 		}
 	}
 
-	std::unique_ptr<WidgetBase> XMLParser::parse(const XMLElement& elem)
+	std::unique_ptr<UIElement> XMLParser::parse(const XMLElement& elem)
 	{
 		auto widget = m_db.getWidgetInfo(elem.name());
 		auto properties = m_db.getAllProperties(widget);

@@ -27,12 +27,12 @@ namespace SivImGui::Reflection::detail
 				.name = PropertyT::Name,
 				.type = typeid(PropertyT::ValueType),
 				.flag = PropertyT::Flag,
-				.getter = [=](const SivImGui::WidgetBase& base)
+				.getter = [=](const SivImGui::UIElement& base)
 				{
 					auto& w = dynamic_cast<const WidgetT&>(base);
 					return (w.*ref).value();
 				},
-				.setter = [=](SivImGui::WidgetBase& base, std::any v)
+				.setter = [=](SivImGui::UIElement& base, std::any v)
 				{
 					auto& w = dynamic_cast<WidgetT&>(base);
 					(w.*ref) = std::any_cast<PropertyT::ValueType>(v);

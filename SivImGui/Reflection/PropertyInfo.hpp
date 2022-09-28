@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
 #include <any>
-#include "../Core/WidgetBase.hpp"
+#include "../Core/UIElement.hpp"
 
 namespace SivImGui::Reflection
 {
@@ -13,12 +13,12 @@ namespace SivImGui::Reflection
 
 		PropertyFlag flag;
 
-		std::function<std::any(const WidgetBase&)> getter;
+		std::function<std::any(const UIElement&)> getter;
 
-		std::function<void(WidgetBase&, std::any v)> setter;
+		std::function<void(UIElement&, std::any v)> setter;
 
-		std::any get(const WidgetBase& w) const { return getter(w); }
+		std::any get(const UIElement& w) const { return getter(w); }
 
-		void set(WidgetBase& w, std::any v) const { return setter(w, v); }
+		void set(UIElement& w, std::any v) const { return setter(w, v); }
 	};
 }

@@ -1,8 +1,8 @@
-﻿#include "WidgetBase.hpp"
+﻿#include "UIElement.hpp"
 
 namespace SivImGui
 {
-	void WidgetBase::requestLayout()
+	void UIElement::requestLayout()
 	{
 		m_layoutRequired = true;
 
@@ -12,15 +12,15 @@ namespace SivImGui
 		}
 	}
 
-	void WidgetBase::removeChildren()
+	void UIElement::removeChildren()
 	{
 		m_visibleChildren.clear();
 		m_children.clear();
-		
+
 		requestLayout();
 	}
 
-	void WidgetBase::removeChildrenFrom(WidgetContainer::const_iterator first)
+	void UIElement::removeChildrenFrom(WidgetContainer::const_iterator first)
 	{
 		if (first == m_children.cend())
 		{
@@ -36,7 +36,7 @@ namespace SivImGui
 		requestLayout();
 	}
 
-	void WidgetBase::addChild(std::unique_ptr<WidgetBase>&& child)
+	void UIElement::addChild(std::unique_ptr<UIElement>&& child)
 	{
 		assert(isContainer);
 		child->m_parent = this;
@@ -45,23 +45,23 @@ namespace SivImGui
 		requestLayout();
 	}
 
-	void WidgetBase::updateChildren(const WidgetRefContainer& children)
+	void UIElement::updateChildren(const WidgetRefContainer& children)
 	{
 		std::for_each(
 			children.rbegin(), children.rend(),
-			[=](WidgetBase* child) { child->updateCore(m_enabled); }
+			[=](UIElement* child) { child->updateCore(m_enabled); }
 		);
 	}
 
-	void WidgetBase::drawChildren(const WidgetRefContainer& children) const
+	void UIElement::drawChildren(const WidgetRefContainer& children) const
 	{
 		std::for_each(
 			children.begin(), children.end(),
-			[](WidgetBase* child) { child->drawCore(); }
+			[](UIElement* child) { child->drawCore(); }
 		);
 	}
 
-	void WidgetBase::layoutCore(Size availableSize)
+	void UIElement::layoutCore(Size availableSize)
 	{
 		checkChildrenVisibility();
 
@@ -76,7 +76,7 @@ namespace SivImGui
 		arrangeCore(rect);
 	}
 
-	void WidgetBase::updateCore(bool enabled)
+	void UIElement::updateCore(bool enabled)
 	{
 		m_enabled = this->enabled && enabled;
 
@@ -84,13 +84,13 @@ namespace SivImGui
 		update({ 0, 0, m_rect.size });
 	}
 
-	void WidgetBase::drawCore() const
+	void UIElement::drawCore() const
 	{
 		Transformer2D t(Mat3x2::Translate(m_rect.pos), TransformCursor::Yes);
 		draw({ 0, 0, m_rect.size });
 	}
 
-	void WidgetBase::measureCore()
+	void UIElement::measureCore()
 	{
 		if (not m_layoutRequired)
 		{
@@ -110,7 +110,7 @@ namespace SivImGui
 		m_measuredSize.expand.y |= yExpand;
 	}
 
-	void WidgetBase::checkChildrenVisibility()
+	void UIElement::checkChildrenVisibility()
 	{
 		m_visibleChildren.clear();
 		m_visibleChildren.reserve(m_children.size());
@@ -126,7 +126,7 @@ namespace SivImGui
 		}
 	}
 
-	void WidgetBase::arrangeCore(Rect rect)
+	void UIElement::arrangeCore(Rect rect)
 	{
 		m_rect.pos = rect.pos;
 

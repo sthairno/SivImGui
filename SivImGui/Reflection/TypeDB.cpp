@@ -5,24 +5,24 @@ namespace SivImGui::Reflection
 	TypeDB::TypeDB()
 	{
 		auto [tpl, _] = m_widgetInfo.emplace(0, WidgetInfo{
-			.name = U"WidgetBase",
-			.type = typeid(WidgetBase),
+			.name = U"UIElement",
+			.type = typeid(UIElement),
 			.id = 0,
 			.baseId = none,
 			.generator = nullptr
 		});
-		
-		detail::RegistrationHelper<WidgetBase>(tpl->second)
-			.prop(&SivImGui::WidgetBase::name)
-			.prop(&SivImGui::WidgetBase::visible)
-			.prop(&SivImGui::WidgetBase::xExpand)
-			.prop(&SivImGui::WidgetBase::yExpand)
-			.prop(&SivImGui::WidgetBase::enabled)
-			.prop(&SivImGui::WidgetBase::enableMouseOver)
-			.prop(&SivImGui::WidgetBase::minSize)
-			.prop(&SivImGui::WidgetBase::layout)
-			.prop(&SivImGui::WidgetBase::gridPos)
-			.prop(&SivImGui::WidgetBase::gridSpan);
+
+		detail::RegistrationHelper<UIElement>(tpl->second)
+			.prop(&SivImGui::UIElement::name)
+			.prop(&SivImGui::UIElement::visible)
+			.prop(&SivImGui::UIElement::xExpand)
+			.prop(&SivImGui::UIElement::yExpand)
+			.prop(&SivImGui::UIElement::enabled)
+			.prop(&SivImGui::UIElement::enableMouseOver)
+			.prop(&SivImGui::UIElement::minSize)
+			.prop(&SivImGui::UIElement::layout)
+			.prop(&SivImGui::UIElement::gridPos)
+			.prop(&SivImGui::UIElement::gridSpan);
 	}
 
 	HashTable<String, PropertyInfo> TypeDB::getAllProperties(size_t id) const

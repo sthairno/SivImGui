@@ -120,7 +120,7 @@
     <ClCompile Include="Core\Property.cpp">
       <Filter>Source Files\SivImGui\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\WidgetBase.cpp">
+    <ClCompile Include="Core\UIElement.cpp">
       <Filter>Source Files\SivImGui\Core</Filter>
     </ClCompile>
     <ClCompile Include="Builder\Builder.cpp">
@@ -440,7 +440,7 @@
     <ClInclude Include="Core\Space.hpp">
       <Filter>Header Files\SivImGui\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\WidgetBase.hpp">
+    <ClInclude Include="Core\UIElement.hpp">
       <Filter>Header Files\SivImGui\Core</Filter>
     </ClInclude>
     <ClInclude Include="Util\ParseCSSLikeColor.hpp">

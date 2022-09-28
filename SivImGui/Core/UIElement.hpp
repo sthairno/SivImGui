@@ -9,20 +9,20 @@ namespace SivImGui
 {
 	class GUI;
 
-	class WidgetBase
+	class UIElement
 	{
 	public:
 
-		using WidgetContainer = std::vector<std::unique_ptr<WidgetBase>>;
+		using WidgetContainer = std::vector<std::unique_ptr<UIElement>>;
 
-		using WidgetRefContainer = std::vector<WidgetBase*>;
+		using WidgetRefContainer = std::vector<UIElement*>;
 
-		WidgetBase(const WidgetTypeInfo& typeInfo, bool isContainer)
+		UIElement(const WidgetTypeInfo& typeInfo, bool isContainer)
 			: typeInfo(typeInfo)
 			, isContainer(isContainer)
 		{ }
 
-		WidgetBase(WidgetBase&) = delete;
+		UIElement(UIElement&) = delete;
 
 	public:
 
@@ -52,7 +52,7 @@ namespace SivImGui
 
 		const bool isContainer;
 
-		WidgetBase* parent() const { return m_parent; }
+		UIElement* parent() const { return m_parent; }
 
 		const WidgetContainer& children() const { return m_children; }
 
@@ -72,7 +72,7 @@ namespace SivImGui
 
 		int32 layoutUpdatedAt() const { return m_layoutUpdatedAt; }
 
-		WidgetBase* hitTest(Vec2 pos)
+		UIElement* hitTest(Vec2 pos)
 		{
 			return hitTest({ 0, 0, m_rect.size }, pos - m_rect.pos);
 		}
@@ -83,7 +83,7 @@ namespace SivImGui
 
 		void removeChildrenFrom(WidgetContainer::const_iterator first);
 
-		void addChild(std::unique_ptr<WidgetBase>&& child);
+		void addChild(std::unique_ptr<UIElement>&& child);
 
 	protected:
 
@@ -91,7 +91,7 @@ namespace SivImGui
 
 		virtual Array<Optional<Rect>> arrange(Rect rect) = 0;
 
-		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) = 0;
+		virtual UIElement* hitTest(Rect rect, Vec2 pos) = 0;
 
 		virtual void update(Rect rect) = 0;
 
@@ -115,7 +115,7 @@ namespace SivImGui
 
 	private:
 
-		WidgetBase* m_parent = nullptr;
+		UIElement* m_parent = nullptr;
 
 		WidgetContainer m_children;
 
@@ -141,6 +141,6 @@ namespace SivImGui
 
 	public:
 
-		virtual ~WidgetBase() = default;
+		virtual ~UIElement() = default;
 	};
 }

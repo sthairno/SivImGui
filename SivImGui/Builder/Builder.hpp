@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
-#include "../Core/WidgetBase.hpp"
+#include "../Core/UIElement.hpp"
 #include "detail/BuilderHelper.hpp"
 
 namespace SivImGui
@@ -12,11 +12,11 @@ namespace SivImGui
 
 		/// @brief コンストラクタ
 		/// @param root 操作対象ウィジェット
-		Builder(WidgetBase& root);
+		Builder(UIElement& root);
 
 	public:
 
-		WidgetBase& current() const { return *m_stack.back().widget; }
+		UIElement& current() const { return *m_stack.back().widget; }
 
 		template<class WidgetT>
 		detail::BuilderHelper<WidgetT> next()
@@ -33,22 +33,22 @@ namespace SivImGui
 
 	private:
 
-		friend void detail::BuilderPush(Builder&, WidgetBase&);
+		friend void detail::BuilderPush(Builder&, UIElement&);
 
 		friend void detail::BuilderPop(Builder&);
 
-		WidgetBase& m_root;
+		UIElement& m_root;
 
 		struct State
 		{
-			WidgetBase* widget;
+			UIElement* widget;
 
-			WidgetBase::WidgetContainer::const_iterator nextItr;
+			UIElement::WidgetContainer::const_iterator nextItr;
 		};
 
 		std::deque<State> m_stack;
 
-		WidgetBase& nextImpl(const WidgetTypeInfo& info, std::function<std::unique_ptr<WidgetBase>()> generator);
+		UIElement& nextImpl(const WidgetTypeInfo& info, std::function<std::unique_ptr<UIElement>()> generator);
 
 	public:
 

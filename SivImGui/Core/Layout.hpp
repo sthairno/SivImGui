@@ -5,7 +5,7 @@
 
 namespace SivImGui
 {
-	class WidgetBase;
+	class UIElement;
 
 	enum class Alignment
 	{
@@ -22,9 +22,9 @@ namespace SivImGui
 
 		Alignment verticalAlignment = Alignment::Stretch;
 
-		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
+		MeasureResult measure(const std::vector<UIElement*>& children) const;
 
-		Array<Optional<Rect>> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
+		Array<Optional<Rect>> arrange(Rect rect, const std::vector<UIElement*>& children) const;
 	};
 
 	struct VerticalLayout
@@ -37,9 +37,9 @@ namespace SivImGui
 
 		Alignment verticalAlignment = Alignment::Start;
 
-		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
+		MeasureResult measure(const std::vector<UIElement*>& children) const;
 
-		Array<Optional<Rect>> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
+		Array<Optional<Rect>> arrange(Rect rect, const std::vector<UIElement*>& children) const;
 	};
 
 	struct StackLayout
@@ -50,9 +50,9 @@ namespace SivImGui
 
 		Alignment verticalAlignment = Alignment::Stretch;
 
-		MeasureResult measure(const std::vector<WidgetBase*>& children) const;
+		MeasureResult measure(const std::vector<UIElement*>& children) const;
 
-		Array<Optional<Rect>> arrange(Rect rect, const std::vector<WidgetBase*>& children) const;
+		Array<Optional<Rect>> arrange(Rect rect, const std::vector<UIElement*>& children) const;
 	};
 
 	using Layout = std::variant<HorizontalLayout, VerticalLayout, StackLayout>;

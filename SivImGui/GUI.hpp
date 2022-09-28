@@ -8,18 +8,18 @@ namespace SivImGui
 	{
 	public:
 
-		GUI(std::unique_ptr<WidgetBase>&& widget)
+		GUI(std::unique_ptr<UIElement>&& widget)
 		{
 			setRootWidget(std::move(widget));
 		}
 
-		void setRootWidget(std::unique_ptr<WidgetBase>&& widget)
+		void setRootWidget(std::unique_ptr<UIElement>&& widget)
 		{
 			assert(widget);
 			m_widget = std::move(widget);
 		}
 
-		WidgetBase& getRootWidget() { return *m_widget; }
+		UIElement& getRootWidget() { return *m_widget; }
 
 		void setEnabled(bool enable) { m_enabled = enable; }
 
@@ -35,23 +35,23 @@ namespace SivImGui
 			return reinterpret_cast<WidgetT*>(findWidget(name, WidgetT::TypeInfo().id));
 		}
 
-		WidgetBase* findWidget(const StringView name, Optional<size_t> typeId = none);
+		UIElement* findWidget(const StringView name, Optional<size_t> typeId = none);
 
 		template<class WidgetT>
 		Array<WidgetT*> findAllWidgets(const StringView name = U"")
 		{
 			return findAllWidgets(name, WidgetT::TypeInfo().id)
-				.map([](WidgetBase* w) { return reinterpret_cast<WidgetT*>(w); });
+				.map([](UIElement* w) { return reinterpret_cast<WidgetT*>(w); });
 		}
 
-		Array<WidgetBase*> findAllWidgets(const StringView name, Optional<size_t> typeId = none);
+		Array<UIElement*> findAllWidgets(const StringView name, Optional<size_t> typeId = none);
 
 	private:
 
-		std::unique_ptr<WidgetBase> m_widget;
+		std::unique_ptr<UIElement> m_widget;
 
 		bool m_enabled = true;
 
-		WidgetBase* m_hoveredWidget = nullptr;
+		UIElement* m_hoveredWidget = nullptr;
 	};
 }

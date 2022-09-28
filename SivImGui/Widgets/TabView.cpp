@@ -105,7 +105,7 @@ namespace SivImGui
 			};
 		}
 
-		for (WidgetBase* child : visibleChildren())
+		for (UIElement* child : visibleChildren())
 		{
 			std::visit([child](auto& l) {
 				return l.measure({ child });
@@ -166,7 +166,7 @@ namespace SivImGui
 
 		Array<Optional<Rect>> result(visibleChildren().size(), none);
 		result[m_selectedTabIdx] = std::visit([this](auto& l) {
-			WidgetBase* selectedItem = visibleChildren()[m_selectedTabIdx];
+			UIElement* selectedItem = visibleChildren()[m_selectedTabIdx];
 			return l.arrange(m_contentRect - Padding{ frameThickness }, { selectedItem });
 		}, layout.value())[0].value();
 		return result;
@@ -209,7 +209,7 @@ namespace SivImGui
 			requestLayout();
 		}
 
-		WidgetBase* selectedItem = visibleChildren()[m_selectedTabIdx];
+		UIElement* selectedItem = visibleChildren()[m_selectedTabIdx];
 		updateChildren({ selectedItem });
 	}
 
@@ -260,7 +260,7 @@ namespace SivImGui
 			{
 				auto [frame, tab, content] =
 					BuildActiveTabShape(m_contentRect, tabRect, tabRound, frameThickness);
-				
+
 				frame.draw(frameColor);
 				tab.draw(tabColor);
 

@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include "../Core/WidgetBase.hpp"
+#include "../Core/UIElement.hpp"
 
 namespace SivImGui
 {
-	class Widget : public WidgetBase
+	class Widget : public UIElement
 	{
 	public:
 
@@ -20,18 +20,18 @@ namespace SivImGui
 	public:
 
 		Widget()
-			: WidgetBase(TypeInfo(), false) { }
+			: UIElement(TypeInfo(), false) { }
 
 	protected:
 
 		Widget(const WidgetTypeInfo& typeInfo)
-			: WidgetBase(typeInfo, false) { }
+			: UIElement(typeInfo, false) { }
 
 	protected:
 
 		virtual Size region() const { return { 0, 0 }; };
 
-		virtual WidgetBase* hitTest(Rect rect, Vec2 pos) override
+		virtual UIElement* hitTest(Rect rect, Vec2 pos) override
 		{
 			return hitTestSelf(rect, pos);
 		}
@@ -41,7 +41,7 @@ namespace SivImGui
 		virtual void draw(Rect) const override { }
 
 		template<class ShapeT>
-		WidgetBase* hitTestSelf(ShapeT shape, Vec2 pos)
+		UIElement* hitTestSelf(ShapeT shape, Vec2 pos)
 		{
 			return
 				enableMouseOver->value_or(typeInfo.enableMouseOver) &&

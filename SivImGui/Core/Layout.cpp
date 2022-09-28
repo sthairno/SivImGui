@@ -1,5 +1,5 @@
 ﻿#include "Layout.hpp"
-#include "WidgetBase.hpp"
+#include "UIElement.hpp"
 
 namespace SivImGui
 {
@@ -43,7 +43,7 @@ namespace SivImGui
 	template<uint8 primary>
 	static void arrangeVH(
 		Array<Optional<Rect>>& result,
-		const std::vector<WidgetBase*>& children,
+		const std::vector<UIElement*>& children,
 		const Rect rect,
 		const int32 space,
 		const Alignment primaryAlignment,
@@ -150,7 +150,7 @@ namespace SivImGui
 		}
 	}
 
-	MeasureResult HorizontalLayout::measure(const std::vector<WidgetBase*>& children) const
+	MeasureResult HorizontalLayout::measure(const std::vector<UIElement*>& children) const
 	{
 		MeasureResult result;
 		for (auto child : children)
@@ -166,7 +166,7 @@ namespace SivImGui
 		return result;
 	}
 
-	Array<Optional<Rect>> HorizontalLayout::arrange(Rect rect, const std::vector<WidgetBase*>& children) const
+	Array<Optional<Rect>> HorizontalLayout::arrange(Rect rect, const std::vector<UIElement*>& children) const
 	{
 		rect -= padding;
 		Array<Optional<Rect>> result(children.size(), Rect{ 0, 0, 0, 0 });
@@ -174,7 +174,7 @@ namespace SivImGui
 		return result;
 	}
 
-	MeasureResult VerticalLayout::measure(const std::vector<WidgetBase*>& children) const
+	MeasureResult VerticalLayout::measure(const std::vector<UIElement*>& children) const
 	{
 		MeasureResult result;
 		for (auto child : children)
@@ -190,7 +190,7 @@ namespace SivImGui
 		return result;
 	}
 
-	Array<Optional<Rect>> VerticalLayout::arrange(Rect rect, const std::vector<WidgetBase*>& children) const
+	Array<Optional<Rect>> VerticalLayout::arrange(Rect rect, const std::vector<UIElement*>& children) const
 	{
 		rect -= padding;
 		Array<Optional<Rect>> result(children.size(), Rect{ 0, 0, 0, 0 });
@@ -198,7 +198,7 @@ namespace SivImGui
 		return result;
 	}
 
-	MeasureResult StackLayout::measure(const std::vector<WidgetBase*>& children) const
+	MeasureResult StackLayout::measure(const std::vector<UIElement*>& children) const
 	{
 		MeasureResult result;
 		for (auto child : children)
@@ -213,7 +213,7 @@ namespace SivImGui
 		return result;
 	}
 
-	Array<Optional<Rect>> StackLayout::arrange(Rect rect, const std::vector<WidgetBase*>& children) const
+	Array<Optional<Rect>> StackLayout::arrange(Rect rect, const std::vector<UIElement*>& children) const
 	{
 		rect -= padding;
 		Array<Optional<Rect>> result(Arg::reserve = children.size());

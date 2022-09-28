@@ -116,7 +116,7 @@
     <ClCompile Include="Builder\Builder.cpp" />
     <ClCompile Include="Core\Layout.cpp" />
     <ClCompile Include="Core\Property.cpp" />
-    <ClCompile Include="Core\WidgetBase.cpp" />
+    <ClCompile Include="Core\UIElement.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Reflection\TypeDB.cpp" />
@@ -229,7 +229,7 @@
     <ClInclude Include="Core\MeasureResult.hpp" />
     <ClInclude Include="Core\Property.hpp" />
     <ClInclude Include="Core\Space.hpp" />
-    <ClInclude Include="Core\WidgetBase.hpp" />
+    <ClInclude Include="Core\UIElement.hpp" />
     <ClInclude Include="Core\PropertyFlag.hpp" />
     <ClInclude Include="GUI.hpp" />
     <ClInclude Include="Reflection.hpp" />

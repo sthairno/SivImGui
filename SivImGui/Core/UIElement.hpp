@@ -7,7 +7,7 @@
 
 namespace SivImGui
 {
-	class GUI;
+	class Root;
 
 	class UIElement
 	{
@@ -103,7 +103,7 @@ namespace SivImGui
 
 	private:
 
-		friend GUI;
+		friend Root;
 
 		bool m_mouseOver = false;
 

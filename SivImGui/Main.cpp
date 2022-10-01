@@ -4,6 +4,8 @@
 #include "Builder.hpp"
 #include "Reflection.hpp"
 
+#include "GUI.hpp"
+
 #include "Widgets/Widget.hpp"
 #include "Widgets/Container.hpp"
 #include "Widgets/SimpleButton.hpp"
@@ -14,11 +16,8 @@
 #include "Widgets/Image.hpp"
 #include "Widgets/TabView.hpp"
 
-#include "GUI.hpp"
-
 constexpr Size gridSize = { 5, 6 };
 Array<String> tileChars;
-SivImGui::Reflection::TypeDB db;
 
 # if SIV3D_PLATFORM(WINDOWS)
 
@@ -50,56 +49,6 @@ bool LaunchFile(FilePathView path)
 
 # endif
 
-void RegisterTypes()
-{
-	db.push<SivImGui::Widget>();
-	db.push<SivImGui::Container>();
-	db.push<SivImGui::Box>()
-		.base<SivImGui::Container>()
-		.prop(&SivImGui::Box::backColor)
-		.prop(&SivImGui::Box::frameColor)
-		.prop(&SivImGui::Box::frameThickness);
-	db.push<SivImGui::Button>()
-		.base<SivImGui::Container>()
-		.prop(&SivImGui::Button::backgroundColor)
-		.prop(&SivImGui::Button::frameColor)
-		.prop(&SivImGui::Button::disabledBackgroundColor)
-		.prop(&SivImGui::Button::disabledFrameColor)
-		.prop(&SivImGui::Button::disabledTextColor)
-		.prop(&SivImGui::Button::mouseOverBackgroundColor)
-		.prop(&SivImGui::Button::mouseOverFrameColor)
-		.prop(&SivImGui::Button::frameThickness)
-		.prop(&SivImGui::Button::roundSize);
-	db.push<SivImGui::Label>()
-		.base<SivImGui::Widget>()
-		.prop(&SivImGui::Label::text, true)
-		.prop(&SivImGui::Label::textColor)
-		.prop(&SivImGui::Label::font)
-		.prop(&SivImGui::Label::fitHeight);
-	db.push<SivImGui::TabView>()
-		.base<SivImGui::Container>()
-		.prop(&SivImGui::TabView::font)
-		.prop(&SivImGui::TabView::frameThickness)
-		.prop(&SivImGui::TabView::tabRound)
-		.prop(&SivImGui::TabView::tabPadding)
-		.prop(&SivImGui::TabView::tabSpace)
-		.prop(&SivImGui::TabView::tabInactiveColor)
-		.prop(&SivImGui::TabView::frameColor)
-		.prop(&SivImGui::TabView::backgroundColor);
-	db.push<SivImGui::Image>()
-		.base<SivImGui::Widget>()
-		.prop(&SivImGui::Image::texture, true)
-		.prop(&SivImGui::Image::fitScale)
-		.prop(&SivImGui::Image::diffuse);
-	db.push<SivImGui::ScrollView>()
-		.base<SivImGui::Container>()
-		.prop(&SivImGui::ScrollView::mode)
-		.prop(&SivImGui::ScrollView::scrollbarSize)
-		.prop(&SivImGui::ScrollView::step);
-	db.push<SivImGui::SimpleButton>()
-		.base<SivImGui::Widget>()
-		.prop(&SivImGui::SimpleButton::text, true);
-}
 void Reset()
 {
 	tileChars.clear();
@@ -246,64 +195,20 @@ void Main()
 {
 	Window::SetStyle(WindowStyle::Sizable);
 
-	const String xmlPath = FileSystem::FullPath(U"UI.xml");
-	const String directoryPath = FileSystem::ParentPath(xmlPath);
-	DirectoryWatcher watcher(directoryPath);
-	bool loaded = false;
-	Stopwatch reloadTimer(1s, StartImmediately::Yes);
+	const StringView xmlPath = U"UI.xml";
 
 	FontAsset::Register(U"heavy28", 28, Typeface::Heavy);
 	TextureAsset::Register(U"mdi-file-edit", { Icon::Type::MaterialDesign, 0xF11E7 }, 30);
 	TextureAsset::Register(U"mdi-delete", { Icon::Type::MaterialDesign, 0xF01B4 }, 30);
 
-	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
-	RegisterTypes();
+	SivImGui::GUI gui(xmlPath, SivImGui::EnableHotReload::Yes);
 
 	Reset();
-
+	
 	while (System::Update())
 	{
-		gui.setAvailableSize();
+		gui.setAvailableSize(Scene::Size());
 
-		// XMLの更新を監視, 自動再読み込み
-
-		bool reload = KeyF5.down();
-		for (auto& event : watcher.retrieveChanges())
-		{
-			reload |=
-				(event.action == FileAction::Added || event.action == FileAction::Modified) &&
-				FileSystem::FullPath(event.path) == xmlPath;
-		}
-		if (reload)
-		{
-			loaded = false;
-			reloadTimer.restart();
-		}
-		if (reloadTimer.elapsed() >= 0.5s && not loaded)
-		{
-			ClearPrint();
-			SivImGui::Reflection::XMLParser parser(db);
-			try
-			{
-				StringView path = xmlPath;
-				XMLReader reader(path);
-				if (reader)
-				{
-					gui.setRootWidget(parser.parse(reader));
-				}
-				else
-				{
-					Print << U"XMLParseError";
-				}
-			}
-			catch (std::out_of_range ex)
-			{
-				Print << Unicode::FromUTF8(ex.what());
-			}
-
-			loaded = true;
-		}
-		
 		// 入力/更新処理
 		gui.update();
 

@@ -138,6 +138,9 @@
     <ClCompile Include="GUI.cpp">
       <Filter>Source Files\SivImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Root.cpp">
+      <Filter>Source Files\SivImGui\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -484,6 +487,9 @@
     </ClInclude>
     <ClInclude Include="GUI.hpp">
       <Filter>Header Files\SivImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Root.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

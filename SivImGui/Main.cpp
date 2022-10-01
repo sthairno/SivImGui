@@ -263,6 +263,8 @@ void Main()
 
 	while (System::Update())
 	{
+		gui.setAvailableSize();
+
 		// XMLの更新を監視, 自動再読み込み
 
 		bool reload = KeyF5.down();
@@ -301,7 +303,7 @@ void Main()
 
 			loaded = true;
 		}
-
+		
 		// 入力/更新処理
 		gui.update();
 
@@ -380,7 +382,7 @@ void Main()
 		// ウィンドウの最小サイズを変更
 		{
 			const Size windowCurrentSize = Scene::Size();
-			const Size windowMinSize = gui.getRootWidget().measuredSize().minSize;
+			const Size windowMinSize = gui.minSize();
 			const Size windowNewSize{
 				Max(windowCurrentSize.x, windowMinSize.x),
 				Max(windowCurrentSize.y, windowMinSize.y)

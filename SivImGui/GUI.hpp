@@ -10,6 +10,7 @@ namespace SivImGui
 
 		GUI(std::unique_ptr<UIElement>&& widget)
 		{
+			setAvailableSize();
 			setRootWidget(std::move(widget));
 		}
 
@@ -17,17 +18,31 @@ namespace SivImGui
 		{
 			assert(widget);
 			m_widget = std::move(widget);
+			layout();
 		}
 
 		UIElement& getRootWidget() { return *m_widget; }
 
+		bool enabled() const { return m_enabled; }
+
+		Size availableSize() const { return m_availableSize; }
+
+		Size size() const { return m_widget->size(); }
+
+		Size minSize() const { return m_widget->measuredSize().minSize; }
+
 		void setEnabled(bool enable) { m_enabled = enable; }
 
-		void layout(Size availableSize = Scene::Size());
+		void setAvailableSize(Size size = Scene::Size())
+		{
+			m_availableSize = size;
+		}
 
-		void update(Point pos = { 0, 0 }, Size availableSize = Scene::Size(), bool allowMouseOver = true);
+		void layout();
 
-		void draw(Point pos = { 0, 0 }) const;
+		void update(bool allowMouseOver = true);
+
+		void draw() const;
 
 		template<class WidgetT>
 		WidgetT* findWidget(const StringView name = U"")
@@ -51,6 +66,8 @@ namespace SivImGui
 		std::unique_ptr<UIElement> m_widget;
 
 		bool m_enabled = true;
+
+		Size m_availableSize;
 
 		UIElement* m_hoveredWidget = nullptr;
 	};

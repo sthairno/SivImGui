@@ -35,12 +35,12 @@ namespace SivImGui
 		}
 	}
 
-	void GUI::layout(Size availableSize)
+	void GUI::layout()
 	{
-		m_widget->layoutCore(availableSize);
+		m_widget->layoutCore(m_availableSize);
 	}
 
-	void GUI::update(Point pos, Size availableSize, bool allowMouseOver)
+	void GUI::update(bool allowMouseOver)
 	{
 		auto& windowState = Window::GetState();
 
@@ -52,22 +52,19 @@ namespace SivImGui
 		allowMouseOver &= windowState.focused;
 		if (allowMouseOver)
 		{
-			m_hoveredWidget = m_widget->hitTest(Cursor::PosF() - pos);
+			m_hoveredWidget = m_widget->hitTest(Cursor::PosF());
 			if (m_hoveredWidget)
 			{
 				m_hoveredWidget->m_mouseOver = true;
 			}
 		}
 
-		Transformer2D t(Mat3x2::Translate(pos), TransformCursor::Yes);
 		m_widget->updateCore(m_enabled);
-
-		layout(availableSize);
+		m_widget->layoutCore(m_availableSize);
 	}
 
-	void GUI::draw(Point pos) const
+	void GUI::draw() const
 	{
-		Transformer2D t(Mat3x2::Translate(pos), TransformCursor::Yes);
 		m_widget->drawCore();
 	}
 

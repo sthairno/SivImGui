@@ -10,7 +10,7 @@
 
 ```cpp
 #include <Siv3D.hpp>
-#include "Core/GUI.hpp"
+#include "GUI.hpp"
 #include "Widgets/Container.hpp"
 #include "Widgets/Label.hpp"
 #include "Widgets/Image.hpp"
@@ -58,7 +58,7 @@ void Main()
 
 	while (System::Update())
 	{
-		gui.layout(Scene::Size());
+		gui.setAvailableSize(Scene::Size());
 		gui.update();
 		gui.draw();
 	}
@@ -69,8 +69,8 @@ void Main()
 
 ```cpp
 #include <Siv3D.hpp>
-#include "Core/GUI.hpp"
-#include "Core/Builder.hpp"
+#include "GUI.hpp"
+#include "Builder.hpp"
 #include "Widgets/Container.hpp"
 #include "Widgets/Label.hpp"
 #include "Widgets/Image.hpp"
@@ -86,7 +86,7 @@ void Main()
 	SivImGui::GUI gui(std::make_unique<SivImGui::Container>());
 
 	// 横幅,縦幅を広げ、子要素を中央に配置
-	auto& root = gui.getRootWidget();
+	auto& root = gui.rootWidget();
 	root.xExpand = true;
 	root.yExpand = true;
 	root.layout = SivImGui::HorizontalLayout{
@@ -94,36 +94,37 @@ void Main()
 		.verticalAlignment = SivImGui::Alignment::Center
 	};
 
-	// 操作対象をrootに設定する
-	SivImGui::Builder builder(root);
-
 	while (System::Update())
 	{
+		gui.setAvailableSize(Scene::Size());
 		gui.update();
-		builder.reset();
 
-		// この内部でUIを定義
-		// ↓ ↓ ↓ ↓ ↓
+		{
+			// 操作対象をrootに設定する
+			SivImGui::Builder b(root);
 
-		// コンテナの定義
-		SivImGui::Container::New(builder)([&](SivImGui::Container& c) {
-			// レイアウトの向きを水平に
-			c.layout = SivImGui::HorizontalLayout{};
+			// この内部でUIを定義
+			// ↓ ↓ ↓ ↓ ↓
 
-			// ラベル"Hello, SivImGui!"を定義
-			SivImGui::Label::New(builder, U"Hello, SivImGui!")([&](SivImGui::Label& l) {
-				l.textColor = Palette::Black;
-				l.font = font;
+			// コンテナの定義
+			b.next<SivImGui::Container>()([&](SivImGui::Container& c) {
+				// レイアウトの向きを水平に
+				c.layout = SivImGui::HorizontalLayout{};
+
+				// ラベル"Hello, SivImGui!"を定義
+				auto& label = b.next<SivImGui::Label>()();
+				label.text = U"Hello, SivImGui!";
+				label.textColor = Palette::Black;
+				label.font = font;
+
+				// ロケットのテクスチャを定義
+				auto& img = b.next<SivImGui::Image>()();
+				img.texture = rocketTex;
 			});
 
-			// ロケットのテクスチャを定義
-			SivImGui::Image::New(builder, rocketTex);
-		});
+			// ↑ ↑ ↑ ↑ ↑
+		}
 
-		// ↑ ↑ ↑ ↑ ↑
-
-		builder.finalize();
-		gui.layout(Scene::Size());
 		gui.draw();
 	}
 }

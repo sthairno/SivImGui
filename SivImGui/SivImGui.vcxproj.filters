@@ -489,7 +489,7 @@
       <Filter>Header Files\SivImGui</Filter>
     </ClInclude>
     <ClInclude Include="Core\Root.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SivImGui\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

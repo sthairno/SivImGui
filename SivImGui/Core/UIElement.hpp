@@ -9,7 +9,7 @@ namespace SivImGui
 {
 	class Root;
 
-	class UIElement
+	class UIElement : Uncopyable
 	{
 	public:
 
@@ -21,8 +21,6 @@ namespace SivImGui
 			: typeInfo(typeInfo)
 			, isContainer(isContainer)
 		{ }
-
-		UIElement(UIElement&) = delete;
 
 	public:
 

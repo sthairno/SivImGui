@@ -122,6 +122,8 @@ namespace SivImGui
 
 	void GUI::update(bool enabled, bool allowMouseOver)
 	{
+		layout();
+
 		if (m_dirWatcher && m_filePath)
 		{
 			if (
@@ -142,6 +144,9 @@ namespace SivImGui
 				reload();
 			}
 		}
+
+		auto& windowState = Window::GetState();
+		allowMouseOver &= not windowState.sizeMove && windowState.focused;
 
 		m_root->update(enabled, allowMouseOver);
 		layout();

@@ -15,14 +15,10 @@ namespace SivImGui
 
 	void Root::update(bool enabled, bool allowMouseOver)
 	{
-		auto& windowState = Window::GetState();
-
 		if (m_hoveredWidget)
 		{
 			m_hoveredWidget->m_mouseOver = false;
 		}
-		allowMouseOver &= not windowState.sizeMove;
-		allowMouseOver &= windowState.focused;
 		if (allowMouseOver)
 		{
 			m_hoveredWidget = m_widget->hitTest(Cursor::PosF());

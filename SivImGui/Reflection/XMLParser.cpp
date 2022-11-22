@@ -7,7 +7,7 @@ namespace SivImGui::Reflection
 	{
 		if (auto result = UR"(^\s*asset:\s*(\S+)\s*$)"_re.match(str))
 		{
-			return TextureAsset(result[1]);
+			return TextureAsset(*result[1]);
 		}
 		return { };
 	}
@@ -16,7 +16,7 @@ namespace SivImGui::Reflection
 	{
 		if (auto result = UR"(^\s*asset:\s*(\S+)\s*$)"_re.match(str))
 		{
-			return FontAsset(result[1]);
+			return FontAsset(*result[1]);
 		}
 		return { };
 	}

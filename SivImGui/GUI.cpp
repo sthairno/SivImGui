@@ -188,7 +188,7 @@ namespace SivImGui
 
 		String parentPath = FileSystem::ParentPath(path, 0, m_filePath);
 
-		XMLReader xml(StringView{ m_filePath });
+		XMLReader xml(m_filePath);
 		if (not xml.isOpen())
 		{
 			reset();

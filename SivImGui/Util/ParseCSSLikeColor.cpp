@@ -203,8 +203,8 @@ namespace SivImGui::Util
 		StringView funcName, funcArg;
 		if (auto match = FuncRgx.match(str))
 		{
-			funcName = match[1];
-			funcArg = match[2];
+			funcName = *match[1];
+			funcArg = *match[2];
 		}
 		else
 		{
@@ -212,55 +212,59 @@ namespace SivImGui::Util
 		}
 
 		// rgb(r,g,b(,a)), rgba(r,g,b(,a))
-		//if (funcName == U"rgb" || funcName == U"rgba")
-		//{
-		//	const MatchResults match = RgbArgsRgx.match(funcArg);
+		if (funcName == U"rgb" || funcName == U"rgba")
+		{
+			const MatchResults match = RgbArgsRgx.match(funcArg);
 
-		//	if (match.isEmpty())
-		//	{
-		//		return none;
-		//	}
+			if (match.isEmpty())
+			{
+				return none;
+			}
 
-		//	ColorF col;
+			ColorF col;
 
-		//	const auto r = ParseOpt<double>(match[1]);
-		//	const auto g = ParseOpt<double>(match[3]);
-		//	const auto b = ParseOpt<double>(match[4]);
+			const auto r = ParseOpt<double>(*match[1]);
+			const auto g = ParseOpt<double>(*match[3]);
+			const auto b = ParseOpt<double>(*match[4]);
 
-		//	if (r && g && b)
-		//	{
-		//		// 0% ~ 100%, 0 ~ 255
+			if (!r || !g || !b)
+			{
+				return none;
+			}
 
-		//		const double mul = (match[2] == U"%" ? 1. / 100 : 1. / 255);
-		//		col.r = Clamp(*r * mul, 0., 1.);
-		//		col.g = Clamp(*g * mul, 0., 1.);
-		//		col.b = Clamp(*b * mul, 0., 1.);
-		//	}
-		//	else
-		//	{
-		//		return none;
-		//	}
+			{
+				// 0% ~ 100%, 0 ~ 255
+				const double mul = (match[2] == U"%" ? 1. / 100 : 1. / 255);
+				col.r = Clamp(*r * mul, 0., 1.);
+				col.g = Clamp(*g * mul, 0., 1.);
+				col.b = Clamp(*b * mul, 0., 1.);
+			}
 
-		//	const auto a = ParseOpt<double>(match[5]);
+			if (!match[5])
+			{
+				col.a = 1;
+				return col;
+			}
 
-		//	if (a)
-		//	{
-		//		// 0% ~ 100%, 0 ~ 1
+			const auto a = ParseOpt<double>(*match[5]);
 
-		//		const double mul = (match[6] == U"%" ? 1. / 100 : 1.);
-		//		col.a = Clamp(*a * mul, 0., 1.);
-		//	}
-		//	else
-		//	{
-		//		col.a = 1;
-		//	}
+			if (!a)
+			{
+				return none;
+			}
 
-		//	return col;
-		//}
-		//else if (funcName == U"hsl" || funcName == U"hsla")
-		//{
-		//	return none;
-		//}
+			{
+				// 0% ~ 100%, 0 ~ 1
+				const double mul = (match[6] == U"%" ? 1. / 100 : 1.);
+				col.a = Clamp(*a * mul, 0., 1.);
+			}
+
+			return col;
+		}
+		else if (funcName == U"hsl" || funcName == U"hsla")
+		{
+			return none;
+		}
 
 		return none;
 	}

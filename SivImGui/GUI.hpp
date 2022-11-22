@@ -49,14 +49,40 @@ namespace SivImGui
 			return m_root ? rootWidget().isEnabled() : false;
 		}
 
+		Vec2 pos() const
+		{
+			return m_root ? rootWidget().pos() : Vec2::Zero();
+		}
+
 		Size size() const
 		{
 			return m_root ? rootWidget().size() : Size::Zero();
 		}
 
+		Rect rect() const
+		{
+			return m_root ? rootWidget().rect() : Rect{ 0, 0, 0, 0 };
+		}
+
 		Size minSize() const
 		{
 			return m_root ? rootWidget().measuredSize().minSize : Size::Zero();
+		}
+
+		void setPos(Point pos)
+		{
+			m_nextPos = pos;
+		}
+
+		void setCenter(Point center)
+		{
+			if (!m_root)
+			{
+				return;
+			}
+
+			Size size = rootWidget().size();
+			setPos({ (center.x - size.x / 2), (center.y - size.y / 2) });
 		}
 
 		void setAvailableSize(Size size)
@@ -109,7 +135,11 @@ namespace SivImGui
 
 		Size m_nextAvailableSize{ 0, 0 };
 
+		Point m_nextPos{ 0, 0 };
+
 		Size m_availableSize{ 0, 0 };
+
+		Point m_pos{ 0, 0 };
 
 		Stopwatch m_reloadStw;
 	};

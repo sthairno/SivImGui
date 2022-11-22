@@ -61,21 +61,6 @@ namespace SivImGui
 		);
 	}
 
-	void UIElement::layoutCore(Size availableSize)
-	{
-		checkChildrenVisibility();
-
-		measureCore();
-
-		Rect rect{
-			0,
-			0,
-			m_measuredSize.expand.x ? Max(m_measuredSize.minSize.x, availableSize.x) : m_measuredSize.minSize.x,
-			m_measuredSize.expand.y ? Max(m_measuredSize.minSize.y, availableSize.y) : m_measuredSize.minSize.y,
-		};
-		arrangeCore(rect);
-	}
-
 	void UIElement::updateCore(bool enabled)
 	{
 		m_enabled = this->enabled && enabled;

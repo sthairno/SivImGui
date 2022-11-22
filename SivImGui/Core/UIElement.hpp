@@ -85,10 +85,6 @@ namespace SivImGui
 
 	protected:
 
-		virtual MeasureResult measure() const = 0;
-
-		virtual Array<Optional<Rect>> arrange(Rect rect) = 0;
-
 		virtual UIElement* hitTest(Rect rect, Vec2 pos) = 0;
 
 		virtual void update(Rect rect) = 0;
@@ -104,8 +100,10 @@ namespace SivImGui
 		friend Root;
 
 		bool m_mouseOver = false;
+		
+		virtual MeasureResult measure() const = 0;
 
-		void layoutCore(Size availableSize);
+		virtual Array<Optional<Rect>> arrange(Rect rect) = 0;
 
 		void updateCore(bool enabled);
 

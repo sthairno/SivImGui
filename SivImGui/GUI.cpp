@@ -116,8 +116,9 @@ namespace SivImGui
 
 	void GUI::layout()
 	{
+		m_pos = m_nextPos;
 		m_availableSize = m_nextAvailableSize;
-		m_root->layout(m_availableSize);
+		m_root->layout(m_pos, m_availableSize);
 	}
 
 	void GUI::update(bool enabled, bool allowMouseOver)

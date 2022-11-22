@@ -13,7 +13,7 @@ namespace SivImGui
 
 		UIElement* hoveredWidget() { return m_hoveredWidget; }
 
-		void layout(Size availableSize);
+		void layout(Point pos, Size availableSize);
 
 		void update(bool enabled = true, bool allowMouseOver = true);
 
